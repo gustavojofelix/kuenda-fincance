@@ -1,0 +1,34 @@
+import { Component, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { StateService } from '../../core/state.service';
+import { switchMap, map } from 'rxjs/operators';
+import { of } from 'rxjs';
+
+@Component({
+  selector: 'app-client-profile',
+  imports: [CommonModule, RouterLink],
+  templateUrl: './client-profile.html'
+})
+export class ClientProfile {
+  private route = inject(ActivatedRoute);
+  private stateService = inject(StateService);
+
+  client$ = this.route.paramMap.pipe(
+    switchMap(params => {
+      const id = Number(params.get('id'));
+      return this.stateService.getClientById(id);
+    })
+  );
+
+  activeLoan$ = this.client$.pipe(
+    switchMap(client => {
+      if (!client) return of(null);
+      return this.stateService.getLoansByClientName(client.name).pipe(
+        map(loans => loans.find(l => l.status === 'Ativo') || null)
+      );
+    })
+  );
+
+  activeTab = 'Informação';
+}

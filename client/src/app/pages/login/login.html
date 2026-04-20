@@ -1,0 +1,126 @@
+<div class="min-h-screen grid grid-cols-1 md:grid-cols-2 bg-slate-50">
+  <!-- Left Side: Login Form -->
+  <div class="flex items-center justify-center p-8 md:p-16">
+    <div class="w-full max-w-md">
+      <div class="mb-10 text-center md:text-left">
+        <h1 class="text-4xl font-bold text-gray-900 mb-2 font-sans tracking-tight">Kuenda<span class="text-primary">.</span></h1>
+        <p class="text-gray-500 font-medium">O Sistema Operacional para Microfinanças.</p>
+      </div>
+
+      <!-- Tabs or Switch for Login / Register -->
+      <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+        <div class="flex space-x-4 mb-6 border-b border-gray-100 pb-0">
+          <button 
+            (click)="switchTab('login')"
+            [class.text-primary]="currentTab === 'login'"
+            [class.border-primary]="currentTab === 'login'"
+            [class.border-transparent]="currentTab !== 'login'"
+            [class.text-gray-500]="currentTab !== 'login'"
+            class="font-semibold pb-3 border-b-2 transition-colors">
+            Acesso IMF
+          </button>
+          <button 
+            (click)="switchTab('register')"
+            [class.text-primary]="currentTab === 'register'"
+            [class.border-primary]="currentTab === 'register'"
+            [class.border-transparent]="currentTab !== 'register'"
+            [class.text-gray-500]="currentTab !== 'register'"
+            class="font-semibold pb-3 border-b-2 transition-colors">
+            Registar IMF
+          </button>
+        </div>
+
+        @if (currentTab === 'login') {
+        <!-- Login Form -->
+        <form>
+          <div class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Email Profissional</label>
+              <input type="email" placeholder="agente@imf.co.mz" class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+              <input type="password" placeholder="••••••••" class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all">
+            </div>
+            <div class="flex items-center justify-between pt-1">
+              <label class="flex items-center cursor-pointer">
+                <input type="checkbox" class="rounded text-primary focus:ring-primary h-4 w-4 border-gray-300">
+                <span class="ml-2 text-sm text-gray-600">Lembrar-me</span>
+              </label>
+              <a href="#" class="text-sm font-medium text-primary hover:text-primary-dark transition-colors">Esqueci a senha</a>
+            </div>
+            
+            <button class="w-full bg-primary hover:bg-primary-dark text-white font-semibold py-3 px-4 rounded-lg shadow hover:shadow-lg transition-all duration-200 mt-4" routerLink="/admin">
+              Entrar no Sistema
+            </button>
+          </div>
+        </form>
+        }
+
+        @if (currentTab === 'register') {
+        <!-- Register Form -->
+        <form>
+          <div class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Nome da Instituição</label>
+              <input type="text" placeholder="Ex: Finanças Rápidas Lda" class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">NUIT</label>
+              <input type="text" placeholder="400000000" class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Email do Administrador</label>
+              <input type="email" placeholder="admin@imf.co.mz" class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all">
+            </div>
+            
+            <button class="w-full bg-gray-900 hover:bg-black text-white font-semibold py-3 px-4 rounded-lg shadow hover:shadow-lg transition-all duration-200 mt-4" (click)="switchTab('login')">
+              Criar Conta (8.500 MZN/mês)
+            </button>
+          </div>
+        </form>
+        }
+
+      </div>
+
+      <div class="mt-8 text-center text-sm text-gray-500">
+        Microempreendedor? <a routerLink="/marketplace" class="text-primary hover:text-primary-dark font-medium transition-colors">Solicite o seu financiamento aqui</a>.
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Side: Graphic/Information -->
+  <div class="hidden md:flex flex-col justify-center p-16 text-white relative overflow-hidden" style="background-color: #0f172a;">
+    <div class="absolute inset-0 opacity-40" style="background-image: radial-gradient(circle at 100% 100%, #10b981 0%, transparent 50%);"></div>
+    <div class="relative z-10 max-w-lg">
+      <div class="inline-block px-3 py-1 bg-white/10 rounded-full text-sm font-medium backdrop-blur-sm mb-6 border border-white/20 text-emerald-300">
+        Plataforma SaaS Certificada
+      </div>
+      <h2 class="text-4xl font-bold mb-6 leading-tight">Gira a sua carteira de crédito num ambiente desenhado para crescer.</h2>
+      <ul class="space-y-5 mb-10 text-gray-300 text-lg">
+        <li class="flex items-start">
+          <svg class="w-6 h-6 text-primary mr-3 mt-1 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> 
+          <span>Cadastre clientes com KYC completo em menos de 3 minutos.</span>
+        </li>
+        <li class="flex items-start">
+          <svg class="w-6 h-6 text-primary mr-3 mt-1 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> 
+          <span>Integração nativa com M-Pesa: desembolsos e cobranças imediatas.</span>
+        </li>
+        <li class="flex items-start">
+          <svg class="w-6 h-6 text-primary mr-3 mt-1 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg> 
+          <span>Marketplace integrado gerando novos leads automaticamente.</span>
+        </li>
+      </ul>
+      
+      <div class="flex items-center space-x-4 mt-12 bg-white/5 p-4 rounded-xl border border-white/10 backdrop-blur-sm">
+        <div class="h-12 w-12 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold">
+          BM
+        </div>
+        <div>
+          <p class="text-sm font-medium text-white">Relatórios Banco de Moçambique</p>
+          <p class="text-xs text-gray-400">Exportação em 1 clique</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

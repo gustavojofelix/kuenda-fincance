@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "BZaDpK79rnU=",
+  "success": true,
+  "projectFilePath": "C:\\Projects\\Companies\\Alvor Software\\Source Code\\kuenda-fincance\\server\\server.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\gusta\\.nuget\\packages\\microsoft.aspnetcore.openapi\\10.0.1\\microsoft.aspnetcore.openapi.10.0.1.nupkg.sha512",
+    "C:\\Users\\gusta\\.nuget\\packages\\microsoft.openapi\\2.0.0\\microsoft.openapi.2.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}

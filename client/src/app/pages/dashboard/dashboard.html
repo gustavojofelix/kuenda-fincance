@@ -1,0 +1,118 @@
+@if (metrics$ | async; as metrics) {
+<div class="mb-8 flex justify-between items-end">
+  <div>
+    <h2 class="text-2xl font-bold text-gray-900">Dashboard</h2>
+    <p class="text-sm text-gray-500 mt-1">Resumo das atividades da Kuenda Finance.</p>
+  </div>
+  <button class="bg-primary hover:bg-primary-dark text-white font-medium py-2 px-4 rounded-lg shadow-sm transition-colors flex items-center">
+    <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+    Exportar BM
+  </button>
+</div>
+
+<!-- KPIs -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+  <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+    <div class="flex items-center text-sm font-medium text-gray-500 mb-2">
+      <svg class="w-5 h-5 text-gray-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+      Carteira Ativa
+    </div>
+    <div class="text-3xl font-bold text-gray-900">{{ metrics.activePortfolio }}</div>
+    <div class="text-sm font-medium text-green-600 mt-2 flex items-center">
+      <svg class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path></svg>
+      8% desde o mês passado
+    </div>
+  </div>
+  
+  <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+    <div class="flex items-center text-sm font-medium text-gray-500 mb-2">
+      <svg class="w-5 h-5 text-gray-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+      Taxa PAR &gt; 30
+    </div>
+    <div class="text-3xl font-bold text-gray-900">{{ metrics.defaultRate }}</div>
+    <div class="text-sm font-medium text-green-600 mt-2 flex items-center">
+      <svg class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+      0.5% descida
+    </div>
+  </div>
+
+  <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+    <div class="flex items-center text-sm font-medium text-gray-500 mb-2">
+      <svg class="w-5 h-5 text-gray-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+      Vencimentos Breves
+    </div>
+    <div class="text-3xl font-bold text-gray-900">{{ metrics.upcomingDue }}</div>
+    <div class="text-sm font-medium text-gray-500 mt-2">
+      Próximos 7 dias
+    </div>
+  </div>
+
+  <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 border-l-4" [class.border-l-primary]="metrics.newLeads > 0" [class.border-l-gray-200]="metrics.newLeads === 0">
+    <div class="flex items-center text-sm font-medium text-gray-500 mb-2">
+      <svg class="w-5 h-5 mr-2" [class.text-primary]="metrics.newLeads > 0" [class.text-gray-400]="metrics.newLeads === 0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+      Novos Leads (Marketplace)
+    </div>
+    <div class="text-3xl font-bold text-gray-900">{{ metrics.newLeads }}</div>
+    <div class="text-sm font-medium mt-2" [class.text-primary]="metrics.newLeads > 0" [class.text-gray-400]="metrics.newLeads === 0">
+      Aguardam aprovação
+    </div>
+  </div>
+</div>
+}
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+  
+  <div class="lg:col-span-1 bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex flex-col">
+    <h3 class="text-lg font-bold text-gray-900 mb-4">Desembolso Mensal</h3>
+    <div class="flex-1 flex items-end space-x-2 w-full pt-8 h-48">
+      <div class="bg-primary/20 hover:bg-primary/40 rounded-t-sm w-1/6" style="height: 40%"></div>
+      <div class="bg-primary/20 hover:bg-primary/40 rounded-t-sm w-1/6" style="height: 60%"></div>
+      <div class="bg-primary/20 hover:bg-primary/40 rounded-t-sm w-1/6" style="height: 50%"></div>
+      <div class="bg-primary/20 hover:bg-primary/40 rounded-t-sm w-1/6" style="height: 80%"></div>
+      <div class="bg-primary hover:bg-primary-dark rounded-t-sm w-1/6" style="height: 95%"></div>
+      <div class="bg-primary/10 rounded-t-sm w-1/6" style="height: 20%"></div>
+    </div>
+    <div class="flex justify-between mt-2 text-xs text-gray-400 border-t border-gray-100 pt-2">
+      <span>Jan</span><span>Fev</span><span>Mar</span><span>Abr</span><span>Mai</span><span>Jun</span>
+    </div>
+  </div>
+
+  <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+    <div class="flex justify-between items-center mb-4">
+      <h3 class="text-lg font-bold text-gray-900">Empréstimos Recentes</h3>
+      <a routerLink="/admin/loans" class="text-primary hover:text-primary-dark text-sm font-medium">Ver Todos</a>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="text-xs uppercase text-gray-400 bg-gray-50 border-b border-gray-100">
+            <th class="py-3 px-4 rounded-tl-lg font-medium">Cliente</th>
+            <th class="py-3 px-4 font-medium">Valor</th>
+            <th class="py-3 px-4 font-medium">Próx. Pagamento</th>
+            <th class="py-3 px-4 rounded-tr-lg font-medium">Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (loan of recentLoans$ | async; track loan.id) {
+          <tr class="border-b border-gray-50 hover:bg-gray-50 transition-colors">
+            <td class="py-3 px-4">
+              <span class="font-medium text-gray-900">{{ loan.clientName }}</span>
+              <span class="block text-xs text-gray-500">{{ loan.id }}</span>
+            </td>
+            <td class="py-3 px-4 font-bold text-gray-700">{{ loan.amount }}</td>
+            <td class="py-3 px-4 text-gray-600">{{ loan.nextPayment }}</td>
+            <td class="py-3 px-4">
+              <span class="px-2 py-1 text-xs font-semibold rounded-full" 
+                [class.bg-green-100]="loan.status === 'Ativo'" [class.text-green-800]="loan.status === 'Ativo'"
+                [class.bg-red-100]="loan.status === 'Atrasado'" [class.text-red-800]="loan.status === 'Atrasado'"
+                [class.bg-yellow-100]="loan.status === 'Em Análise'" [class.text-yellow-800]="loan.status === 'Em Análise'">
+                {{ loan.status }}
+              </span>
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

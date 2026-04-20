@@ -1,0 +1,129 @@
+@if (loan$ | async; as loan) {
+<div class="max-w-[1400px] mx-auto pb-20 px-6">
+  
+  <!-- Breadcrumbs -->
+  <div class="flex items-center text-sm text-gray-500 mb-6 font-medium">
+    <a routerLink="/admin/loans" class="hover:text-gray-900 transition-colors">Empréstimos</a>
+    <span class="mx-2 text-gray-300">/</span>
+    <span class="text-gray-900">Detalhes do Contrato {{ loan.id }}</span>
+  </div>
+
+  <div class="flex flex-col lg:flex-row justify-between items-start gap-6 mb-10">
+    <div>
+        <h1 class="text-4xl font-black text-gray-900 tracking-tight">{{ loan.clientName }}</h1>
+        <div class="flex items-center gap-4 mt-3">
+            <span class="px-4 py-1.5 bg-emerald-100 text-emerald-800 text-sm font-black rounded-full uppercase tracking-widest shadow-sm">{{ loan.status }}</span>
+            <span class="text-gray-400 font-bold">Referência: <span class="text-gray-900">{{ loan.id }}</span></span>
+        </div>
+    </div>
+    
+    <div class="flex gap-4">
+        <button class="bg-white border border-gray-200 text-gray-700 font-bold py-3 px-6 rounded-2xl hover:bg-gray-50 transition-all flex items-center shadow-sm">
+            <svg class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+            Imprimir Contrato
+        </button>
+        <button class="bg-gray-900 text-white font-bold py-3 px-6 rounded-2xl hover:bg-black transition-all flex items-center shadow-lg shadow-gray-200">
+            Registar Amortização
+        </button>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+    
+    <!-- Esquerda: Detalhes Financeiros -->
+    <div class="lg:col-span-2 space-y-8">
+      
+      <!-- Cards de Resumo -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm">
+            <p class="text-[10px] uppercase font-black text-gray-400 tracking-widest mb-2">Total de Empréstimo</p>
+            <p class="text-2xl font-black text-gray-900">{{ loan.amount | number }} MZN</p>
+            <p class="text-xs text-emerald-600 font-bold mt-2">+{{ loan.interestRate }}% Juro Total</p>
+        </div>
+        <div class="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm">
+            <p class="text-[10px] uppercase font-black text-gray-400 tracking-widest mb-2">Montante Pago</p>
+            <p class="text-2xl font-black text-emerald-600">{{ loan.paidAmount | number }} MZN</p>
+            <p class="text-xs text-gray-400 font-medium mt-2">{{ loan.paidInstallments }} de {{ loan.installmentsCount }} parcelas</p>
+        </div>
+        <div class="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm">
+            <p class="text-[10px] uppercase font-black text-gray-400 tracking-widest mb-2">Saldo em Dívida</p>
+            <p class="text-2xl font-black text-red-600">{{ (loan.totalToPay - loan.paidAmount) | number }} MZN</p>
+            <p class="text-xs text-gray-400 font-medium mt-2">Próxima Parcela: {{ loan.nextPayment }}</p>
+        </div>
+      </div>
+
+      <!-- Tabela de Histórico de Pagamentos -->
+      <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="p-8 border-b border-gray-50 flex justify-between items-center">
+            <h3 class="text-lg font-bold text-gray-900">Histórico de Amortizações</h3>
+            <span class="text-xs font-bold text-gray-400 uppercase tracking-widest">Extraído em Tempo Real</span>
+        </div>
+        <table class="w-full text-left">
+            <thead>
+                <tr class="text-[10px] uppercase font-black text-gray-400 bg-gray-50/50 border-b border-gray-100">
+                    <th class="py-4 px-8">Data de Pagamento</th>
+                    <th class="py-4 px-8">Valor Pago</th>
+                    <th class="py-4 px-8">Método</th>
+                    <th class="py-4 px-8 text-right">Referência / Estado</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-50">
+                @for (item of history; track item.date) {
+                    <tr class="hover:bg-gray-50/50 transition-colors">
+                        <td class="py-5 px-8 text-sm font-bold text-gray-700">{{ item.date }}</td>
+                        <td class="py-5 px-8 text-sm font-black text-emerald-600">{{ item.amount | number }} MZN</td>
+                        <td class="py-5 px-8">
+                            <span class="flex items-center text-xs font-bold text-gray-600">
+                                <div class="w-2 h-2 rounded-full bg-primary mr-2"></div>
+                                {{ item.method }}
+                            </span>
+                        </td>
+                        <td class="py-5 px-8 text-right">
+                            <span class="px-3 py-1 bg-gray-100 text-[10px] font-black text-gray-500 rounded-full uppercase tracking-tighter">{{ item.status }}</span>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Direita: Perfil e Informação Técnica -->
+    <div class="space-y-8">
+        <div class="bg-gray-50 rounded-3xl p-8 border border-gray-100">
+            <h4 class="text-sm font-black text-gray-400 uppercase tracking-widest mb-6 border-b border-gray-200 pb-4">Detalhes do Mutuário</h4>
+            <div class="flex items-center mb-8">
+                <div class="h-16 w-16 bg-white rounded-2xl flex items-center justify-center text-2xl font-black text-primary shadow-sm border border-gray-100">
+                    {{ loan.clientName.substring(0, 2).toUpperCase() }}
+                </div>
+                <div class="ml-4">
+                    <p class="font-black text-gray-900">{{ loan.clientName }}</p>
+                    <a [routerLink]="['/admin/clients', 1]" class="text-xs font-bold text-primary hover:underline">Ver Perfil Completo KYC</a>
+                </div>
+            </div>
+            
+            <div class="space-y-4">
+                <div class="flex justify-between text-xs">
+                    <span class="text-gray-400 font-bold uppercase tracking-tighter">Canal de Desembolso</span>
+                    <span class="font-black text-gray-900">{{ loan.disbursementMethod || 'Pendente' }}</span>
+                </div>
+                <div class="flex justify-between text-xs">
+                    <span class="text-gray-400 font-bold uppercase tracking-tighter">Data de Início</span>
+                    <span class="font-black text-gray-900">{{ loan.date }}</span>
+                </div>
+                <div class="flex justify-between text-xs">
+                    <span class="text-gray-400 font-bold uppercase tracking-tighter">Próximo Vencimento</span>
+                    <span class="font-black text-blue-600">{{ loan.nextPayment }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-red-50 rounded-3xl p-8 border border-red-100">
+            <h4 class="text-sm font-black text-red-600 uppercase tracking-widest mb-4">Análise de Risco</h4>
+            <p class="text-xs leading-relaxed text-red-800 font-medium">Este contrato encontra-se em estado <strong>{{ loan.status }}</strong>. Verifique o histórico de interações antes de autorizar novos ciclos de crédito.</p>
+        </div>
+    </div>
+
+  </div>
+</div>
+}

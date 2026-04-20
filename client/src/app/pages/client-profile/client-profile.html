@@ -1,0 +1,136 @@
+@if (client$ | async; as client) {
+<div class="max-w-[1400px] mx-auto pb-10 px-6">
+  
+  <!-- Breadcrumbs & Header Actions -->
+  <div class="flex items-center text-sm text-gray-500 mb-6">
+    <a routerLink="/admin/dashboard" class="flex items-center hover:text-gray-900 transition-colors">
+      <svg class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+    </a>
+    <span class="mx-2">&gt;</span>
+    <a routerLink="/admin/clients" class="hover:text-gray-900 transition-colors">Clientes</a>
+    <span class="mx-2">&gt;</span>
+    <span class="text-gray-900 font-medium">{{ client.name }}</span>
+  </div>
+
+  <!-- Profile Header -->
+  <div class="flex flex-col md:flex-row md:items-start justify-between gap-6 mb-8">
+    <div class="flex items-center">
+      <div class="h-20 w-20 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 font-bold text-2xl border border-blue-100 flex-shrink-0">
+        {{ client.name.substring(0, 2).toUpperCase() }}
+      </div>
+      <div class="ml-5">
+        <h1 class="text-2xl font-bold text-gray-900">{{ client.name }}</h1>
+        <div class="flex flex-wrap items-center text-sm text-gray-500 mt-2 gap-4">
+          <span class="flex items-center">
+            <svg class="w-4 h-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+            {{ client.phone }}
+          </span>
+          <span class="flex items-center">
+            <svg class="w-4 h-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+            {{ client.province }}, Mozambique
+          </span>
+          <span class="flex items-center">
+            <svg class="w-4 h-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+            {{ client.business }}
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="flex items-center gap-3">
+      <button class="bg-[#1a3b8b] hover:bg-blue-900 text-white font-medium py-2 px-5 rounded-lg shadow-sm transition-colors flex items-center">
+        <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+        Novo Empréstimo
+      </button>
+      <button class="bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium py-2 px-5 rounded-lg shadow-sm transition-colors flex items-center">
+        <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+        Registar Pagamento
+      </button>
+    </div>
+  </div>
+
+  <!-- Active Loan Card -->
+  <div class="bg-[#f4f7fb] border border-blue-100 rounded-xl p-6 mb-8 shadow-sm">
+    <div class="flex items-center text-[#1a3b8b] font-bold mb-4">
+      <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+      Empréstimo Activo
+    </div>
+    
+    @if (activeLoan$ | async; as activeLoan) {
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div>
+          <p class="text-sm font-medium text-gray-500 mb-1">Valor</p>
+          <p class="text-xl font-bold text-gray-900">{{ activeLoan.amount }}</p>
+        </div>
+        <div>
+          <p class="text-sm font-medium text-gray-500 mb-1">% Taxa</p>
+          <p class="text-xl font-bold text-gray-900">5%</p>
+        </div>
+        <div>
+          <p class="text-sm font-medium text-gray-500 mb-1">Parcelas</p>
+          <p class="text-xl font-bold text-gray-900">10/24</p>
+        </div>
+        <div>
+          <p class="text-sm font-medium text-gray-500 flex items-center mb-1">
+            <svg class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+            Próxima
+          </p>
+          <p class="text-xl font-bold text-[#1a3b8b]">1.200 MZN</p>
+          <p class="text-xs font-medium text-gray-500 mt-1">{{ activeLoan.nextPayment }}</p>
+        </div>
+      </div>
+    } @else {
+      <div class="text-gray-500 text-sm">Este cliente não possui um empréstimo ativo no momento.</div>
+    }
+  </div>
+
+  <!-- Tabs Navigation -->
+  <div class="flex space-x-1 bg-gray-100 p-1 rounded-xl w-max mb-6">
+    <button (click)="activeTab = 'Informação'" [class.bg-white]="activeTab === 'Informação'" [class.shadow]="activeTab === 'Informação'" class="px-5 py-2 rounded-lg text-sm font-medium text-gray-700 hover:text-gray-900 transition-all">Informação</button>
+    <button (click)="activeTab = 'Empréstimos'" [class.bg-white]="activeTab === 'Empréstimos'" [class.shadow]="activeTab === 'Empréstimos'" class="px-5 py-2 rounded-lg text-sm font-medium text-gray-700 hover:text-gray-900 transition-all">Empréstimos</button>
+    <button (click)="activeTab = 'Histórico'" [class.bg-white]="activeTab === 'Histórico'" [class.shadow]="activeTab === 'Histórico'" class="px-5 py-2 rounded-lg text-sm font-medium text-gray-700 hover:text-gray-900 transition-all">Histórico</button>
+  </div>
+
+  <!-- Tab Content -->
+  @if (activeTab === 'Informação') {
+  <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-8 grid grid-cols-1 md:grid-cols-2 gap-10">
+    
+    <!-- Dados Pessoais -->
+    <div>
+      <h3 class="text-lg font-bold text-[#1a3b8b] mb-6 border-b border-gray-100 pb-2">Dados Pessoais</h3>
+      <div class="space-y-4">
+        <p class="text-sm"><span class="text-gray-500 block mb-0.5">Nome completo:</span> <span class="font-medium text-gray-900">{{ client.name }}</span></p>
+        <p class="text-sm"><span class="text-gray-500 block mb-0.5">BI:</span> <span class="font-medium text-gray-900">{{ client.bi }}</span></p>
+        <p class="text-sm"><span class="text-gray-500 block mb-0.5">Data de nascimento:</span> <span class="font-medium text-gray-900">15/03/1985</span></p>
+        <p class="text-sm"><span class="text-gray-500 block mb-0.5">Estado Civil:</span> <span class="font-medium text-gray-900">{{ client.maritalStatus }}</span></p>
+      </div>
+    </div>
+
+    <!-- Dados do Negócio -->
+    <div>
+      <h3 class="text-lg font-bold text-[#1a3b8b] mb-6 border-b border-gray-100 pb-2">Dados do Negócio</h3>
+      <div class="space-y-4">
+        <p class="text-sm"><span class="text-gray-500 block mb-0.5">Tipo:</span> <span class="font-medium text-gray-900">{{ client.business }}</span></p>
+        <p class="text-sm"><span class="text-gray-500 block mb-0.5">Renda Média Mês:</span> <span class="font-medium text-gray-900">{{ client.income }} MZN</span></p>
+        <p class="text-sm"><span class="text-gray-500 block mb-0.5">Localização:</span> <span class="font-medium text-gray-900">{{ client.address }}, {{ client.neighborhood }}</span></p>
+        <p class="text-sm"><span class="text-gray-500 block mb-0.5">Anos de actividade:</span> <span class="font-medium text-gray-900">5 anos</span></p>
+      </div>
+    </div>
+    
+  </div>
+  }
+  
+  @if (activeTab === 'Empréstimos') {
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-8">
+      <div class="text-center text-gray-500 py-10">Módulo de Histórico de Empréstimos em breve.</div>
+    </div>
+  }
+
+  @if (activeTab === 'Histórico') {
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-8">
+      <div class="text-center text-gray-500 py-10">Log de Eventos KYC em breve.</div>
+    </div>
+  }
+
+</div>
+}

@@ -1,0 +1,216 @@
+<div class="max-w-[1400px] mx-auto pb-20 px-6">
+  
+  <!-- Breadcrumbs -->
+  <div class="flex items-center text-sm text-gray-500 mb-6 font-medium">
+    <a routerLink="/admin/clients" class="hover:text-gray-900 transition-colors">Clientes</a>
+    <span class="mx-2 text-gray-300">/</span>
+    <span class="text-gray-900">{{ isEditMode ? 'Editar KYC' : 'Novo Registo KYC' }}</span>
+  </div>
+
+  <!-- Header Section -->
+  <div class="mb-8">
+    <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">{{ isEditMode ? 'Atualizar Dossier KYC' : 'Abertura de Conta & KYC' }}</h1>
+    <p class="text-gray-500 mt-2 text-lg">Preencha os dados do microempreendedor para análise de crédito.</p>
+  </div>
+
+  <!-- Edit Summary (Conditional) -->
+  @if (isEditMode) {
+    <div class="bg-blue-50 border border-blue-100 rounded-2xl p-6 mb-8 flex items-center shadow-sm">
+      <div class="h-16 w-16 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-2xl shadow-md">
+        {{ client.name?.substring(0, 2)?.toUpperCase() }}
+      </div>
+      <div class="ml-6">
+        <h2 class="text-xl font-bold text-gray-900">{{ client.name }}</h2>
+        <div class="flex gap-4 mt-1">
+          <span class="text-sm text-blue-700 bg-blue-100 px-2.5 py-0.5 rounded-full font-semibold">{{ client.status }}</span>
+          <span class="text-sm text-gray-500 font-medium">BI: {{ client.bi }}</span>
+          <span class="text-sm text-gray-500 font-medium">Ciclo: {{ client.loanCycle }}º</span>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Wizard Progress Bar -->
+  <div class="mb-10 relative">
+    <div class="overflow-hidden h-2 mb-4 text-xs flex rounded bg-gray-200">
+      <div [style.width.%]="(currentStep / totalSteps) * 100" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-primary transition-all duration-500"></div>
+    </div>
+    <div class="flex justify-between text-xs font-bold text-gray-400 uppercase tracking-widest">
+      <div [class.text-primary]="currentStep >= 1">1. Identidade</div>
+      <div [class.text-primary]="currentStep >= 2">2. Localização</div>
+      <div [class.text-primary]="currentStep >= 3">3. Negócio</div>
+      <div [class.text-primary]="currentStep >= 4">4. Emergência</div>
+    </div>
+  </div>
+
+  <!-- Step Content -->
+  <div class="bg-white rounded-3xl shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden">
+    <div class="p-8 md:p-12">
+      
+      <!-- STEP 1: Identidade -->
+      @if (currentStep === 1) {
+        <div class="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <div class="border-b border-gray-100 pb-4">
+            <h3 class="text-xl font-bold text-gray-900">Informação de Identidade</h3>
+            <p class="text-sm text-gray-500 mt-1">Dados oficiais do Bilhete de Identidade.</p>
+          </div>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="space-y-6">
+              <div>
+                <label class="block text-sm font-bold text-gray-700 mb-2">Nome Completo</label>
+                <input type="text" [(ngModel)]="client.name" placeholder="Como consta no BI" class="w-full px-5 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all">
+              </div>
+              <div>
+                <label class="block text-sm font-bold text-gray-700 mb-2">Bilhete de Identidade (BI)</label>
+                <input type="text" [(ngModel)]="client.bi" placeholder="Ex: 123456789A" class="w-full px-5 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all">
+              </div>
+              <div>
+                <label class="block text-sm font-bold text-gray-700 mb-2">Estado Civil</label>
+                <select [(ngModel)]="client.maritalStatus" class="w-full px-5 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all">
+                  <option value="Solteiro(a)">Solteiro(a)</option>
+                  <option value="Casado">Casado(a) / União Mans.</option>
+                  <option value="Divorciada">Divorciado(a)</option>
+                  <option value="Viúvo(a)">Viúvo(a)</option>
+                </select>
+              </div>
+            </div>
+            
+            <div class="flex flex-col items-center justify-center border-2 border-dashed border-gray-200 rounded-3xl p-8 bg-gray-50 hover:bg-primary/5 hover:border-primary/50 transition-all cursor-pointer group">
+              <svg class="w-16 h-16 text-gray-300 group-hover:text-primary transition-colors mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path></svg>
+              <span class="text-sm font-bold text-gray-500 group-hover:text-primary">Carregar Foto do BI</span>
+              <p class="text-xs text-gray-400 mt-2">Visibilidade total dos dados obrigatória</p>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- STEP 2: Localização -->
+      @if (currentStep === 2) {
+        <div class="space-y-8 animate-in fade-in slide-in-from-right-4 duration-500">
+          <div class="border-b border-gray-100 pb-4">
+            <h3 class="text-xl font-bold text-gray-900">Contacto e Localização</h3>
+            <p class="text-sm text-gray-500 mt-1">Onde podemos encontrar o empreendedor.</p>
+          </div>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+              <label class="block text-sm font-bold text-gray-700 mb-2">Telemóvel Principal (M-Pesa)</label>
+              <input type="tel" [(ngModel)]="client.phone" placeholder="+258" class="w-full px-5 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all font-mono">
+            </div>
+            <div>
+              <label class="block text-sm font-bold text-gray-700 mb-2">Província</label>
+              <select [(ngModel)]="client.province" class="w-full px-5 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all">
+                <option value="Maputo Cidade">Maputo Cidade</option>
+                <option value="Maputo Província">Maputo Província</option>
+                <option value="Gaza">Gaza</option>
+                <option value="Inhambane">Inhambane</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-bold text-gray-700 mb-2">Distrito</label>
+              <select [(ngModel)]="client.district" class="w-full px-5 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all">
+                <option value="KaMpfumo">KaMpfumo</option>
+                <option value="Matola">Matola</option>
+                <option value="Boane">Boane</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-bold text-gray-700 mb-2">Bairro</label>
+              <input type="text" [(ngModel)]="client.neighborhood" class="w-full px-5 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all">
+            </div>
+            <div class="md:col-span-2">
+              <label class="block text-sm font-bold text-gray-700 mb-2">Endereço Físico Detalhado</label>
+              <textarea [(ngModel)]="client.address" rows="3" placeholder="Ponto de referência, número da casa..." class="w-full px-5 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all resize-none"></textarea>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- STEP 3: Negócio -->
+      @if (currentStep === 3) {
+        <div class="space-y-8 animate-in fade-in slide-in-from-right-4 duration-500">
+          <div class="border-b border-gray-100 pb-4">
+            <h3 class="text-xl font-bold text-gray-900">Dimensão do Negócio</h3>
+            <p class="text-sm text-gray-500 mt-1">Avaliação da sustentabilidade e rendimento.</p>
+          </div>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+              <label class="block text-sm font-bold text-gray-700 mb-2">Actividade Comercial</label>
+              <select [(ngModel)]="client.business" class="w-full px-5 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all">
+                <option value="Mercearia">Mercearia / Retalho</option>
+                <option value="Vestuário / Calçado">Vestuário / Calçado</option>
+                <option value="Estética / Cabeleireiro">Estética / Cabeleireiro</option>
+                <option value="Carpintaria / Metalurgia">Carpintaria / Metalurgia</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-bold text-gray-700 mb-2">Tempo de Operação</label>
+              <select [(ngModel)]="client.businessYears" class="w-full px-5 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all">
+                <option value="Menos de 1 ano">Menos de 1 ano</option>
+                <option value="1 a 3 anos">1 a 3 anos</option>
+                <option value="Mais de 5 anos">Mais de 5 anos</option>
+              </select>
+            </div>
+            <div class="md:col-span-2">
+              <label class="block text-sm font-bold text-gray-700 mb-2">Renda Mensal Estimada (MZN)</label>
+              <select [(ngModel)]="client.income" class="w-full px-5 py-3 bg-gray-50 border border-gray-200 rounded-xl font-bold text-green-700 focus:bg-white focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all">
+                <option value="0 - 10.000 MZN">Até 10.000 MZN</option>
+                <option value="10.001 - 25.000 MZN">10.001 - 25.000 MZN</option>
+                <option value="25.001 - 50.000 MZN">25.001 - 50.000 MZN</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- STEP 4: Emergência -->
+      @if (currentStep === 4) {
+        <div class="space-y-8 animate-in fade-in slide-in-from-right-4 duration-500">
+          <div class="border-b border-gray-100 pb-4">
+            <h3 class="text-xl font-bold text-gray-900">Contacto de Emergência</h3>
+            <p class="text-sm text-gray-500 mt-1">Pessoa de contacto em caso de impossibilidade.</p>
+          </div>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="md:col-span-2">
+              <label class="block text-sm font-bold text-gray-700 mb-2">Nome Completo do Contacto</label>
+              <input type="text" [(ngModel)]="client.emergencyName" class="w-full px-5 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all">
+            </div>
+            <div>
+              <label class="block text-sm font-bold text-gray-700 mb-2">Relação / Parentesco</label>
+              <select [(ngModel)]="client.emergencyRelation" class="w-full px-5 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all">
+                <option value="Familiar">Familiar</option>
+                <option value="Cônjuge">Cônjuge</option>
+                <option value="Sócio">Sócio</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-bold text-gray-700 mb-2">Telemóvel de Emergência</label>
+              <input type="tel" [(ngModel)]="client.emergencyPhone" placeholder="+258" class="w-full px-5 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all font-mono">
+            </div>
+          </div>
+        </div>
+      }
+
+    </div>
+
+    <!-- Wizard Footer -->
+    <div class="bg-gray-50 px-8 md:px-12 py-6 flex justify-between items-center border-t border-gray-100">
+      <button (click)="prevStep()" [disabled]="currentStep === 1" class="px-6 py-3 text-sm font-bold text-gray-500 hover:text-gray-900 disabled:opacity-30 disabled:cursor-not-allowed transition-all">
+        Voltar Atrás
+      </button>
+      
+      <div class="flex gap-4">
+        <button [routerLink]="['/admin/clients']" class="px-6 py-3 text-sm font-bold text-gray-400 hover:text-gray-600 transition-all">
+          Cancelar
+        </button>
+        <button (click)="nextStep()" class="bg-gray-900 hover:bg-black text-white px-8 py-3 rounded-xl font-bold shadow-lg shadow-gray-200 transition-all cursor-pointer">
+          {{ currentStep === totalSteps ? (isEditMode ? 'Guardar Alterações' : 'Submeter Dossier') : 'Próximo Passo' }}
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,72 @@
+<div class="min-h-screen bg-slate-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative overflow-hidden">
+  
+  <!-- Background Pattern -->
+  <div class="absolute inset-0 pointer-events-none" style="background-image: radial-gradient(#10b981 1px, transparent 1px); background-size: 40px 40px; opacity: 0.1;"></div>
+
+  <div class="sm:mx-auto sm:w-full sm:max-w-md relative z-10">
+    <div class="flex justify-center">
+      <h1 class="text-4xl font-bold text-gray-900 tracking-tight">Kuenda<span class="text-primary">.</span> Marketplace</h1>
+    </div>
+    <h2 class="mt-6 text-center text-3xl font-bold text-gray-900 font-sans tracking-tight">
+      Dê um salto no seu negócio
+    </h2>
+    <p class="mt-2 text-center text-sm text-gray-500 font-medium">
+      Onde os microempreendedores encontram crédito direto e sem burocracia.
+    </p>
+  </div>
+
+  <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md relative z-10">
+    <div class="bg-white py-10 px-6 shadow-xl shadow-gray-200/50 border border-gray-100 sm:rounded-2xl sm:px-10 mb-8">
+      
+      @if (submitted) {
+        <div class="text-center py-8">
+          <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100 mb-6 border-4 border-green-50">
+            <svg class="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-2">Pedido Recebido!</h3>
+          <p class="text-sm text-gray-500 mb-8 leading-relaxed">
+            A sua solicitação foi encaminhada. Estamos a processar a sua avaliação usando os seus dados do M-Pesa. Será notificado via SMS com a decisão da Instituição de Microfinança em breve.
+          </p>
+          <button (click)="submitted = false" class="text-primary hover:text-primary-dark font-semibold text-sm transition-colors cursor-pointer border px-4 py-2 rounded-lg border-primary/20 hover:bg-primary/5">Submeter Novo Pedido</button>
+        </div>
+      } @else {
+        <form class="space-y-6" (submit)="submitForm($event)">
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">Nome Completo</label>
+            <input type="text" name="fullName" [(ngModel)]="fullName" placeholder="Nome do responsável" required class="appearance-none block w-full px-4 py-3 border border-gray-200 bg-gray-50 focus:bg-white rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary sm:text-sm transition-all duration-200">
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">O que o seu negócio faz?</label>
+            <input type="text" name="business" [(ngModel)]="business" placeholder="Ex: Mercearia, Venda de Roupa" required class="appearance-none block w-full px-4 py-3 border border-gray-200 bg-gray-50 focus:bg-white rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary sm:text-sm transition-all duration-200">
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">Telemóvel (Conta M-Pesa)</label>
+            <input type="tel" name="phone" [(ngModel)]="phone" placeholder="+258 84..." required class="appearance-none block w-full px-4 py-3 border border-gray-200 bg-gray-50 focus:bg-white rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary sm:text-sm transition-all duration-200">
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">Valor Desejado (MZN)</label>
+            <input type="number" name="amount" [(ngModel)]="amount" placeholder="0.00" required class="appearance-none block w-full px-4 py-3 border border-gray-200 bg-gray-50 focus:bg-white rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary text-lg font-bold sm:text-sm transition-all duration-200">
+          </div>
+
+          <div class="flex items-start bg-primary/5 p-4 border border-primary/20 rounded-xl">
+            <div class="flex items-center h-5 mt-1">
+              <input type="checkbox" required class="focus:ring-primary h-5 w-5 text-primary border-gray-300 rounded focus:ring-offset-0">
+            </div>
+            <div class="ml-3 text-sm">
+              <label class="font-bold text-gray-900 leading-tight">Autorização M-Pesa View</label>
+              <p class="text-gray-600 mt-1 text-xs leading-relaxed">Eu autorizo voluntariamente a IMFs na plataforma Kuenda a aceder ao meu histórico de transações M-Pesa unicamente para fins de avaliação rápida de capacidade de pagamento.</p>
+            </div>
+          </div>
+
+          <button type="submit" class="w-full flex justify-center py-4 px-4 border border-transparent rounded-xl shadow text-sm font-bold text-white bg-gray-900 hover:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-all duration-200 cursor-pointer">
+            Solicitar Financiamento Agora
+          </button>
+        </form>
+      }
+    </div>
+    
+  </div>
+</div>
