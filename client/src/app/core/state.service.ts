@@ -49,6 +49,16 @@ export interface Loan {
   disbursementMethod?: 'M-Pesa' | 'E-Mola' | 'Banco';
 }
 
+export interface Transaction {
+  id: string;
+  description: string;
+  amount: number;
+  date: string;
+  category: 'Salários' | 'Energia' | 'Água' | 'Renda' | 'Impostos' | 'Empréstimo' | 'Amortização' | 'Receita Juros' | 'Outros';
+  type: 'Entrada' | 'Saída';
+  isAuto?: boolean;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -64,10 +74,17 @@ export class StateService {
   private loansSubj = new BehaviorSubject<Loan[]>(MOCK_LOANS as any);
   loans$ = this.loansSubj.asObservable();
 
+  private transactionsSubj = new BehaviorSubject<Transaction[]>([
+    { id: 'T-101', description: 'Pagamento Salários Março', amount: 45000, date: '2024-03-05', category: 'Salários', type: 'Saída' },
+    { id: 'T-102', description: 'Factura EDM - Maputo', amount: 3200, date: '2024-03-02', category: 'Energia', type: 'Saída' },
+    { id: 'T-103', description: 'Amortização João Chissano', amount: 875, date: '2024-03-12', category: 'Amortização', type: 'Entrada', isAuto: true }
+  ]);
+  transactions$ = this.transactionsSubj.asObservable();
+
   private metricsSubj = new BehaviorSubject(MOCK_METRICS);
   metrics$ = this.metricsSubj.asObservable();
 
-  // Derived KPIs for Loans
+  // Derived KPIs
   totalActivePortfolio$ = this.loans$.pipe(map(loans => loans.filter(l => l.status === 'Ativo' || l.status === 'Atrasado').reduce((acc, l) => acc + (l.totalToPay - l.paidAmount), 0)));
   dueTodayCount$ = this.loans$.pipe(map(loans => loans.filter(l => l.status === 'Ativo' && l.nextPayment.includes(new Date().getDate().toString())).length));
   par30Rate$ = this.loans$.pipe(map(loans => {
@@ -75,6 +92,11 @@ export class StateService {
       const late = loans.filter(l => l.status === 'Atrasado').length;
       return active > 0 ? (late / active) * 100 : 0;
   }));
+
+  // Accounting KPIs
+  cashBalance$ = this.transactions$.pipe(map(ts => ts.reduce((acc, t) => acc + (t.type === 'Entrada' ? t.amount : -t.amount), 500000))); // 500k base capital
+  monthlyInflow$ = this.transactions$.pipe(map(ts => ts.filter(t => t.type === 'Entrada').reduce((acc, t) => acc + t.amount, 0)));
+  monthlyOutflow$ = this.transactions$.pipe(map(ts => ts.filter(t => t.type === 'Saída').reduce((acc, t) => acc + t.amount, 0)));
 
   getClientById(id: number) {
     return this.clients$.pipe(map(clients => clients.find(c => c.id === id)));
@@ -87,14 +109,7 @@ export class StateService {
   addClient(client: Partial<Client>) {
     const currentList = this.clientsSubj.value;
     const newId = currentList.length > 0 ? Math.max(...currentList.map(c => c.id)) + 1 : 1;
-    const newClient = { 
-      loanCycle: 1,
-      status: 'Avaliação',
-      ...client, 
-      id: newId 
-    } as Client;
-    
-    // Add to front of list
+    const newClient = { loanCycle: 1, status: 'Avaliação', ...client, id: newId } as Client;
     this.clientsSubj.next([newClient, ...currentList]);
     return newClient;
   }
@@ -111,25 +126,15 @@ export class StateService {
   addLoan(loan: Partial<Loan>) {
     const currentList = this.loansSubj.value;
     const newIdStr = `L-${10023 + currentList.length}`;
-    
-    // Simple Price simulation for the mock
     const amount = loan.amount || 0;
     const rate = (loan.interestRate || 5) / 100;
     const term = loan.term || 6;
-    const totalToPay = amount * (1 + rate); // Simplified for mock
+    const totalToPay = amount * (1 + rate);
     const monthlyPayment = totalToPay / term;
 
     const newLoan = { 
-        date: '-', 
-        status: 'Em Análise',
-        nextPayment: '-',
-        paidAmount: 0,
-        paidInstallments: 0,
-        totalToPay,
-        monthlyPayment,
-        installmentsCount: term,
-        ...loan, 
-        id: newIdStr 
+        date: '-', status: 'Em Análise', nextPayment: '-', paidAmount: 0, paidInstallments: 0,
+        totalToPay, monthlyPayment, installmentsCount: term, ...loan, id: newIdStr 
     } as Loan;
     
     this.loansSubj.next([newLoan, ...currentList]);
@@ -153,7 +158,16 @@ export class StateService {
       
       this.loansSubj.next(updated);
 
-      // Link to client status
+      // AUTOMATIC TRANSACTION: OUTFLOW
+      this.addInternalTransaction({
+        description: `Desembolso ${method}: ${updated[index].clientName}`,
+        amount: updated[index].amount,
+        category: 'Empréstimo',
+        type: 'Saída',
+        isAuto: true
+      });
+
+      // Update client status
       const currentClients = this.clientsSubj.value;
       const clientIndex = currentClients.findIndex(c => c.name === updated[index].clientName);
       if (clientIndex > -1) {
@@ -177,6 +191,30 @@ export class StateService {
           }
           
           this.loansSubj.next(updated);
+
+          // AUTOMATIC TRANSACTION: INFLOW
+          this.addInternalTransaction({
+            description: `Amortização: ${updated[index].clientName}`,
+            amount: amount,
+            category: 'Amortização',
+            type: 'Entrada',
+            isAuto: true
+          });
       }
+  }
+
+  addManualTransaction(tx: Partial<Transaction>) {
+      this.addInternalTransaction(tx);
+  }
+
+  private addInternalTransaction(tx: Partial<Transaction>) {
+      const current = this.transactionsSubj.value;
+      const newId = `T-${100 + current.length + 1}`;
+      const newTx = {
+          id: newId,
+          date: new Date().toISOString().split('T')[0], // Default to today
+          ...tx
+      } as Transaction;
+      this.transactionsSubj.next([newTx, ...current]);
   }
 }
