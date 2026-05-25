@@ -40,9 +40,14 @@ export class RegisterLoan {
     const rate = this.loanData.interestRate / 100;
     const term = this.loanData.term;
     
-    // Simplified Price Table Logic for Mock
-    this.simulation.totalToPay = amount * (1 + rate);
-    this.simulation.monthlyPayment = this.simulation.totalToPay / term;
+    if (rate === 0) {
+      this.simulation.monthlyPayment = amount / term;
+    } else {
+      this.simulation.monthlyPayment = (amount * rate) / (1 - Math.pow(1 + rate, -term));
+    }
+    
+    this.simulation.monthlyPayment = Math.round(this.simulation.monthlyPayment * 100) / 100;
+    this.simulation.totalToPay = Math.round((this.simulation.monthlyPayment * term) * 100) / 100;
   }
 
   submitLoan() {

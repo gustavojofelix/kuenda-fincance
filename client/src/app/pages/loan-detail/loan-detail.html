@@ -17,14 +17,16 @@
         </div>
     </div>
     
-    <div class="flex gap-4">
-        <button class="bg-white border border-gray-200 text-gray-700 font-bold py-3 px-6 rounded-2xl hover:bg-gray-50 transition-all flex items-center shadow-sm">
+    <div class="flex gap-4 print:hidden">
+        <button (click)="printContract()" class="bg-white border border-gray-200 text-gray-700 font-bold py-3 px-6 rounded-2xl hover:bg-gray-50 transition-all flex items-center shadow-sm cursor-pointer">
             <svg class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
             Imprimir Contrato
         </button>
-        <button class="bg-gray-900 text-white font-bold py-3 px-6 rounded-2xl hover:bg-black transition-all flex items-center shadow-lg shadow-gray-200">
-            Registar Amortização
-        </button>
+        @if (loan.status === 'Ativo' || loan.status === 'Atrasado') {
+            <button (click)="openPayment(loan)" class="bg-gray-900 text-white font-bold py-3 px-6 rounded-2xl hover:bg-black transition-all flex items-center shadow-lg shadow-gray-200 cursor-pointer">
+                Registar Amortização
+            </button>
+        }
     </div>
   </div>
 
@@ -49,6 +51,52 @@
             <p class="text-[10px] uppercase font-black text-gray-400 tracking-widest mb-2">Saldo em Dívida</p>
             <p class="text-2xl font-black text-red-600">{{ (loan.totalToPay - loan.paidAmount) | number }} MZN</p>
             <p class="text-xs text-gray-400 font-medium mt-2">Próxima Parcela: {{ loan.nextPayment }}</p>
+        </div>
+      </div>
+
+      <!-- Plano de Amortização Dinâmico (Tabela Price) -->
+      <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden mb-8">
+        <div class="p-8 border-b border-gray-50 flex justify-between items-center">
+            <div>
+               <h3 class="text-lg font-bold text-gray-900">Plano de Amortização</h3>
+               <p class="text-xs text-gray-400 font-medium mt-1">Simulado com o método de Parcelas Fixas (Tabela Price)</p>
+            </div>
+            <span class="text-xs font-black text-primary bg-emerald-50 border border-emerald-100 px-3 py-1 rounded-full uppercase tracking-widest shadow-sm">Sistema Francês</span>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full text-left">
+                <thead>
+                    <tr class="text-[10px] uppercase font-black text-gray-400 bg-gray-50/50 border-b border-gray-100">
+                        <th class="py-4 px-8">Nº Parcela</th>
+                        <th class="py-4 px-6">Vencimento</th>
+                        <th class="py-4 px-6">Prestação</th>
+                        <th class="py-4 px-6">Amortização</th>
+                        <th class="py-4 px-6">Juros</th>
+                        <th class="py-4 px-6">Saldo Restante</th>
+                        <th class="py-4 px-8 text-right">Estado</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-50">
+                    @for (inst of getAmortizationSchedule(loan); track inst.installmentNumber) {
+                        <tr class="hover:bg-gray-50/50 transition-colors">
+                            <td class="py-5 px-8 text-sm font-mono text-gray-400">#{{ inst.installmentNumber }}</td>
+                            <td class="py-5 px-6 text-sm font-bold text-gray-700">{{ inst.dueDate }}</td>
+                            <td class="py-5 px-6 text-sm font-black text-gray-900">{{ inst.monthlyPayment | number:'1.2-2' }} MZN</td>
+                            <td class="py-5 px-6 text-sm font-bold text-emerald-600">{{ inst.principalPortion | number:'1.2-2' }} MZN</td>
+                            <td class="py-5 px-6 text-sm font-medium text-amber-600">{{ inst.interestPortion | number:'1.2-2' }} MZN</td>
+                            <td class="py-5 px-6 text-sm font-bold text-gray-500">{{ inst.remainingBalance | number:'1.2-2' }} MZN</td>
+                            <td class="py-5 px-8 text-right">
+                                <span class="px-3 py-1 text-[10px] font-black uppercase rounded-full tracking-tighter"
+                                    [class.bg-emerald-50]="inst.status === 'Pago'" [class.text-emerald-700]="inst.status === 'Pago'"
+                                    [class.bg-red-50]="inst.status === 'Vencido'" [class.text-red-700]="inst.status === 'Vencido'"
+                                    [class.bg-gray-100]="inst.status === 'Pendente'" [class.text-gray-500]="inst.status === 'Pendente'">
+                                    {{ inst.status }}
+                                </span>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
       </div>
 
@@ -118,12 +166,54 @@
             </div>
         </div>
 
-        <div class="bg-red-50 rounded-3xl p-8 border border-red-100">
+        <div class="bg-red-50 rounded-3xl p-8 border border-red-100 print:hidden">
             <h4 class="text-sm font-black text-red-600 uppercase tracking-widest mb-4">Análise de Risco</h4>
             <p class="text-xs leading-relaxed text-red-800 font-medium">Este contrato encontra-se em estado <strong>{{ loan.status }}</strong>. Verifique o histórico de interações antes de autorizar novos ciclos de crédito.</p>
+        </div>
+
+        <!-- Print Signatures Section (Only on Print) -->
+        <div class="hidden print:block pt-20 space-y-20">
+            <div class="grid grid-cols-2 gap-20">
+                <div class="border-t border-gray-900 pt-4 text-center">
+                    <p class="text-xs font-bold text-gray-900">O Mutuário</p>
+                    <p class="text-[10px] text-gray-400 mt-1">(Assinatura e Impressão Digital)</p>
+                </div>
+                <div class="border-t border-gray-900 pt-4 text-center">
+                    <p class="text-xs font-bold text-gray-900">A Instituição (Kuenda Finance)</p>
+                    <p class="text-[10px] text-gray-400 mt-1">(Carimbo e Assinatura)</p>
+                </div>
+            </div>
+            <div class="border-t border-gray-200 pt-8 text-center text-[10px] text-gray-400 uppercase tracking-widest">
+                Gerado em {{ loan.date }} via Kuenda Finance Platform
+            </div>
         </div>
     </div>
 
   </div>
 </div>
+
+<!-- Modal de Registo de Pagamento (Amortização) -->
+@if (showPaymentModal) {
+<div class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-300">
+        <div class="px-8 py-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+            <h3 class="text-xl font-bold text-gray-900">Registar Pagamento</h3>
+            <button (click)="showPaymentModal = false" class="text-gray-400 hover:text-gray-600 cursor-pointer">
+                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+        <div class="p-8">
+            <div class="mb-6">
+                <label class="block text-sm font-bold text-gray-700 mb-2">Valor da Amortização (MZN)</label>
+                <input type="number" [(ngModel)]="paymentAmount" class="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl text-2xl font-black text-emerald-600 focus:bg-white focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 outline-none transition-all">
+                <p class="text-[11px] text-gray-400 mt-2">Valor sugerido baseado na Parcela Fixa (Price).</p>
+            </div>
+            
+            <button (click)="confirmPayment()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 px-6 rounded-2xl shadow-lg shadow-emerald-100 transition-all cursor-pointer">
+                Confirmar Recebimento
+            </button>
+        </div>
+    </div>
+</div>
+}
 }

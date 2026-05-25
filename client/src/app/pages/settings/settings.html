@@ -1,1 +1,234 @@
-<p>settings works!</p>
+<div class="max-w-[1400px] mx-auto pb-20 px-6">
+  
+  <div class="mb-10">
+    <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">Configurações do Sistema</h1>
+    <p class="text-gray-500 mt-2 text-lg">Administração da plataforma, regras de negócio e gestão de agências.</p>
+  </div>
+
+  <div class="flex flex-col lg:flex-row gap-10">
+    
+    <!-- Sidebar Interna de Navegação -->
+    <div class="w-full lg:w-72 flex-shrink-0">
+      <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-4 space-y-1 sticky top-24">
+        <button (click)="activeTab = 'perfil'" 
+            [class.bg-primary/10]="activeTab === 'perfil'" [class.text-primary]="activeTab === 'perfil'"
+            class="w-full flex items-center px-5 py-4 rounded-2xl text-sm font-bold transition-all text-gray-400 hover:text-gray-900 hover:bg-gray-50 cursor-pointer">
+          <svg class="w-5 h-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+          Perfil da IMF
+        </button>
+        <button (click)="activeTab = 'credito'" 
+            [class.bg-primary/10]="activeTab === 'credito'" [class.text-primary]="activeTab === 'credito'"
+            class="w-full flex items-center px-5 py-4 rounded-2xl text-sm font-bold transition-all text-gray-400 hover:text-gray-900 hover:bg-gray-50 cursor-pointer">
+          <svg class="w-5 h-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          Regras de Crédito
+        </button>
+        <button (click)="activeTab = 'agencias'" 
+            [class.bg-primary/10]="activeTab === 'agencias'" [class.text-primary]="activeTab === 'agencias'"
+            class="w-full flex items-center px-5 py-4 rounded-2xl text-sm font-bold transition-all text-gray-400 hover:text-gray-900 hover:bg-gray-50 cursor-pointer">
+          <svg class="w-5 h-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+          Múltiplas Agências
+        </button>
+        <button (click)="activeTab = 'equipa'" 
+            [class.bg-primary/10]="activeTab === 'equipa'" [class.text-primary]="activeTab === 'equipa'"
+            class="w-full flex items-center px-5 py-4 rounded-2xl text-sm font-bold transition-all text-gray-400 hover:text-gray-900 hover:bg-gray-50 cursor-pointer">
+          <svg class="w-5 h-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 01-9-3.833M15 9a3 3 0 11-6 0 3 3 0 016 0zm6 24v-1a6 6 0 00-9-3.833V21h9z"></path></svg>
+          Gestão de Equipa
+        </button>
+      </div>
+    </div>
+
+    <!-- Área de Conteúdo -->
+    <div class="flex-1">
+      
+      <!-- Secção 1: Perfil Institucional -->
+      @if (activeTab === 'perfil') {
+        <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 md:p-10 space-y-10 animate-in fade-in duration-500">
+            <div>
+                <h3 class="text-xl font-bold text-gray-900 mb-2">Perfil Institucional</h3>
+                <p class="text-sm text-gray-500">Estas informações aparecerão nos contratos e relatórios oficiais.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="md:col-span-2 flex items-center gap-8 pb-4 border-b border-gray-50">
+                    <div class="h-24 w-24 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200 flex flex-col items-center justify-center text-gray-400 hover:border-primary hover:text-primary transition-all cursor-pointer">
+                        <svg class="h-8 w-8 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        <span class="text-[10px] font-black uppercase">Logótipo</span>
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-bold text-gray-900">{{ profile.name }}</h4>
+                        <p class="text-xs text-gray-400">Dimensões sugeridas: 512x512px (PNG/SVG)</p>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Nome Comercial</label>
+                    <input type="text" [(ngModel)]="profile.name" class="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:bg-white focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all font-bold">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">NUIT (ID Fiscal)</label>
+                    <input type="text" [(ngModel)]="profile.nuit" class="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:bg-white outline-none font-bold">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Email Geral</label>
+                    <input type="email" [(ngModel)]="profile.email" class="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:bg-white outline-none font-bold">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Telefone Central</label>
+                    <input type="text" [(ngModel)]="profile.phone" class="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:bg-white outline-none font-bold">
+                </div>
+                <div class="md:col-span-2">
+                    <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Endereço Fiscal / Sede</label>
+                    <textarea [(ngModel)]="profile.address" rows="3" class="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:bg-white outline-none font-bold"></textarea>
+                </div>
+            </div>
+
+            <div class="flex justify-end pt-6 border-t border-gray-50">
+                <button (click)="saveProfile()" class="bg-primary hover:bg-primary-dark text-white font-black py-4 px-10 rounded-2xl shadow-lg shadow-emerald-100 transition-all cursor-pointer">
+                    Guardar Alterações
+                </button>
+            </div>
+        </div>
+      }
+
+      <!-- Secção 2: Regras de Crédito -->
+      @if (activeTab === 'credito') {
+        <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 md:p-10 space-y-10 animate-in slide-in-from-right-10 duration-500">
+            <div>
+                <h3 class="text-xl font-bold text-gray-900 mb-2">Política de Crédito</h3>
+                <p class="text-sm text-gray-500">Parâmetros financeiros aplicados a novos contratos.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-gray-50 p-6 rounded-3xl border border-gray-100">
+                    <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4">Taxa de Juro Padrão (%)</label>
+                    <div class="flex items-center">
+                        <input type="number" [(ngModel)]="creditParams.defaultRate" class="flex-1 bg-transparent border-none text-4xl font-black text-primary p-0 outline-none">
+                        <span class="text-2xl font-black text-gray-300 ml-2">%</span>
+                    </div>
+                </div>
+                <div class="bg-gray-50 p-6 rounded-3xl border border-gray-100">
+                    <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4">Taxa de Mora Diária (%)</label>
+                    <div class="flex items-center">
+                        <input type="number" [(ngModel)]="creditParams.lateRate" class="flex-1 bg-transparent border-none text-4xl font-black text-red-500 p-0 outline-none">
+                        <span class="text-2xl font-black text-gray-300 ml-2">%</span>
+                    </div>
+                </div>
+                <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                        <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Taxa de Abertura (MZN)</label>
+                        <input type="number" [(ngModel)]="creditParams.originationFee" class="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl outline-none font-bold">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Moeda Base (Fixa)</label>
+                        <input type="text" [value]="creditParams.currency" disabled class="w-full px-6 py-4 bg-gray-100 border border-gray-100 rounded-2xl outline-none font-black text-gray-400 cursor-not-allowed">
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-end pt-6 border-t border-gray-50">
+                <button (click)="saveCredit()" class="bg-gray-900 hover:bg-black text-white font-black py-4 px-10 rounded-2xl transition-all cursor-pointer">
+                    Actualizar Regras Globais
+                </button>
+            </div>
+        </div>
+      }
+
+      <!-- Secção 3: Agências (Multi-Filial) -->
+      @if (activeTab === 'agencias') {
+        <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden animate-in slide-in-from-right-10 duration-500">
+            <div class="p-8 border-b border-gray-50 flex justify-between items-center bg-gray-50/30">
+                <div>
+                   <h3 class="text-xl font-bold text-gray-900">Rede de Agências</h3>
+                   <p class="text-xs text-gray-400 mt-1">Configure múltiplas filiais para a sua IMF.</p>
+                </div>
+                <button (click)="addBranch()" class="bg-primary text-white font-bold py-2.5 px-6 rounded-xl hover:bg-primary-dark transition-all flex items-center cursor-pointer">
+                    <svg class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                    Nova Agência
+                </button>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead>
+                        <tr class="text-[10px] uppercase font-black text-gray-400 bg-gray-50/50 border-b border-gray-100">
+                            <th class="py-4 px-8">ID</th>
+                            <th class="py-4 px-8">Nome / Cidade</th>
+                            <th class="py-4 px-8">Gestor de Agência</th>
+                            <th class="py-4 px-8">Estado</th>
+                            <th class="py-4 px-8 text-right">Acção</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-50">
+                        @for (b of (branches$ | async); track b.id) {
+                            <tr class="hover:bg-gray-50/50 transition-colors">
+                                <td class="py-5 px-8 text-sm font-mono text-gray-400">#{{ b.id }}</td>
+                                <td class="py-5 px-8">
+                                    <div class="text-sm font-bold text-gray-900">{{ b.name }}</div>
+                                    <div class="text-[11px] text-gray-400 font-medium">{{ b.city }}</div>
+                                </td>
+                                <td class="py-5 px-8 text-sm font-bold text-gray-700">{{ b.manager }}</td>
+                                <td class="py-5 px-8">
+                                    <span class="px-3 py-1 text-[10px] font-black uppercase rounded-full"
+                                        [class.bg-emerald-100]="b.status === 'Ativa'" [class.text-emerald-700]="b.status === 'Ativa'"
+                                        [class.bg-gray-100]="b.status === 'Inativa'" [class.text-gray-500]="b.status === 'Inativa'">
+                                        {{ b.status }}
+                                    </span>
+                                </td>
+                                <td class="py-5 px-8 text-right">
+                                    <button class="p-2 text-gray-400 hover:text-primary transition-all cursor-pointer">
+                                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+      }
+
+      <!-- Secção 4: Equipa & Utilizadores -->
+      @if (activeTab === 'equipa') {
+        <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden animate-in slide-in-from-right-10 duration-500">
+            <div class="p-8 border-b border-gray-50 flex justify-between items-center bg-gray-50/30">
+                <div>
+                   <h3 class="text-xl font-bold text-gray-900">Gestão de Equipa</h3>
+                   <p class="text-xs text-gray-400 mt-1">Controle quem tem acesso à plataforma do Kuenda.</p>
+                </div>
+                <button class="bg-gray-900 text-white font-bold py-2.5 px-6 rounded-xl hover:bg-black transition-all flex items-center cursor-pointer">
+                    Convidar Utilizador
+                </button>
+            </div>
+            <div class="divide-y divide-gray-50">
+                @for (u of users; track u.email) {
+                    <div class="p-8 flex items-center justify-between hover:bg-gray-50/50 transition-colors">
+                        <div class="flex items-center">
+                            <div class="h-12 w-12 bg-gray-100 rounded-xl flex items-center justify-center text-primary font-black">
+                                {{ u.name.substring(0, 1) }}
+                            </div>
+                            <div class="ml-4">
+                                <div class="text-sm font-bold text-gray-900">{{ u.name }}</div>
+                                <div class="text-xs text-gray-400">{{ u.email }}</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-10">
+                            <div>
+                                <p class="text-[10px] uppercase font-black text-gray-300 tracking-widest mb-0.5">Cargo</p>
+                                <p class="text-xs font-bold text-gray-700">{{ u.role }}</p>
+                            </div>
+                            <div class="w-24">
+                                <span class="px-2.5 py-1 bg-emerald-50 text-emerald-600 text-[10px] font-black uppercase rounded-md tracking-tighter">{{ u.status }}</span>
+                            </div>
+                            <button class="p-2 text-gray-400 hover:text-red-500 transition-all cursor-pointer">
+                                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+      }
+
+    </div>
+
+  </div>
+</div>

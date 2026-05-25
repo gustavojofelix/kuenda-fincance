@@ -9,3 +9,54 @@
     @apply bg-slate-50 text-slate-900;
   }
 }
+
+@media print {
+  /* Hide UI elements */
+  aside, 
+  header, 
+  nav,
+  button,
+  .print\:hidden {
+    display: none !important;
+  }
+
+  /* Reset main content for print */
+  main {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  body {
+    background: white !important;
+  }
+
+  .max-w-\[1400px\] {
+    max-width: 100% !important;
+    width: 100% !important;
+    padding: 0 !important;
+  }
+
+  /* Ensure colors and text are visible */
+  * {
+    color: black !important;
+    box-shadow: none !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Specific document styling */
+  .bg-white, .bg-gray-50, .bg-emerald-50, .bg-red-50 {
+    background-color: transparent !important;
+    border: 1px solid #eee !important;
+  }
+
+  .rounded-3xl, .rounded-2xl, .rounded-xl {
+    border-radius: 0.5rem !important;
+  }
+
+  /* Force page breaks if needed */
+  .page-break {
+    page-break-before: always;
+  }
+}
+

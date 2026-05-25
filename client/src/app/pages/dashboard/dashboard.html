@@ -1,118 +1,239 @@
-@if (metrics$ | async; as metrics) {
-<div class="mb-8 flex justify-between items-end">
-  <div>
-    <h2 class="text-2xl font-bold text-gray-900">Dashboard</h2>
-    <p class="text-sm text-gray-500 mt-1">Resumo das atividades da Kuenda Finance.</p>
-  </div>
-  <button class="bg-primary hover:bg-primary-dark text-white font-medium py-2 px-4 rounded-lg shadow-sm transition-colors flex items-center">
-    <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-    Exportar BM
-  </button>
-</div>
-
-<!-- KPIs -->
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-  <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-    <div class="flex items-center text-sm font-medium text-gray-500 mb-2">
-      <svg class="w-5 h-5 text-gray-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-      Carteira Ativa
-    </div>
-    <div class="text-3xl font-bold text-gray-900">{{ metrics.activePortfolio }}</div>
-    <div class="text-sm font-medium text-green-600 mt-2 flex items-center">
-      <svg class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path></svg>
-      8% desde o mês passado
-    </div>
-  </div>
+<div class="max-w-[1400px] mx-auto pb-20 px-6">
   
-  <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-    <div class="flex items-center text-sm font-medium text-gray-500 mb-2">
-      <svg class="w-5 h-5 text-gray-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-      Taxa PAR &gt; 30
+  <div class="mb-10 flex justify-between items-center bg-white/50 backdrop-blur-md p-6 rounded-3xl border border-gray-100 shadow-sm">
+    <div>
+      <h2 class="text-3xl font-black text-gray-900 tracking-tight">Cockpit de Gestão</h2>
+      <p class="text-gray-500 mt-1 font-medium italic">Seja bem-vindo, Administrador.</p>
     </div>
-    <div class="text-3xl font-bold text-gray-900">{{ metrics.defaultRate }}</div>
-    <div class="text-sm font-medium text-green-600 mt-2 flex items-center">
-      <svg class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
-      0.5% descida
+    
+    <div class="flex items-center gap-4">
+        <!-- Privacy Toggle -->
+        <button (click)="togglePrivacy()" 
+            [class.bg-emerald-50]="privacyMode" [class.text-emerald-600]="privacyMode"
+            [class.bg-gray-100]="!privacyMode" [class.text-gray-500]="!privacyMode"
+            class="flex items-center px-4 py-2.5 rounded-xl font-bold text-xs uppercase tracking-widest transition-all cursor-pointer">
+            <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                @if (privacyMode) {
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path>
+                } @else {
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                }
+            </svg>
+            {{ privacyMode ? 'Modo Privado ON' : 'Ocultar Valores' }}
+        </button>
+
+        <!-- Simulator Toggle -->
+        <button (click)="simulate30Days()" 
+            class="flex items-center bg-red-50 hover:bg-red-100 text-red-600 font-bold px-4 py-2.5 rounded-xl text-xs uppercase tracking-widest transition-all cursor-pointer border border-red-100">
+            <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            Simular +30 Dias (Risco)
+        </button>
+
+        <a routerLink="/admin/reports" class="bg-gray-900 text-white font-bold py-2.5 px-6 rounded-xl hover:bg-black transition-all flex items-center shadow-lg shadow-gray-200 cursor-pointer">
+          <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+          MAPs BdM
+        </a>
     </div>
   </div>
 
-  <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-    <div class="flex items-center text-sm font-medium text-gray-500 mb-2">
-      <svg class="w-5 h-5 text-gray-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-      Vencimentos Breves
+  <!-- Real KPIs Row -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+    <div class="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm hover:shadow-md transition-shadow group">
+      <p class="text-[10px] uppercase font-black text-gray-400 tracking-widest mb-3 flex items-center">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 mr-2"></span>
+          Liquidez em Caixa
+      </p>
+      <div class="text-3xl font-black text-gray-900 group-hover:text-emerald-600 transition-colors">
+          {{ getMaskedValue(cashBalance$ | async) }}
+      </div>
+      <div class="mt-4 flex items-center text-[10px] font-black text-gray-400 uppercase tracking-tighter">
+          <svg class="w-4 h-4 text-emerald-500 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 10l7-7m0 0l7 7m-7-7v18"></path></svg>
+          Estável
+      </div>
     </div>
-    <div class="text-3xl font-bold text-gray-900">{{ metrics.upcomingDue }}</div>
-    <div class="text-sm font-medium text-gray-500 mt-2">
-      Próximos 7 dias
-    </div>
+    
+    <div class="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm hover:shadow-md transition-shadow group">
+        <p class="text-[10px] uppercase font-black text-gray-400 tracking-widest mb-3 flex items-center">
+            <span class="w-2 h-2 rounded-full bg-primary mr-2 animate-pulse"></span>
+            Crédito Ativo
+        </p>
+        <div class="text-3xl font-black text-gray-900 group-hover:text-primary transition-colors">
+            {{ getMaskedValue(totalPortfolio$ | async) }}
+        </div>
+        <div class="mt-4 flex items-center text-[10px] font-black text-primary uppercase tracking-tighter">
+            {{ (totalClients$ | async) }} Mutuários Ativos
+        </div>
+      </div>
+
+      <div class="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm hover:shadow-md transition-shadow group">
+        <p class="text-[10px] uppercase font-black text-gray-400 tracking-widest mb-3 flex items-center">
+            <svg class="w-4 h-4 mr-1 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+            PAR > 30 (Risco)
+        </p>
+        <div class="text-3xl font-black text-gray-900 group-hover:text-red-500 transition-colors">
+            {{ (par30Rate$ | async) | number:'1.1-1' }}%
+        </div>
+        <div class="mt-4 flex items-center text-[10px] font-black text-red-400 uppercase tracking-tighter">
+            Abaixo do limite prudencial
+        </div>
+      </div>
+
+      <div class="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm hover:shadow-md transition-shadow group">
+        <p class="text-[10px] uppercase font-black text-gray-400 tracking-widest mb-3 flex items-center font-bold">
+            Fluxo Mensal (Net)
+        </p>
+        <div class="text-3xl font-black text-gray-900 group-hover:text-blue-600 transition-colors">
+            @if (privacyMode) {
+                ••••••
+            } @else {
+               {{ ((monthlyInflow$ | async) || 0) - ((monthlyOutflow$ | async) || 0) | number }}
+            }
+        </div>
+        <div class="mt-4 flex items-center text-[10px] font-black text-blue-500 uppercase tracking-tighter">
+            In: +{{ (monthlyInflow$ | async) | number }} | Out: -{{ (monthlyOutflow$ | async) | number }}
+        </div>
+      </div>
   </div>
 
-  <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 border-l-4" [class.border-l-primary]="metrics.newLeads > 0" [class.border-l-gray-200]="metrics.newLeads === 0">
-    <div class="flex items-center text-sm font-medium text-gray-500 mb-2">
-      <svg class="w-5 h-5 mr-2" [class.text-primary]="metrics.newLeads > 0" [class.text-gray-400]="metrics.newLeads === 0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-      Novos Leads (Marketplace)
-    </div>
-    <div class="text-3xl font-bold text-gray-900">{{ metrics.newLeads }}</div>
-    <div class="text-sm font-medium mt-2" [class.text-primary]="metrics.newLeads > 0" [class.text-gray-400]="metrics.newLeads === 0">
-      Aguardam aprovação
-    </div>
-  </div>
-</div>
-}
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+    
+    <!-- Minimalist SVG Charts (Stripe Style) -->
+    <div class="lg:col-span-2 space-y-10">
+        
+        <!-- Cash Flow Bar Chart (Pure SVG) -->
+        <div class="bg-white rounded-3xl border border-gray-100 p-10 shadow-sm">
+            <div class="flex justify-between items-center mb-10">
+                <div>
+                    <h3 class="text-lg font-bold text-gray-900">Histórico de Fluxo de Caixa</h3>
+                    <p class="text-xs text-gray-400 font-medium">Entradas vs Saídas (Últimos 6 Meses)</p>
+                </div>
+                <div class="flex gap-4">
+                    <span class="flex items-center text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                        <span class="w-3 h-3 bg-primary rounded-sm mr-2"></span> Entradas
+                    </span>
+                    <span class="flex items-center text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                        <span class="w-3 h-3 bg-gray-200 rounded-sm mr-2"></span> Saídas
+                    </span>
+                </div>
+            </div>
 
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-  
-  <div class="lg:col-span-1 bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex flex-col">
-    <h3 class="text-lg font-bold text-gray-900 mb-4">Desembolso Mensal</h3>
-    <div class="flex-1 flex items-end space-x-2 w-full pt-8 h-48">
-      <div class="bg-primary/20 hover:bg-primary/40 rounded-t-sm w-1/6" style="height: 40%"></div>
-      <div class="bg-primary/20 hover:bg-primary/40 rounded-t-sm w-1/6" style="height: 60%"></div>
-      <div class="bg-primary/20 hover:bg-primary/40 rounded-t-sm w-1/6" style="height: 50%"></div>
-      <div class="bg-primary/20 hover:bg-primary/40 rounded-t-sm w-1/6" style="height: 80%"></div>
-      <div class="bg-primary hover:bg-primary-dark rounded-t-sm w-1/6" style="height: 95%"></div>
-      <div class="bg-primary/10 rounded-t-sm w-1/6" style="height: 20%"></div>
-    </div>
-    <div class="flex justify-between mt-2 text-xs text-gray-400 border-t border-gray-100 pt-2">
-      <span>Jan</span><span>Fev</span><span>Mar</span><span>Abr</span><span>Mai</span><span>Jun</span>
-    </div>
-  </div>
+            <div class="relative h-64 flex items-end justify-between gap-4 px-2">
+                <!-- Grid Lines -->
+                <div class="absolute inset-0 flex flex-col justify-between pointer-events-none">
+                    <div class="w-full border-t border-gray-50"></div>
+                    <div class="w-full border-t border-gray-50"></div>
+                    <div class="w-full border-t border-gray-50"></div>
+                </div>
 
-  <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-    <div class="flex justify-between items-center mb-4">
-      <h3 class="text-lg font-bold text-gray-900">Empréstimos Recentes</h3>
-      <a routerLink="/admin/loans" class="text-primary hover:text-primary-dark text-sm font-medium">Ver Todos</a>
+                @for (entry of cashFlowData; track entry.month) {
+                    <div class="flex-1 flex flex-col items-center group relative cursor-help">
+                        <!-- Bar Tooltip -->
+                        <div class="absolute -top-12 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-900 text-white text-[10px] px-3 py-1.5 rounded-lg z-10 pointer-events-none font-bold">
+                            +{{ entry.inflow | number }} MZN
+                        </div>
+                        
+                        <div class="w-full flex justify-center gap-1 items-end relative z-0">
+                            <!-- Inflow Bar -->
+                            <div class="bg-primary hover:bg-primary-dark transition-all duration-700 rounded-t-lg w-4 md:w-8" [style.height.px]="entry.inflow / 250"></div>
+                            <!-- Outflow Bar -->
+                            <div class="bg-gray-100 hover:bg-gray-200 transition-all duration-700 rounded-t-lg w-4 md:w-8" [style.height.px]="entry.outflow / 250"></div>
+                        </div>
+                        <span class="mt-4 text-[10px] font-black text-gray-400 uppercase tracking-widest">{{ entry.month }}</span>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- Recent Activity Feed -->
+        <div class="bg-white rounded-3xl border border-gray-100 overflow-hidden shadow-sm">
+            <div class="p-8 border-b border-gray-50 flex justify-between items-center">
+                <h3 class="text-lg font-bold text-gray-900">Últimos Contratos</h3>
+                <a routerLink="/admin/loans" class="text-xs font-black text-primary uppercase tracking-widest hover:underline">Ver Gestão de Crédito</a>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead>
+                        <tr class="text-[10px] font-black text-gray-400 uppercase tracking-widest bg-gray-50 border-b border-gray-100">
+                            <th class="py-4 px-8">Contrato / Cliente</th>
+                            <th class="py-4 px-8">Principal</th>
+                            <th class="py-4 px-8">Próximo Venc.</th>
+                            <th class="py-4 px-8 text-right">Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-50">
+                        @for (loan of recentLoans$ | async; track loan.id) {
+                            <tr class="hover:bg-gray-50/50 transition-colors">
+                                <td class="py-5 px-8">
+                                    <div class="text-sm font-bold text-gray-900">{{ loan.clientName }}</div>
+                                    <div class="text-[10px] text-gray-400 font-mono tracking-tighter">{{ loan.id }}</div>
+                                </td>
+                                <td class="py-5 px-8 text-sm font-black text-gray-700">
+                                    {{ getMaskedValue(loan.amount) }}
+                                </td>
+                                <td class="py-5 px-8">
+                                    <div class="flex items-center text-xs font-bold text-gray-500">
+                                        <svg class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                        {{ loan.nextPayment }}
+                                    </div>
+                                </td>
+                                <td class="py-5 px-8 text-right">
+                                    <span class="px-3 py-1 bg-emerald-50 text-emerald-600 text-[10px] font-bold uppercase rounded-full border border-emerald-100">{{ loan.status }}</span>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
-    <div class="overflow-x-auto">
-      <table class="w-full text-left border-collapse">
-        <thead>
-          <tr class="text-xs uppercase text-gray-400 bg-gray-50 border-b border-gray-100">
-            <th class="py-3 px-4 rounded-tl-lg font-medium">Cliente</th>
-            <th class="py-3 px-4 font-medium">Valor</th>
-            <th class="py-3 px-4 font-medium">Próx. Pagamento</th>
-            <th class="py-3 px-4 rounded-tr-lg font-medium">Estado</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (loan of recentLoans$ | async; track loan.id) {
-          <tr class="border-b border-gray-50 hover:bg-gray-50 transition-colors">
-            <td class="py-3 px-4">
-              <span class="font-medium text-gray-900">{{ loan.clientName }}</span>
-              <span class="block text-xs text-gray-500">{{ loan.id }}</span>
-            </td>
-            <td class="py-3 px-4 font-bold text-gray-700">{{ loan.amount }}</td>
-            <td class="py-3 px-4 text-gray-600">{{ loan.nextPayment }}</td>
-            <td class="py-3 px-4">
-              <span class="px-2 py-1 text-xs font-semibold rounded-full" 
-                [class.bg-green-100]="loan.status === 'Ativo'" [class.text-green-800]="loan.status === 'Ativo'"
-                [class.bg-red-100]="loan.status === 'Atrasado'" [class.text-red-800]="loan.status === 'Atrasado'"
-                [class.bg-yellow-100]="loan.status === 'Em Análise'" [class.text-yellow-800]="loan.status === 'Em Análise'">
-                {{ loan.status }}
-              </span>
-            </td>
-          </tr>
-          }
-        </tbody>
-      </table>
+
+    <!-- Right Sidebar: Operational Stats -->
+    <div class="space-y-6">
+        <div class="bg-primary rounded-3xl p-8 text-white shadow-xl shadow-emerald-100 relative overflow-hidden group">
+            <!-- Decorative circle -->
+            <div class="absolute -top-10 -right-10 w-32 h-32 bg-white/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-1000"></div>
+            
+            <h4 class="text-xs font-black uppercase tracking-widest text-white/60 mb-6 flex items-center">
+                <svg class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                Gestão Ágil
+            </h4>
+            
+            <div class="space-y-4">
+                <a routerLink="/admin/clients/register" class="flex items-center justify-between p-4 bg-white/10 hover:bg-white/20 rounded-2xl transition-all group/btn">
+                    <span class="text-sm font-bold">Novo Cliente</span>
+                    <svg class="h-5 w-5 opacity-0 group-hover/btn:opacity-100 group-hover/btn:translate-x-1 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7"></path></svg>
+                </a>
+                <a routerLink="/admin/loans/register" class="flex items-center justify-between p-4 bg-white/10 hover:bg-white/20 rounded-2xl transition-all group/btn">
+                    <span class="text-sm font-bold">Simular Crédito</span>
+                    <svg class="h-5 w-5 opacity-0 group-hover/btn:opacity-100 group-hover/btn:translate-x-1 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7"></path></svg>
+                </a>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm">
+            <h4 class="text-xs font-black text-gray-400 uppercase tracking-widest mb-6 pb-2 border-b border-gray-50">Métricas de Equipa</h4>
+            <div class="space-y-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-bold text-gray-900 tracking-tight">Leads Pendentes</p>
+                        <p class="text-[10px] text-gray-400 uppercase font-black">Aguardando Avaliação</p>
+                    </div>
+                    <span class="h-8 w-8 bg-amber-50 text-amber-600 rounded-lg flex items-center justify-center font-black">8</span>
+                </div>
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-bold text-gray-900 tracking-tight">Novos Registos (Mês)</p>
+                        <p class="text-[10px] text-gray-400 uppercase font-black">Ciclo KYC</p>
+                    </div>
+                    <span class="h-8 w-8 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center font-black">12</span>
+                </div>
+            </div>
+        </div>
+        
     </div>
+
   </div>
 </div>

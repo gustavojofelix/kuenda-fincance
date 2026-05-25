@@ -1,1 +1,101 @@
-<p>leads works!</p>
+<div class="max-w-[1400px] mx-auto pb-20 px-6">
+  
+    <div class="mb-10 flex justify-between items-end">
+      <div>
+        <h2 class="text-3xl font-extrabold text-gray-900 tracking-tight">Gestão de Leads</h2>
+        <p class="text-gray-500 mt-2 text-lg">Pedidos recebidos via Marketplace que aguardam qualificação.</p>
+      </div>
+      <div class="flex gap-4">
+          <div class="px-6 py-3 bg-white border border-gray-100 rounded-2xl shadow-sm">
+              <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-0.5">Pipeline Potencial</p>
+              <p class="text-xl font-black text-primary">{{ (pipelineValue$ | async) | number }} MZN</p>
+          </div>
+      </div>
+    </div>
+
+    <!-- KPIs Row -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+        <div class="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm flex items-center">
+            <div class="h-12 w-12 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-600 mr-4">
+                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+            </div>
+            <div>
+                <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Leads Pendentes</p>
+                <p class="text-2xl font-black text-gray-900">{{ totalLeads$ | async }}</p>
+            </div>
+        </div>
+        
+        <div class="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm flex items-center">
+            <div class="h-12 w-12 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-600 mr-4">
+                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            </div>
+            <div>
+                <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Taxa de Conversão</p>
+                <p class="text-2xl font-black text-gray-900">24%</p>
+            </div>
+        </div>
+
+        <div class="bg-gray-900 p-8 rounded-3xl shadow-xl flex items-center justify-between text-white overflow-hidden relative group">
+            <div class="relative z-10">
+                <p class="text-[10px] font-black text-white/50 uppercase tracking-widest mb-1">Qualidade das Leads</p>
+                <p class="text-lg font-bold">Alta Prioridade</p>
+            </div>
+            <svg class="h-16 w-16 text-white/10 absolute -right-4 -bottom-4 transform rotate-12 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"></path></svg>
+        </div>
+    </div>
+
+    <!-- Leads Table -->
+    <div class="bg-white rounded-[40px] shadow-sm border border-gray-100 overflow-hidden">
+        <table class="w-full text-left">
+            <thead>
+                <tr class="text-[10px] font-black text-gray-400 uppercase tracking-widest bg-gray-50/50 border-b border-gray-100">
+                    <th class="py-5 px-8">Interessado / Negócio</th>
+                    <th class="py-5 px-8">Valor Solicitado</th>
+                    <th class="py-5 px-8">Contacto M-Pesa</th>
+                    <th class="py-5 px-8">Estado de Avaliação</th>
+                    <th class="py-5 px-8 text-right">Direcionamento</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-50">
+                @for (lead of (leads$ | async); track lead.id) {
+                    <tr class="hover:bg-gray-50/50 transition-colors group">
+                        <td class="py-6 px-8">
+                            <div class="text-sm font-bold text-gray-900 group-hover:text-primary transition-colors">{{ lead.name }}</div>
+                            <div class="text-[11px] text-gray-400 font-medium">Actividade: {{ lead.business }}</div>
+                        </td>
+                        <td class="py-6 px-8">
+                            <div class="text-sm font-black text-gray-900">{{ lead.income | number }} MZN</div>
+                            <div class="text-[10px] text-emerald-600 font-bold uppercase tracking-widest">Pipeline</div>
+                        </td>
+                        <td class="py-6 px-8 text-sm font-mono font-bold text-gray-500">
+                            {{ lead.phone }}
+                        </td>
+                        <td class="py-6 px-8">
+                            <span class="px-3 py-1 bg-blue-50 text-blue-600 text-[10px] font-black uppercase rounded-full border border-blue-100">
+                                {{ lead.status }}
+                            </span>
+                        </td>
+                        <td class="py-6 px-8 text-right space-x-2">
+                            <button (click)="approveLead(lead.id)" class="text-emerald-600 hover:text-white hover:bg-emerald-600 border border-emerald-600 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all cursor-pointer">Qualificar</button>
+                            <button (click)="rejectLead(lead.id)" class="text-gray-400 hover:text-red-500 p-2 transition-all cursor-pointer">
+                                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                            </button>
+                        </td>
+                    </tr>
+                }
+                @if (((leads$ | async) || []).length === 0) {
+                    <tr>
+                        <td colspan="5" class="py-20 text-center">
+                            <div class="max-w-xs mx-auto">
+                                <svg class="mx-auto h-12 w-12 text-gray-200 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                                <p class="text-gray-400 font-bold">Sem leads pendentes no momento.</p>
+                                <p class="text-[10px] text-gray-300 uppercase mt-1">Os novos formulários do Marketplace aparecerão aqui.</p>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+  </div>
