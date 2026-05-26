@@ -36,7 +36,7 @@
           <div class="space-y-4">
             <div>
               <label class="block text-sm font-bold text-gray-700 mb-1 uppercase text-[10px] tracking-wider">Código da IMF (Subdomínio)</label>
-              <input type="text" [(ngModel)]="imfId" (input)="onImfIdInput()" name="imfId" placeholder="Ex: kuenda ou socinal" class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all font-mono font-bold text-sm">
+              <input type="text" [(ngModel)]="imfId" (input)="onImfIdInput()" name="imfId" placeholder="Ex: IMF-20260526KD" class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all font-mono font-bold text-sm">
             </div>
             <div>
               <label class="block text-sm font-bold text-gray-700 mb-1 uppercase text-[10px] tracking-wider">E-mail Profissional</label>
@@ -65,8 +65,8 @@
                 Contas Mock Disponíveis (SaaS):
               </p>
               <ul class="list-disc list-inside space-y-0.5 ml-1">
-                <li>Código: <code class="font-bold text-gray-800">kuenda</code> | Utilizador: <code class="font-bold text-gray-800">carlos@kuenda.co.mz</code> | Senha: <code class="font-bold text-gray-800">123456</code></li>
-                <li>Código: <code class="font-bold text-gray-800">socinal</code> | Utilizador: <code class="font-bold text-gray-800">ana@socinal.co.mz</code> | Senha: <code class="font-bold text-gray-800">123456</code></li>
+                <li>Código: <code class="font-bold text-gray-800">IMF-20260526KD</code> | Utilizador: <code class="font-bold text-gray-800">carlos@kuenda.co.mz</code> | Senha: <code class="font-bold text-gray-800">123456</code></li>
+                <li>Código: <code class="font-bold text-gray-800">IMF-20260526SC</code> | Utilizador: <code class="font-bold text-gray-800">ana@socinal.co.mz</code> | Senha: <code class="font-bold text-gray-800">123456</code></li>
               </ul>
             </div>
           </div>
@@ -74,27 +74,61 @@
         }
 
         @if (currentTab === 'register') {
-        <!-- Register Form -->
-        <form>
-          <div class="space-y-4">
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Nome da Instituição</label>
-              <input type="text" placeholder="Ex: Finanças Rápidas Lda" class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all">
+          @if (!registeredCode) {
+          <!-- Register Form -->
+          <form (submit)="$event.preventDefault(); onSubmitRegister()">
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Nome da Instituição</label>
+                <input type="text" [(ngModel)]="regName" name="regName" placeholder="Ex: Finanças Rápidas Lda" class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" required>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">NUIT</label>
+                <input type="text" [(ngModel)]="regNuit" name="regNuit" placeholder="Ex: 400123456" class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" required>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Email do Administrador</label>
+                <input type="email" [(ngModel)]="regEmail" name="regEmail" placeholder="admin@imf.co.mz" class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" required>
+              </div>
+              
+              <button type="submit" class="w-full bg-gray-900 hover:bg-black text-white font-semibold py-3 px-4 rounded-lg shadow hover:shadow-lg transition-all duration-200 mt-4 cursor-pointer">
+                Criar Conta (8.500 MZN/mês)
+              </button>
             </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">NUIT</label>
-              <input type="text" placeholder="400000000" class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all">
+          </form>
+          } @else {
+          <!-- Success State -->
+          <div class="text-center py-4 animate-in fade-in slide-in-from-bottom-4 duration-300">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 mb-4">
+              <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
+              </svg>
             </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Email do Administrador</label>
-              <input type="email" placeholder="admin@imf.co.mz" class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all">
-            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">Subscrição Concluída!</h3>
+            <p class="text-sm text-gray-500 mb-6 font-medium">A sua instituição foi registada. Utilize o código gerado abaixo para aceder ao sistema:</p>
             
-            <button class="w-full bg-gray-900 hover:bg-black text-white font-semibold py-3 px-4 rounded-lg shadow hover:shadow-lg transition-all duration-200 mt-4" (click)="switchTab('login')">
-              Criar Conta (8.500 MZN/mês)
+            <div class="bg-gray-50 border border-dashed border-gray-300 rounded-xl p-4 mb-6 relative group overflow-hidden">
+              <span class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1.5">Código da IMF</span>
+              <span class="block text-2xl font-mono font-bold text-slate-800 uppercase tracking-wider select-all">{{ registeredCode }}</span>
+            </div>
+
+            <div class="text-left bg-blue-50 border border-blue-100 rounded-xl p-4 mb-6 text-xs text-blue-800 leading-relaxed">
+              <p class="font-bold mb-1.5 flex items-center">
+                <svg class="h-4 w-4 mr-1 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                Instruções de Acesso:
+              </p>
+              <ul class="list-disc list-inside space-y-1 ml-1 font-semibold">
+                <li>Utilize o código acima como Código da IMF.</li>
+                <li>E-mail: <code class="font-bold text-blue-900 bg-blue-100/50 px-1.5 py-0.5 rounded">{{ regEmail }}</code></li>
+                <li>Palavra-passe padrão: <code class="font-bold text-blue-900 bg-blue-100/50 px-1.5 py-0.5 rounded">123456</code></li>
+              </ul>
+            </div>
+
+            <button (click)="proceedToLogin()" class="w-full bg-primary hover:bg-primary-dark text-white font-semibold py-3 px-4 rounded-lg shadow hover:shadow-lg transition-all duration-200 cursor-pointer">
+              Avançar para o Login
             </button>
           </div>
-        </form>
+          }
         }
 
       </div>

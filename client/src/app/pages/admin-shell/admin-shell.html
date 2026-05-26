@@ -61,17 +61,20 @@
         </div>
       </div>
       
-      <!-- SaaS Institution Switcher Dropdown -->
-      <div>
-        <label class="block text-[8px] font-black text-gray-500 uppercase tracking-widest mb-1.5">Mudar de Instituição</label>
-        <div class="relative">
-          <select [ngModel]="activeImfId$ | async" (ngModelChange)="switchImf($event)" class="w-full bg-slate-800 text-white text-xs font-bold border border-white/10 rounded-xl px-3 py-2.5 outline-none cursor-pointer focus:border-primary focus:ring-1 focus:ring-primary appearance-none">
-              @for (imf of imfs$ | async; track imf.id) {
-                  <option [value]="imf.id">{{ imf.name }}</option>
-              }
-          </select>
-          <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-400">
-            <svg class="fill-current h-3 w-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+      <!-- Current Tenant Info Card -->
+      <div class="bg-slate-800/40 border border-white/5 rounded-2xl p-4 mt-2">
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-[8px] font-black text-gray-500 uppercase tracking-widest">Instituição SaaS</span>
+          <span class="px-2 py-0.5 bg-primary/15 border border-primary/20 text-primary text-[8px] font-black rounded-full uppercase tracking-wider">Ativa</span>
+        </div>
+        <div class="space-y-2 text-xs">
+          <div class="flex justify-between items-center">
+            <span class="text-gray-400 font-semibold text-[10px]">Código:</span>
+            <span class="font-mono font-bold text-gray-200 uppercase tracking-wider select-all bg-slate-900/40 px-2 py-0.5 rounded border border-white/5">{{ (activeImf$ | async)?.id | uppercase }}</span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-gray-400 font-semibold text-[10px]">NUIT:</span>
+            <span class="font-bold text-gray-200">{{ (activeImf$ | async)?.nuit || '---' }}</span>
           </div>
         </div>
       </div>

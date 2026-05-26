@@ -17,7 +17,6 @@ export class AdminShell {
   notifications$ = this.notificationService.notifications$;
   unreadCount$ = this.notificationService.unreadCount$;
   
-  imfs$ = this.stateService.imfs$;
   activeImf$ = this.stateService.activeImf$;
   activeImfId$ = this.stateService.activeImfId$;
   
@@ -32,9 +31,5 @@ export class AdminShell {
 
   markAsRead(id: string) {
     this.notificationService.markAsRead(id);
-  }
-
-  switchImf(id: string) {
-    this.stateService.switchImf(id);
   }
 }

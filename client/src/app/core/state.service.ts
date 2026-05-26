@@ -87,7 +87,7 @@ export class StateService {
   // Multi-Tenant IMF Database
   private imfsSubj = new BehaviorSubject<IMF[]>([
     { 
-      id: 'kuenda', 
+      id: 'imf-20260526kd', 
       name: 'Kuenda Microfinanças', 
       nuit: '400567123', 
       email: 'contacto@kuenda.co.mz', 
@@ -97,7 +97,7 @@ export class StateService {
       secondaryColor: '#059669'
     },
     { 
-      id: 'socinal', 
+      id: 'imf-20260526sc', 
       name: 'Socinal Microfinanças', 
       nuit: '900456123', 
       email: 'contacto@socinal.co.mz', 
@@ -110,29 +110,29 @@ export class StateService {
   imfs$ = this.imfsSubj.asObservable();
 
   // Active IMF Context
-  private activeImfIdSubj = new BehaviorSubject<string>('kuenda');
+  private activeImfIdSubj = new BehaviorSubject<string>('imf-20260526kd');
   activeImfId$ = this.activeImfIdSubj.asObservable();
 
   activeImf$ = combineLatest([this.imfs$, this.activeImfId$]).pipe(
-    map(([imfs, activeId]) => imfs.find(i => i.id === activeId))
+    map(([imfs, activeId]) => imfs.find(i => i.id.toLowerCase() === activeId.toLowerCase()))
   );
 
   // Master Data Subjects
   private branchesSubj = new BehaviorSubject<Branch[]>([
-    { id: 1, imfId: 'kuenda', name: 'Sede Maputo', city: 'Maputo', address: 'Av. Eduardo Mondlane', manager: 'Carlos Mutemba', status: 'Ativa' },
-    { id: 2, imfId: 'kuenda', name: 'Agência Matola', city: 'Matola', address: 'Rua da Beira', manager: 'Anabela Sitoe', status: 'Ativa' },
-    { id: 3, imfId: 'socinal', name: 'Agência Beira', city: 'Beira', address: 'Av. das Indústrias', manager: 'João Chissano', status: 'Ativa' },
-    { id: 4, imfId: 'socinal', name: 'Agência Nampula', city: 'Nampula', address: 'Rua da Estação', manager: 'Filomena Sitoe', status: 'Ativa' }
+    { id: 1, imfId: 'imf-20260526kd', name: 'Sede Maputo', city: 'Maputo', address: 'Av. Eduardo Mondlane', manager: 'Carlos Mutemba', status: 'Ativa' },
+    { id: 2, imfId: 'imf-20260526kd', name: 'Agência Matola', city: 'Matola', address: 'Rua da Beira', manager: 'Anabela Sitoe', status: 'Ativa' },
+    { id: 3, imfId: 'imf-20260526sc', name: 'Agência Beira', city: 'Beira', address: 'Av. das Indústrias', manager: 'João Chissano', status: 'Ativa' },
+    { id: 4, imfId: 'imf-20260526sc', name: 'Agência Nampula', city: 'Nampula', address: 'Rua da Estação', manager: 'Filomena Sitoe', status: 'Ativa' }
   ]);
 
   private clientsSubj = new BehaviorSubject<Client[]>(MOCK_CLIENTS);
   private loansSubj = new BehaviorSubject<Loan[]>(MOCK_LOANS as any);
   
   private transactionsSubj = new BehaviorSubject<Transaction[]>([
-    { id: 'T-101', imfId: 'kuenda', description: 'Pagamento Salários Março', amount: 45000, date: '2024-03-05', category: 'Salários', type: 'Saída' },
-    { id: 'T-102', imfId: 'kuenda', description: 'Factura EDM - Maputo', amount: 3200, date: '2024-03-02', category: 'Energia', type: 'Saída' },
-    { id: 'T-201', imfId: 'socinal', description: 'Pagamento Renda Agência', amount: 25000, date: '2024-03-01', category: 'Renda', type: 'Saída' },
-    { id: 'T-202', imfId: 'socinal', description: 'Consumo EDM - Beira', amount: 4800, date: '2024-03-04', category: 'Energia', type: 'Saída' }
+    { id: 'T-101', imfId: 'imf-20260526kd', description: 'Pagamento Salários Março', amount: 45000, date: '2024-03-05', category: 'Salários', type: 'Saída' },
+    { id: 'T-102', imfId: 'imf-20260526kd', description: 'Factura EDM - Maputo', amount: 3200, date: '2024-03-02', category: 'Energia', type: 'Saída' },
+    { id: 'T-201', imfId: 'imf-20260526sc', description: 'Pagamento Renda Agência', amount: 25000, date: '2024-03-01', category: 'Renda', type: 'Saída' },
+    { id: 'T-202', imfId: 'imf-20260526sc', description: 'Consumo EDM - Beira', amount: 4800, date: '2024-03-04', category: 'Energia', type: 'Saída' }
   ]);
 
   private metricsSubj = new BehaviorSubject(MOCK_METRICS);
@@ -172,9 +172,65 @@ export class StateService {
   }
 
   switchImf(imfId: string) {
-    if (this.imfsSubj.value.some(i => i.id === imfId)) {
-      this.activeImfIdSubj.next(imfId);
+    const id = imfId.trim().toLowerCase();
+    if (this.imfsSubj.value.some(i => i.id.toLowerCase() === id)) {
+      this.activeImfIdSubj.next(id);
     }
+  }
+
+  registerIMF(name: string, nuit: string, email: string): IMF {
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const dd = String(today.getDate()).padStart(2, '0');
+    const dateStr = `${yyyy}${mm}${dd}`;
+    
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const r1 = chars.charAt(Math.floor(Math.random() * chars.length));
+    const r2 = chars.charAt(Math.floor(Math.random() * chars.length));
+    
+    const generatedId = `imf-${dateStr}${r1}${r2}`.toLowerCase();
+
+    // Select dynamic brand primary color combinations (Hex)
+    const colors = [
+      { primary: '#6366f1', secondary: '#4f46e5' }, // Indigo
+      { primary: '#8b5cf6', secondary: '#7c3aed' }, // Purple
+      { primary: '#ec4899', secondary: '#db2777' }, // Pink
+      { primary: '#06b6d4', secondary: '#0891b2' }, // Cyan
+      { primary: '#10b981', secondary: '#059669' }, // Emerald
+      { primary: '#f59e0b', secondary: '#d97706' }  // Amber
+    ];
+    const color = colors[Math.floor(Math.random() * colors.length)];
+
+    const newImf: IMF = {
+      id: generatedId,
+      name,
+      nuit,
+      email,
+      phone: '',
+      address: '',
+      primaryColor: color.primary,
+      secondaryColor: color.secondary
+    };
+
+    const currentImfs = this.imfsSubj.value;
+    this.imfsSubj.next([...currentImfs, newImf]);
+
+    // Initialize a default main branch for this new tenant
+    const currentBranches = this.branchesSubj.value;
+    const nextBranchId = currentBranches.length > 0 ? Math.max(...currentBranches.map(b => b.id)) + 1 : 1;
+    const defaultBranch: Branch = {
+      id: nextBranchId,
+      imfId: generatedId,
+      name: 'Agência Sede',
+      city: 'Maputo',
+      address: 'Sede Principal',
+      manager: 'Administrador',
+      status: 'Ativa'
+    };
+    this.branchesSubj.next([...currentBranches, defaultBranch]);
+
+    return newImf;
   }
 
   updateIMF(updates: Partial<IMF>) {
