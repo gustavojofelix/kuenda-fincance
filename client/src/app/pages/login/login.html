@@ -32,15 +32,19 @@
 
         @if (currentTab === 'login') {
         <!-- Login Form -->
-        <form>
+        <form (submit)="$event.preventDefault(); onSubmitLogin()">
           <div class="space-y-4">
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Email Profissional</label>
-              <input type="email" placeholder="agente@imf.co.mz" class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all">
+              <label class="block text-sm font-bold text-gray-700 mb-1 uppercase text-[10px] tracking-wider">Código da IMF (Subdomínio)</label>
+              <input type="text" [(ngModel)]="imfId" (input)="onImfIdInput()" name="imfId" placeholder="Ex: kuenda ou socinal" class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all font-mono font-bold text-sm">
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
-              <input type="password" placeholder="••••••••" class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all">
+              <label class="block text-sm font-bold text-gray-700 mb-1 uppercase text-[10px] tracking-wider">E-mail Profissional</label>
+              <input type="email" [(ngModel)]="email" name="email" placeholder="carlos@kuenda.co.mz" class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all">
+            </div>
+            <div>
+              <label class="block text-sm font-bold text-gray-700 mb-1 uppercase text-[10px] tracking-wider">Palavra-passe (Senha)</label>
+              <input type="password" [(ngModel)]="password" name="password" placeholder="••••••••" class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all">
             </div>
             <div class="flex items-center justify-between pt-1">
               <label class="flex items-center cursor-pointer">
@@ -50,9 +54,21 @@
               <a href="#" class="text-sm font-medium text-primary hover:text-primary-dark transition-colors">Esqueci a senha</a>
             </div>
             
-            <button class="w-full bg-primary hover:bg-primary-dark text-white font-semibold py-3 px-4 rounded-lg shadow hover:shadow-lg transition-all duration-200 mt-4" routerLink="/admin">
+            <button type="submit" class="w-full bg-primary hover:bg-primary-dark text-white font-semibold py-3 px-4 rounded-lg shadow hover:shadow-lg transition-all duration-200 mt-4 cursor-pointer">
               Entrar no Sistema
             </button>
+            
+            <!-- Tip panel -->
+            <div class="mt-4 p-4 bg-gray-50 rounded-xl border border-gray-150 text-[10px] text-gray-500 leading-relaxed">
+              <p class="font-bold text-gray-700 mb-1 flex items-center">
+                <svg class="h-4 w-4 text-primary mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                Contas Mock Disponíveis (SaaS):
+              </p>
+              <ul class="list-disc list-inside space-y-0.5 ml-1">
+                <li>Código: <code class="font-bold text-gray-800">kuenda</code> | Utilizador: <code class="font-bold text-gray-800">carlos@kuenda.co.mz</code> | Senha: <code class="font-bold text-gray-800">123456</code></li>
+                <li>Código: <code class="font-bold text-gray-800">socinal</code> | Utilizador: <code class="font-bold text-gray-800">ana@socinal.co.mz</code> | Senha: <code class="font-bold text-gray-800">123456</code></li>
+              </ul>
+            </div>
           </div>
         </form>
         }

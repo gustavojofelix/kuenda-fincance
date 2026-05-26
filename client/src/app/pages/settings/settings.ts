@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { StateService, IMFProfile, Branch } from '../../core/state.service';
+import { StateService, IMF, Branch } from '../../core/state.service';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -14,9 +14,17 @@ export class Settings implements OnInit {
 
   activeTab: 'perfil' | 'credito' | 'agencias' | 'equipa' = 'perfil';
 
-  profile: IMFProfile = { name: '', nuit: '', email: '', phone: '', address: '' };
+  imf: IMF = { id: '', name: '', nuit: '', email: '', phone: '', address: '', primaryColor: '#10b981', secondaryColor: '#059669' };
   branches$: Observable<Branch[]> = this.stateService.branches$;
   
+  // Curated SaaS Color Presets
+  colorPresets = [
+    { name: 'Esmeralda', primary: '#10b981', secondary: '#059669', bgClass: 'bg-emerald-500' },
+    { name: 'Azul Real', primary: '#2563eb', secondary: '#1d4ed8', bgClass: 'bg-blue-600' },
+    { name: 'Coral Tinto', primary: '#f43f5e', secondary: '#e11d48', bgClass: 'bg-rose-500' },
+    { name: 'Ametista', primary: '#8b5cf6', secondary: '#7c3aed', bgClass: 'bg-purple-500' }
+  ];
+
   // Mock Credit Params
   creditParams = {
     defaultRate: 5,
@@ -34,12 +42,27 @@ export class Settings implements OnInit {
   ];
 
   ngOnInit() {
-    this.stateService.profile$.subscribe(p => this.profile = { ...p });
+    this.stateService.activeImf$.subscribe(i => {
+      if (i) {
+        this.imf = { ...i };
+      }
+    });
+  }
+
+  selectPreset(preset: { primary: string, secondary: string }) {
+    this.imf.primaryColor = preset.primary;
+    this.imf.secondaryColor = preset.secondary;
+    this.stateService.applyImfTheme(this.imf);
+  }
+
+  onCustomColorChange() {
+    this.imf.secondaryColor = this.imf.primaryColor;
+    this.stateService.applyImfTheme(this.imf);
   }
 
   saveProfile() {
-    this.stateService.updateProfile(this.profile);
-    alert('Perfil da IMF actualizado com sucesso!');
+    this.stateService.updateIMF(this.imf);
+    alert('Branding e perfil da IMF atualizados globalmente!');
   }
 
   saveCredit() {

@@ -1,19 +1,23 @@
 import { Injectable, inject } from '@angular/core';
-import { BehaviorSubject, map } from 'rxjs';
+import { BehaviorSubject, map, combineLatest } from 'rxjs';
 import { MOCK_CLIENTS, MOCK_LOANS, MOCK_METRICS } from './mock-data';
 import { NotificationService } from './notification.service';
 
-export interface IMFProfile {
+export interface IMF {
+  id: string; // Tenant unique ID, e.g. 'kuenda', 'socinal'
   name: string;
   nuit: string;
   email: string;
   phone: string;
   address: string;
   logoUrl?: string;
+  primaryColor: string; // Dynamic brand primary color (e.g. Hex)
+  secondaryColor: string; // Dynamic brand secondary/dark color (e.g. Hex)
 }
 
 export interface Branch {
   id: number;
+  imfId: string;
   name: string;
   city: string;
   address: string;
@@ -23,6 +27,7 @@ export interface Branch {
 
 export interface Client {
   id: number;
+  imfId: string;
   name: string;
   bi: string;
   biUrl?: string;
@@ -45,6 +50,7 @@ export interface Client {
 
 export interface Loan {
   id: string;
+  imfId: string;
   clientId?: number;
   clientName: string;
   amount: number; // Principal
@@ -63,6 +69,7 @@ export interface Loan {
 
 export interface Transaction {
   id: string;
+  imfId: string;
   description: string;
   amount: number;
   date: string;
@@ -77,39 +84,112 @@ export interface Transaction {
 export class StateService {
   private notificationService = inject(NotificationService);
 
-  private profileSubj = new BehaviorSubject<IMFProfile>({
-    name: 'Kuenda Microfinanças',
-    nuit: '400567123',
-    email: 'contacto@kuenda.co.mz',
-    phone: '+258 84 000 0000',
-    address: 'Av. Eduardo Mondlane, 1234, Maputo'
-  });
-  profile$ = this.profileSubj.asObservable();
-
-  private branchesSubj = new BehaviorSubject<Branch[]>([
-    { id: 1, name: 'Sede Maputo', city: 'Maputo', address: 'Av. Eduardo Mondlane', manager: 'Carlos Mutemba', status: 'Ativa' },
-    { id: 2, name: 'Agência Matola', city: 'Matola', address: 'Rua da Beira', manager: 'Anabela Sitoe', status: 'Ativa' },
-    { id: 3, name: 'Agência Beira', city: 'Beira', address: 'Av. das Indústrias', manager: 'João Chissano', status: 'Inativa' }
+  // Multi-Tenant IMF Database
+  private imfsSubj = new BehaviorSubject<IMF[]>([
+    { 
+      id: 'kuenda', 
+      name: 'Kuenda Microfinanças', 
+      nuit: '400567123', 
+      email: 'contacto@kuenda.co.mz', 
+      phone: '+258 84 000 0000', 
+      address: 'Av. Eduardo Mondlane, 1234, Maputo',
+      primaryColor: '#10b981', // Emerald Green
+      secondaryColor: '#059669'
+    },
+    { 
+      id: 'socinal', 
+      name: 'Socinal Microfinanças', 
+      nuit: '900456123', 
+      email: 'contacto@socinal.co.mz', 
+      phone: '+258 82 111 2222', 
+      address: 'Av. 25 de Setembro, Matola',
+      primaryColor: '#2563eb', // Royal Blue
+      secondaryColor: '#1d4ed8'
+    }
   ]);
-  branches$ = this.branchesSubj.asObservable();
+  imfs$ = this.imfsSubj.asObservable();
+
+  // Active IMF Context
+  private activeImfIdSubj = new BehaviorSubject<string>('kuenda');
+  activeImfId$ = this.activeImfIdSubj.asObservable();
+
+  activeImf$ = combineLatest([this.imfs$, this.activeImfId$]).pipe(
+    map(([imfs, activeId]) => imfs.find(i => i.id === activeId))
+  );
+
+  // Master Data Subjects
+  private branchesSubj = new BehaviorSubject<Branch[]>([
+    { id: 1, imfId: 'kuenda', name: 'Sede Maputo', city: 'Maputo', address: 'Av. Eduardo Mondlane', manager: 'Carlos Mutemba', status: 'Ativa' },
+    { id: 2, imfId: 'kuenda', name: 'Agência Matola', city: 'Matola', address: 'Rua da Beira', manager: 'Anabela Sitoe', status: 'Ativa' },
+    { id: 3, imfId: 'socinal', name: 'Agência Beira', city: 'Beira', address: 'Av. das Indústrias', manager: 'João Chissano', status: 'Ativa' },
+    { id: 4, imfId: 'socinal', name: 'Agência Nampula', city: 'Nampula', address: 'Rua da Estação', manager: 'Filomena Sitoe', status: 'Ativa' }
+  ]);
 
   private clientsSubj = new BehaviorSubject<Client[]>(MOCK_CLIENTS);
-  clients$ = this.clientsSubj.asObservable();
-
   private loansSubj = new BehaviorSubject<Loan[]>(MOCK_LOANS as any);
-  loans$ = this.loansSubj.asObservable();
-
+  
   private transactionsSubj = new BehaviorSubject<Transaction[]>([
-    { id: 'T-101', description: 'Pagamento Salários Março', amount: 45000, date: '2024-03-05', category: 'Salários', type: 'Saída' },
-    { id: 'T-102', description: 'Factura EDM - Maputo', amount: 3200, date: '2024-03-02', category: 'Energia', type: 'Saída' }
+    { id: 'T-101', imfId: 'kuenda', description: 'Pagamento Salários Março', amount: 45000, date: '2024-03-05', category: 'Salários', type: 'Saída' },
+    { id: 'T-102', imfId: 'kuenda', description: 'Factura EDM - Maputo', amount: 3200, date: '2024-03-02', category: 'Energia', type: 'Saída' },
+    { id: 'T-201', imfId: 'socinal', description: 'Pagamento Renda Agência', amount: 25000, date: '2024-03-01', category: 'Renda', type: 'Saída' },
+    { id: 'T-202', imfId: 'socinal', description: 'Consumo EDM - Beira', amount: 4800, date: '2024-03-04', category: 'Energia', type: 'Saída' }
   ]);
-  transactions$ = this.transactionsSubj.asObservable();
 
   private metricsSubj = new BehaviorSubject(MOCK_METRICS);
   metrics$ = this.metricsSubj.asObservable();
 
-  // KPIs and other methods...
+  // Reactive Filters based on active IMF ID
+  branches$ = combineLatest([this.branchesSubj, this.activeImfId$]).pipe(
+    map(([branches, imfId]) => branches.filter(b => b.imfId === imfId))
+  );
 
+  clients$ = combineLatest([this.clientsSubj, this.activeImfId$]).pipe(
+    map(([clients, imfId]) => clients.filter(c => c.imfId === imfId))
+  );
+
+  loans$ = combineLatest([this.loansSubj, this.activeImfId$]).pipe(
+    map(([loans, imfId]) => loans.filter(l => l.imfId === imfId))
+  );
+
+  transactions$ = combineLatest([this.transactionsSubj, this.activeImfId$]).pipe(
+    map(([transactions, imfId]) => transactions.filter(t => t.imfId === imfId))
+  );
+
+  constructor() {
+    // Dynamic Theme Color Application
+    this.activeImf$.subscribe(imf => {
+      if (imf) {
+        this.applyImfTheme(imf);
+      }
+    });
+  }
+
+  applyImfTheme(imf: IMF) {
+    if (typeof document !== 'undefined' && document.documentElement) {
+      document.documentElement.style.setProperty('--color-primary', imf.primaryColor);
+      document.documentElement.style.setProperty('--color-primary-dark', imf.secondaryColor || imf.primaryColor);
+    }
+  }
+
+  switchImf(imfId: string) {
+    if (this.imfsSubj.value.some(i => i.id === imfId)) {
+      this.activeImfIdSubj.next(imfId);
+    }
+  }
+
+  updateIMF(updates: Partial<IMF>) {
+    const currentImfs = this.imfsSubj.value;
+    const activeId = this.activeImfIdSubj.value;
+    const index = currentImfs.findIndex(i => i.id === activeId);
+    if (index > -1) {
+      const updated = [...currentImfs];
+      updated[index] = { ...updated[index], ...updates };
+      this.imfsSubj.next(updated);
+      this.applyImfTheme(updated[index]);
+    }
+  }
+
+  // KPIs calculated dynamically on the active filtered streams
   totalClientsCount$ = this.clients$.pipe(map(clients => clients.length));
   activeClientsCount$ = this.clients$.pipe(map(clients => clients.filter(c => c.status === 'Em Dia' || c.status === 'Atrasado').length));
   atRiskClients$ = this.clients$.pipe(map(clients => clients.filter(c => c.status === 'Atrasado').length));
@@ -126,28 +206,35 @@ export class StateService {
   monthlyInflow$ = this.transactions$.pipe(map(ts => ts.filter(t => t.type === 'Entrada').reduce((acc, t) => acc + t.amount, 0)));
   monthlyOutflow$ = this.transactions$.pipe(map(ts => ts.filter(t => t.type === 'Saída').reduce((acc, t) => acc + t.amount, 0)));
 
-  updateProfile(profile: IMFProfile) {
-    this.profileSubj.next(profile);
-  }
-
   addBranch(branch: Partial<Branch>) {
     const current = this.branchesSubj.value;
-    const newBranch = { ...branch, id: current.length + 1, status: 'Ativa' } as Branch;
+    const newBranch = { 
+      ...branch, 
+      id: current.length + 1, 
+      imfId: this.activeImfIdSubj.value,
+      status: 'Ativa' 
+    } as Branch;
     this.branchesSubj.next([...current, newBranch]);
   }
 
   getClientById(id: number) {
-    return this.clients$.pipe(map(clients => clients.find(c => c.id === id)));
+    return this.clientsSubj.asObservable().pipe(map(clients => clients.find(c => c.id === id)));
   }
 
   getLoansByClientName(name: string) {
-    return this.loans$.pipe(map(loans => loans.filter(l => l.clientName === name)));
+    return this.loansSubj.asObservable().pipe(map(loans => loans.filter(l => l.clientName === name)));
   }
 
   addClient(client: Partial<Client>) {
     const currentList = this.clientsSubj.value;
     const newId = currentList.length > 0 ? Math.max(...currentList.map(c => c.id)) + 1 : 1;
-    const newClient = { loanCycle: 1, status: 'Avaliação', ...client, id: newId } as Client;
+    const newClient = { 
+      loanCycle: 1, 
+      status: 'Avaliação', 
+      imfId: this.activeImfIdSubj.value, 
+      ...client, 
+      id: newId 
+    } as Client;
     this.clientsSubj.next([newClient, ...currentList]);
     return newClient;
   }
@@ -156,8 +243,9 @@ export class StateService {
     const currentList = this.clientsSubj.value;
     const index = currentList.findIndex(c => c.id === id);
     if (index > -1) {
-      currentList[index] = { ...currentList[index], ...updates };
-      this.clientsSubj.next([...currentList]);
+      const updated = [...currentList];
+      updated[index] = { ...updated[index], ...updates };
+      this.clientsSubj.next(updated);
     }
   }
 
@@ -188,6 +276,7 @@ export class StateService {
       totalToPay, 
       monthlyPayment, 
       installmentsCount: term, 
+      imfId: this.activeImfIdSubj.value,
       ...loan, 
       id: newIdStr 
     } as Loan;
@@ -208,7 +297,15 @@ export class StateService {
       nextMonth.setMonth(nextMonth.getMonth() + 1);
       updated[index].nextPayment = `${nextMonth.getDate()} ${nextMonth.toLocaleString('pt', { month: 'short' })} ${nextMonth.getFullYear()}`;
       this.loansSubj.next(updated);
-      this.addInternalTransaction({ description: `Desembolso ${method}: ${updated[index].clientName}`, amount: updated[index].amount, category: 'Empréstimo', type: 'Saída', isAuto: true });
+      
+      this.addInternalTransaction({ 
+        description: `Desembolso ${method}: ${updated[index].clientName}`, 
+        amount: updated[index].amount, 
+        category: 'Empréstimo', 
+        type: 'Saída', 
+        isAuto: true 
+      });
+      
       const currentClients = this.clientsSubj.value;
       const clientIndex = currentClients.findIndex(c => c.name === updated[index].clientName);
       if (clientIndex > -1) {
@@ -226,19 +323,33 @@ export class StateService {
           const updated = [...currentLoans];
           updated[index].paidAmount += amount;
           updated[index].paidInstallments += 1;
-          if (updated[index].paidAmount >= updated[index].totalToPay) { updated[index].status = 'Liquidado'; }
+          if (updated[index].paidAmount >= updated[index].totalToPay) { 
+            updated[index].status = 'Liquidado'; 
+          }
           this.loansSubj.next(updated);
-          this.addInternalTransaction({ description: `Amortização: ${updated[index].clientName}`, amount: amount, category: 'Amortização', type: 'Entrada', isAuto: true });
+          
+          this.addInternalTransaction({ 
+            description: `Amortização: ${updated[index].clientName}`, 
+            amount: amount, 
+            category: 'Amortização', 
+            type: 'Entrada', 
+            isAuto: true 
+          });
       }
   }
 
-  addManualTransaction(tx: Partial<Transaction>) { this.addInternalTransaction(tx); }
+  addManualTransaction(tx: Partial<Transaction>) { 
+    this.addInternalTransaction(tx); 
+  }
 
   simulate30DaysLater() {
     const currentLoans = this.loansSubj.value;
+    const currentImfId = this.activeImfIdSubj.value;
     let activeLoansUpdatedCount = 0;
+    
     const updatedLoans = currentLoans.map(l => {
-      if (l.status === 'Ativo') {
+      // Only affect the active IMF's active loans
+      if (l.imfId === currentImfId && l.status === 'Ativo') {
         activeLoansUpdatedCount++;
         
         this.notificationService.addNotification({
@@ -269,7 +380,12 @@ export class StateService {
   private addInternalTransaction(tx: Partial<Transaction>) {
       const current = this.transactionsSubj.value;
       const newId = `T-${100 + current.length + 1}`;
-      const newTx = { id: newId, date: new Date().toISOString().split('T')[0], ...tx } as Transaction;
+      const newTx = { 
+        id: newId, 
+        imfId: this.activeImfIdSubj.value,
+        date: new Date().toISOString().split('T')[0], 
+        ...tx 
+      } as Transaction;
       this.transactionsSubj.next([newTx, ...current]);
   }
 }

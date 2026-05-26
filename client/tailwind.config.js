@@ -7,8 +7,8 @@ module.exports = {
     extend: {
       colors: {
         primary: {
-          DEFAULT: '#10b981',
-          dark: '#059669',
+          DEFAULT: 'var(--color-primary, #10b981)',
+          dark: 'var(--color-primary-dark, #059669)',
         }
       },
       fontFamily: {
