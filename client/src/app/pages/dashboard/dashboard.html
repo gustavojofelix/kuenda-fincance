@@ -180,7 +180,25 @@
                                     </div>
                                 </td>
                                 <td class="py-5 px-8 text-right">
-                                    <span class="px-3 py-1 bg-emerald-50 text-emerald-600 text-[10px] font-bold uppercase rounded-full border border-emerald-100">{{ loan.status }}</span>
+                                    <span 
+                                        [class.bg-emerald-50]="loan.status === 'Ativo' || loan.status === 'Aprovado'" 
+                                        [class.text-emerald-600]="loan.status === 'Ativo' || loan.status === 'Aprovado'"
+                                        [class.border-emerald-100]="loan.status === 'Ativo' || loan.status === 'Aprovado'"
+                                        
+                                        [class.bg-amber-50]="loan.status === 'Em Análise'" 
+                                        [class.text-amber-600]="loan.status === 'Em Análise'"
+                                        [class.border-amber-100]="loan.status === 'Em Análise'"
+                                        
+                                        [class.bg-rose-50]="loan.status === 'Atrasado'" 
+                                        [class.text-rose-600]="loan.status === 'Atrasado'"
+                                        [class.border-rose-100]="loan.status === 'Atrasado'"
+                                        
+                                        [class.bg-slate-50]="loan.status === 'Liquidado'" 
+                                        [class.text-slate-600]="loan.status === 'Liquidado'"
+                                        [class.border-slate-100]="loan.status === 'Liquidado'"
+                                        class="px-3 py-1 text-[10px] font-bold uppercase rounded-full border">
+                                        {{ loan.status }}
+                                    </span>
                                 </td>
                             </tr>
                         }
