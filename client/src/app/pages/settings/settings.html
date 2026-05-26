@@ -10,6 +10,12 @@
     <!-- Sidebar Interna de Navegação -->
     <div class="w-full lg:w-72 flex-shrink-0">
       <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-4 space-y-1 sticky top-24">
+        <button (click)="activeTab = 'utilizador'" 
+            [class.bg-primary/10]="activeTab === 'utilizador'" [class.text-primary]="activeTab === 'utilizador'"
+            class="w-full flex items-center px-5 py-4 rounded-2xl text-sm font-bold transition-all text-gray-400 hover:text-gray-900 hover:bg-gray-50 cursor-pointer">
+          <svg class="w-5 h-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+          Perfil do Utilizador
+        </button>
         <button (click)="activeTab = 'perfil'" 
             [class.bg-primary/10]="activeTab === 'perfil'" [class.text-primary]="activeTab === 'perfil'"
             class="w-full flex items-center px-5 py-4 rounded-2xl text-sm font-bold transition-all text-gray-400 hover:text-gray-900 hover:bg-gray-50 cursor-pointer">
@@ -40,6 +46,98 @@
     <!-- Área de Conteúdo -->
     <div class="flex-1">
       
+      <!-- Secção 0: Perfil do Utilizador -->
+      @if (activeTab === 'utilizador') {
+        <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 md:p-10 space-y-10 animate-in fade-in duration-500">
+            <div>
+                <h3 class="text-xl font-bold text-gray-900 mb-2">Perfil do Utilizador</h3>
+                <p class="text-sm text-gray-500">Gerencie suas credenciais profissionais, foto de perfil e palavra-passe.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Avatar Upload Row -->
+                <div class="md:col-span-2 flex flex-col sm:flex-row items-center gap-6 pb-6 border-b border-gray-50">
+                    <div class="h-24 w-24 rounded-3xl overflow-hidden bg-primary/10 border border-primary/20 flex items-center justify-center text-3xl font-black text-primary shadow-sm shrink-0">
+                        @if (currentUser.photoUrl) {
+                            <img [src]="currentUser.photoUrl" class="w-full h-full object-cover">
+                        } @else {
+                            <span>{{ currentUser.name.substring(0, 1).toUpperCase() || 'U' }}</span>
+                        }
+                    </div>
+                    <div class="space-y-2 text-center sm:text-left">
+                        <h4 class="text-sm font-bold text-gray-900">Foto de Perfil</h4>
+                        <p class="text-xs text-gray-400 max-w-sm font-semibold">Carregue um arquivo JPG ou PNG de até 2MB para personalizar seu avatar.</p>
+                        <div class="flex flex-wrap justify-center sm:justify-start gap-2 pt-1">
+                            <label class="px-4 py-2 bg-primary hover:bg-primary-dark text-white text-xs font-black rounded-xl transition-all cursor-pointer shadow-md shadow-emerald-100/50 flex items-center gap-1.5">
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                                Enviar Foto
+                                <input type="file" (change)="onPhotoSelected($event)" accept="image/*" class="hidden">
+                            </label>
+                            @if (currentUser.photoUrl) {
+                                <button type="button" (click)="removePhoto()" class="px-4 py-2 bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-bold rounded-xl transition-all cursor-pointer border border-rose-100">
+                                    Remover
+                                </button>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <!-- User Credentials Form -->
+                <div>
+                    <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Nome Completo</label>
+                    <input type="text" [(ngModel)]="currentUser.name" placeholder="Ex: Carlos Felix" class="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:bg-white focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all font-bold">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Cargo Base (SaaS)</label>
+                    <input type="text" [value]="currentUser.role" disabled class="w-full px-6 py-4 bg-gray-100 border border-gray-100 rounded-2xl text-gray-400 font-black cursor-not-allowed outline-none">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">E-mail Profissional</label>
+                    <input type="email" [(ngModel)]="currentUser.email" placeholder="carlos.felix@kuenda.co.mz" class="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:bg-white outline-none font-bold">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Telemóvel</label>
+                    <input type="text" [(ngModel)]="currentUser.phone" placeholder="+258 84 999 8888" class="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:bg-white outline-none font-bold">
+                </div>
+            </div>
+
+            <div class="flex justify-end pt-6 border-t border-gray-50">
+                <button (click)="saveUserProfile()" class="bg-primary hover:bg-primary-dark text-white font-black py-4 px-10 rounded-2xl shadow-lg shadow-emerald-100 transition-all cursor-pointer">
+                    Salvar Alterações do Perfil
+                </button>
+            </div>
+        </div>
+
+        <!-- Security / Password Card -->
+        <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 md:p-10 space-y-10 mt-8 animate-in fade-in duration-500">
+            <div>
+                <h3 class="text-xl font-bold text-gray-900 mb-2">Alterar Palavra-passe</h3>
+                <p class="text-sm text-gray-500 font-semibold">Garante a segurança da sua conta utilizando credenciais robustas.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Palavra-passe Atual</label>
+                    <input type="password" [(ngModel)]="currentPassword" placeholder="••••••••" class="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:bg-white outline-none font-bold">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Nova Palavra-passe</label>
+                    <input type="password" [(ngModel)]="newPassword" placeholder="••••••••" class="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:bg-white outline-none font-bold">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Confirmar Nova Palavra-passe</label>
+                    <input type="password" [(ngModel)]="confirmPassword" placeholder="••••••••" class="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:bg-white outline-none font-bold">
+                </div>
+            </div>
+
+            <div class="flex justify-end pt-6 border-t border-gray-50">
+                <button (click)="changePassword()" class="bg-gray-900 hover:bg-black text-white font-black py-4 px-10 rounded-2xl transition-all cursor-pointer">
+                    Alterar Palavra-passe
+                </button>
+            </div>
+        </div>
+      }
+
       <!-- Secção 1: Perfil Institucional -->
       @if (activeTab === 'perfil') {
         <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 md:p-10 space-y-10 animate-in fade-in duration-500">
@@ -49,14 +147,32 @@
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="md:col-span-2 flex items-center gap-8 pb-4 border-b border-gray-50">
-                    <div class="h-20 w-20 rounded-2xl flex items-center justify-center text-3xl font-black text-white shadow-md border"
-                         style="background-color: var(--color-primary); border-color: var(--color-primary-dark);">
-                        {{ imf.name.substring(0, 2).toUpperCase() }}
+                <!-- Logo da Empresa Upload Row -->
+                <div class="md:col-span-2 flex flex-col sm:flex-row items-center gap-6 pb-6 border-b border-gray-50">
+                    <div class="h-24 w-24 rounded-3xl overflow-hidden bg-primary/10 border border-primary/20 flex items-center justify-center text-3xl font-black text-white shadow-sm shrink-0"
+                         [style.background-color]="imf.logoUrl ? 'transparent' : 'var(--color-primary)'"
+                         [style.border-color]="imf.logoUrl ? 'transparent' : 'var(--color-primary-dark)'">
+                        @if (imf.logoUrl) {
+                            <img [src]="imf.logoUrl" class="w-full h-full object-cover">
+                        } @else {
+                            <span>{{ imf.name.substring(0, 2).toUpperCase() || 'IMF' }}</span>
+                        }
                     </div>
-                    <div>
-                        <h4 class="text-sm font-bold text-gray-900">{{ imf.name }}</h4>
-                        <p class="text-xs text-gray-400">Identificação Fiscal NUIT: {{ imf.nuit }}</p>
+                    <div class="space-y-2 text-center sm:text-left">
+                        <h4 class="text-sm font-bold text-gray-900">Logótipo da Empresa</h4>
+                        <p class="text-xs text-gray-400 max-w-sm font-semibold">Carregue um logótipo em formato JPG ou PNG (máx. 2MB) para personalizar a marca nos documentos e relatórios oficiais da IMF.</p>
+                        <div class="flex flex-wrap justify-center sm:justify-start gap-2 pt-1">
+                            <label class="px-4 py-2 bg-primary hover:bg-primary-dark text-white text-xs font-black rounded-xl transition-all cursor-pointer shadow-md shadow-emerald-100/50 flex items-center gap-1.5">
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                                Enviar Logótipo
+                                <input type="file" (change)="onLogoSelected($event)" accept="image/*" class="hidden">
+                            </label>
+                            @if (imf.logoUrl) {
+                                <button type="button" (click)="removeLogo()" class="px-4 py-2 bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-bold rounded-xl transition-all cursor-pointer border border-rose-100">
+                                    Remover
+                                </button>
+                            }
+                        </div>
                     </div>
                 </div>
 
@@ -184,8 +300,8 @@
                    <h3 class="text-xl font-bold text-gray-900">Rede de Agências</h3>
                    <p class="text-xs text-gray-400 mt-1">Configure múltiplas filiais para a sua IMF.</p>
                 </div>
-                <button (click)="addBranch()" class="bg-primary text-white font-bold py-2.5 px-6 rounded-xl hover:bg-primary-dark transition-all flex items-center cursor-pointer">
-                    <svg class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                <button (click)="openAddBranch()" class="bg-primary text-white font-bold py-2.5 px-6 rounded-xl hover:bg-primary-dark transition-all flex items-center cursor-pointer shadow-md shadow-emerald-100/50">
+                    <svg class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
                     Nova Agência
                 </button>
             </div>
@@ -195,30 +311,53 @@
                         <tr class="text-[10px] uppercase font-black text-gray-400 bg-gray-50/50 border-b border-gray-100">
                             <th class="py-4 px-8">ID</th>
                             <th class="py-4 px-8">Nome / Cidade</th>
-                            <th class="py-4 px-8">Gestor de Agência</th>
+                            <th class="py-4 px-8">Gestor / Responsável</th>
+                            <th class="py-4 px-8">Contactos</th>
                             <th class="py-4 px-8">Estado</th>
-                            <th class="py-4 px-8 text-right">Acção</th>
+                            <th class="py-4 px-8 text-right">Acções</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-50">
                         @for (b of (branches$ | async); track b.id) {
                             <tr class="hover:bg-gray-50/50 transition-colors">
-                                <td class="py-5 px-8 text-sm font-mono text-gray-400">#{{ b.id }}</td>
+                                <td class="py-5 px-8 text-sm font-mono text-gray-400 font-bold">#{{ b.id }}</td>
                                 <td class="py-5 px-8">
                                     <div class="text-sm font-bold text-gray-900">{{ b.name }}</div>
-                                    <div class="text-[11px] text-gray-400 font-medium">{{ b.city }}</div>
+                                    <div class="text-[11px] text-gray-400 font-bold uppercase tracking-wider">{{ b.city }}</div>
                                 </td>
-                                <td class="py-5 px-8 text-sm font-bold text-gray-700">{{ b.manager }}</td>
                                 <td class="py-5 px-8">
-                                    <span class="px-3 py-1 text-[10px] font-black uppercase rounded-full"
-                                        [class.bg-emerald-100]="b.status === 'Ativa'" [class.text-emerald-700]="b.status === 'Ativa'"
-                                        [class.bg-gray-100]="b.status === 'Inativa'" [class.text-gray-500]="b.status === 'Inativa'">
-                                        {{ b.status }}
-                                    </span>
+                                    <div class="text-sm font-bold text-gray-700">{{ b.manager }}</div>
                                 </td>
-                                <td class="py-5 px-8 text-right">
-                                    <button class="p-2 text-gray-400 hover:text-primary transition-all cursor-pointer">
-                                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                                <td class="py-5 px-8 text-xs font-semibold text-gray-500">
+                                    <div class="flex items-center gap-1">
+                                        <svg class="w-3.5 h-3.5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.94.725l.548 2.2a1 1 0 01-.321.988l-1.305.98a10.582 10.582 0 004.872 4.872l.98-1.305a1 1 0 01.988-.321l2.2.548a1 1 0 01.725.94V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                                        {{ b.phone || '---' }}
+                                    </div>
+                                    <div class="flex items-center gap-1 mt-1 font-mono tracking-tighter">
+                                        <svg class="w-3.5 h-3.5 text-gray-400 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                                        {{ b.email || '---' }}
+                                    </div>
+                                </td>
+                                <td class="py-5 px-8">
+                                    <button type="button" (click)="toggleBranchStatus(b)" 
+                                            [class.bg-emerald-50]="b.status === 'Ativa'" [class.text-emerald-700]="b.status === 'Ativa'" [class.border-emerald-100]="b.status === 'Ativa'"
+                                            [class.bg-slate-50]="b.status === 'Inativa'" [class.text-slate-500]="b.status === 'Inativa'" [class.border-gray-200]="b.status === 'Inativa'"
+                                            class="px-3 py-1.5 text-[10px] font-black uppercase rounded-xl border transition-all cursor-pointer">
+                                        {{ b.status }}
+                                    </button>
+                                </td>
+                                <td class="py-5 px-8 text-right space-x-1.5">
+                                    <!-- Ver Detalhes -->
+                                    <button (click)="openBranchDetails(b)" title="Ver Detalhes" class="p-2.5 text-gray-400 hover:text-blue-500 bg-gray-50 hover:bg-blue-50 rounded-xl transition-all cursor-pointer">
+                                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                                    </button>
+                                    <!-- Editar -->
+                                    <button (click)="openEditBranch(b)" title="Editar" class="p-2.5 text-gray-400 hover:text-primary bg-gray-50 hover:bg-emerald-50 rounded-xl transition-all cursor-pointer">
+                                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                                    </button>
+                                    <!-- Apagar -->
+                                    <button (click)="deleteBranch(b)" title="Remover" class="p-2.5 text-gray-450 hover:text-rose-500 bg-gray-50 hover:bg-rose-50 rounded-xl transition-all cursor-pointer">
+                                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                     </button>
                                 </td>
                             </tr>
@@ -227,6 +366,190 @@
                 </table>
             </div>
         </div>
+
+        <!-- RICH MODAL: CRIAR / EDITAR AGÊNCIA -->
+        @if (showBranchModal) {
+            <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in duration-200">
+                <div class="bg-white rounded-3xl shadow-2xl border border-gray-100 max-w-lg w-full overflow-hidden animate-in zoom-in-95 duration-200">
+                    <div class="p-6 border-b border-gray-50 flex justify-between items-center bg-gray-50/50">
+                        <h4 class="text-sm font-black text-gray-905 uppercase tracking-widest">
+                            {{ isEditingBranch ? 'Editar Agência' : 'Nova Agência' }}
+                        </h4>
+                        <button (click)="showBranchModal = false" class="text-gray-400 hover:text-gray-600 cursor-pointer">
+                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        </button>
+                    </div>
+
+                    <div class="p-8 max-h-[75vh] overflow-y-auto space-y-6">
+                        <!-- Nome -->
+                        <div>
+                            <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Nome da Agência</label>
+                            <input type="text" [(ngModel)]="selectedBranch.name" placeholder="Ex: Agência Nampula Cidade" 
+                                   class="w-full px-5 py-3.5 bg-gray-50 border border-gray-100 rounded-xl focus:bg-white focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all font-bold text-sm">
+                            @if (branchErrors['name']) {
+                                <p class="text-[10px] text-rose-500 font-bold mt-1.5 flex items-center gap-1">
+                                    <span class="w-1 h-1 rounded-full bg-rose-500"></span>
+                                    {{ branchErrors['name'] }}
+                                </p>
+                            }
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <!-- Cidade -->
+                            <div>
+                                <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Cidade</label>
+                                <input type="text" [(ngModel)]="selectedBranch.city" placeholder="Ex: Nampula" 
+                                       class="w-full px-5 py-3.5 bg-gray-50 border border-gray-100 rounded-xl focus:bg-white focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all font-bold text-sm">
+                                @if (branchErrors['city']) {
+                                    <p class="text-[10px] text-rose-500 font-bold mt-1.5 flex items-center gap-1">
+                                        <span class="w-1 h-1 rounded-full bg-rose-500"></span>
+                                        {{ branchErrors['city'] }}
+                                    </p>
+                                }
+                            </div>
+                            
+                            <!-- Responsável -->
+                            <div>
+                                <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Responsável / Gestor</label>
+                                <input type="text" [(ngModel)]="selectedBranch.manager" placeholder="Ex: Filomena Sitoe" 
+                                       class="w-full px-5 py-3.5 bg-gray-50 border border-gray-100 rounded-xl focus:bg-white focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all font-bold text-sm">
+                                @if (branchErrors['manager']) {
+                                    <p class="text-[10px] text-rose-500 font-bold mt-1.5 flex items-center gap-1">
+                                        <span class="w-1 h-1 rounded-full bg-rose-500"></span>
+                                        {{ branchErrors['manager'] }}
+                                    </p>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <!-- Telemóvel -->
+                            <div>
+                                <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Contacto Telefónico</label>
+                                <input type="text" [(ngModel)]="selectedBranch.phone" placeholder="+258 82 777 8888" 
+                                       class="w-full px-5 py-3.5 bg-gray-50 border border-gray-100 rounded-xl focus:bg-white focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all font-bold text-sm">
+                                @if (branchErrors['phone']) {
+                                    <p class="text-[10px] text-rose-500 font-bold mt-1.5 flex items-center gap-1">
+                                        <span class="w-1 h-1 rounded-full bg-rose-500"></span>
+                                        {{ branchErrors['phone'] }}
+                                    </p>
+                                }
+                            </div>
+                            
+                            <!-- E-mail -->
+                            <div>
+                                <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">E-mail de Contacto</label>
+                                <input type="email" [(ngModel)]="selectedBranch.email" placeholder="agencia@dominio.co.mz" 
+                                       class="w-full px-5 py-3.5 bg-gray-50 border border-gray-100 rounded-xl focus:bg-white focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all font-bold text-sm">
+                                @if (branchErrors['email']) {
+                                    <p class="text-[10px] text-rose-500 font-bold mt-1.5 flex items-center gap-1">
+                                        <span class="w-1 h-1 rounded-full bg-rose-500"></span>
+                                        {{ branchErrors['email'] }}
+                                    </p>
+                                }
+                            </div>
+                        </div>
+
+                        <!-- Endereço -->
+                        <div>
+                            <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Endereço Completo</label>
+                            <textarea [(ngModel)]="selectedBranch.address" placeholder="Av. das Indústrias, Nº 14, 2º Andar" rows="3" 
+                                      class="w-full px-5 py-3.5 bg-gray-50 border border-gray-100 rounded-xl focus:bg-white focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all font-bold text-sm"></textarea>
+                            @if (branchErrors['address']) {
+                                <p class="text-[10px] text-rose-500 font-bold mt-1.5 flex items-center gap-1">
+                                    <span class="w-1 h-1 rounded-full bg-rose-500"></span>
+                                    {{ branchErrors['address'] }}
+                                </p>
+                            }
+                        </div>
+
+                        <!-- Estado -->
+                        <div>
+                            <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Estado da Agência</label>
+                            <select [(ngModel)]="selectedBranch.status" 
+                                    class="w-full px-5 py-3.5 bg-gray-50 border border-gray-100 rounded-xl focus:bg-white outline-none font-bold text-sm cursor-pointer">
+                                <option value="Ativa">Ativa (Acesso livre e operacional)</option>
+                                <option value="Inativa">Inativa (Bloqueada temporariamente)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="p-6 bg-gray-50/50 border-t border-gray-100 flex justify-end gap-3">
+                        <button type="button" (click)="showBranchModal = false" 
+                                class="px-6 py-3 border border-gray-200 text-gray-600 font-black text-xs uppercase tracking-widest rounded-xl hover:bg-gray-100 transition-all cursor-pointer">
+                            Cancelar
+                        </button>
+                        <button type="button" (click)="saveBranch()" 
+                                class="px-8 py-3 bg-primary text-white font-black text-xs uppercase tracking-widest rounded-xl hover:bg-primary-dark transition-all cursor-pointer shadow-md shadow-emerald-100/50">
+                            Gravar Dados
+                        </button>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <!-- RICH MODAL: VER DETALHES DA AGÊNCIA -->
+        @if (showBranchDetailsModal) {
+            <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in duration-200">
+                <div class="bg-white rounded-3xl shadow-2xl border border-gray-100 max-w-md w-full overflow-hidden animate-in zoom-in-95 duration-200">
+                    <div class="p-6 border-b border-gray-50 flex justify-between items-center bg-gray-50/50">
+                        <h4 class="text-sm font-black text-gray-900 uppercase tracking-widest">Ficha da Agência</h4>
+                        <button (click)="showBranchDetailsModal = false" class="text-gray-400 hover:text-gray-600 cursor-pointer">
+                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        </button>
+                    </div>
+
+                    <div class="p-8 space-y-6">
+                        <!-- Header Card Info -->
+                        <div class="flex items-center gap-5 pb-5 border-b border-gray-50">
+                            <div class="h-16 w-16 bg-primary/10 rounded-2xl flex items-center justify-center text-primary text-2xl font-black shrink-0">
+                                {{ selectedBranch.name.substring(0, 2).toUpperCase() }}
+                            </div>
+                            <div>
+                                <h3 class="text-base font-black text-gray-900 leading-tight">{{ selectedBranch.name }}</h3>
+                                <div class="flex items-center gap-2 mt-2">
+                                    <span class="text-[9px] font-black uppercase tracking-wider text-gray-400 bg-gray-100 px-2 py-0.5 rounded">{{ selectedBranch.city }}</span>
+                                    <span class="px-2 py-0.5 text-[8px] font-black uppercase border rounded-full"
+                                          [class.bg-emerald-50]="selectedBranch.status === 'Ativa'" [class.text-emerald-700]="selectedBranch.status === 'Ativa'" [class.border-emerald-100]="selectedBranch.status === 'Ativa'"
+                                          [class.bg-slate-50]="selectedBranch.status === 'Inativa'" [class.text-slate-500]="selectedBranch.status === 'Inativa'" [class.border-gray-200]="selectedBranch.status === 'Inativa'">
+                                        {{ selectedBranch.status }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Data Fields List -->
+                        <div class="space-y-5 text-sm font-medium">
+                            <div>
+                                <span class="block text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1.5">Gestor Responsável</span>
+                                <span class="text-gray-800 font-bold text-sm">{{ selectedBranch.manager }}</span>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <span class="block text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1.5">Telefone Principal</span>
+                                    <span class="text-gray-800 font-bold text-sm">{{ selectedBranch.phone || 'Nenhum' }}</span>
+                                </div>
+                                <div>
+                                    <span class="block text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1.5">Correio Eletrónico</span>
+                                    <span class="text-gray-800 font-bold text-sm truncate block">{{ selectedBranch.email || 'Nenhum' }}</span>
+                                </div>
+                            </div>
+                            <div>
+                                <span class="block text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1.5">Endereço Sede / Físico</span>
+                                <span class="text-gray-650 font-bold block bg-gray-50 p-4 rounded-2xl border border-gray-100 text-xs leading-relaxed">{{ selectedBranch.address }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-6 bg-gray-50/50 border-t border-gray-100 flex justify-end">
+                        <button type="button" (click)="showBranchDetailsModal = false" 
+                                class="px-8 py-3 bg-gray-900 text-white font-black text-xs uppercase tracking-widest rounded-xl hover:bg-black transition-all cursor-pointer">
+                            Fechar Ficha
+                        </button>
+                    </div>
+                </div>
+            </div>
+        }
       }
 
       <!-- Secção 4: Equipa & Utilizadores -->

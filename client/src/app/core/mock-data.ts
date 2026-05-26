@@ -1,14 +1,15 @@
 export const MOCK_CLIENTS = [
-  { id: 1, imfId: 'imf-20260526kd', name: 'João Chissano', bi: '100456123B', phone: '+258 84 123 4567', business: 'Mercearia', income: '10.001 - 25.000 MZN', maritalStatus: 'Casado', province: 'Maputo Cidade', district: 'KaMpfumo', neighborhood: 'Polana', address: 'Av. Julius Nyerere, 123', status: 'Em Dia', loanCycle: 2 },
-  { id: 2, imfId: 'imf-20260526sc', name: 'Anabela Mutemba', bi: '120987654M', phone: '+258 82 987 6543', business: 'Vestuário / Calçado', income: '25.001 - 50.000 MZN', maritalStatus: 'Solteira', province: 'Maputo Província', district: 'Matola', neighborhood: 'Fomento', address: 'Rua das Flores, 45', status: 'Atrasado', loanCycle: 1 },
-  { id: 3, imfId: 'imf-20260526sc', name: 'Carlos Sitoe', bi: '130345678C', phone: '+258 85 345 6789', business: 'Serviços / Manutenção', income: '25.001 - 50.000 MZN', maritalStatus: 'Casado', province: 'Maputo Província', district: 'Matola', neighborhood: 'Tchumene', address: 'Rua Principal, 89', status: 'Avaliação', loanCycle: 1 },
-  { id: 4, imfId: 'imf-20260526kd', name: 'Fátima Nhavene', bi: '140112233N', phone: '+258 84 112 2334', business: 'Estética / Cabeleireiro', income: '10.001 - 25.000 MZN', maritalStatus: 'Divorciada', province: 'Maputo Cidade', district: 'KaMaxakeni', neighborhood: 'Alto Maé', address: 'Av. Eduardo Mondlane, 400', status: 'Avaliação', loanCycle: 3 }
+  { id: 1, imfId: 'imf-20260526kd', branchId: 1, name: 'João Chissano', bi: '100456123B', phone: '+258 84 123 4567', business: 'Mercearia', income: '10.001 - 25.000 MZN', maritalStatus: 'Casado', province: 'Maputo Cidade', district: 'KaMpfumo', neighborhood: 'Polana', address: 'Av. Julius Nyerere, 123', status: 'Em Dia', loanCycle: 2 },
+  { id: 2, imfId: 'imf-20260526sc', branchId: 3, name: 'Anabela Mutemba', bi: '120987654M', phone: '+258 82 987 6543', business: 'Vestuário / Calçado', income: '25.001 - 50.000 MZN', maritalStatus: 'Solteira', province: 'Maputo Província', district: 'Matola', neighborhood: 'Fomento', address: 'Rua das Flores, 45', status: 'Atrasado', loanCycle: 1 },
+  { id: 3, imfId: 'imf-20260526sc', branchId: 4, name: 'Carlos Sitoe', bi: '130345678C', phone: '+258 85 345 6789', business: 'Serviços / Manutenção', income: '25.001 - 50.000 MZN', maritalStatus: 'Casado', province: 'Maputo Província', district: 'Matola', neighborhood: 'Tchumene', address: 'Rua Principal, 89', status: 'Avaliação', loanCycle: 1 },
+  { id: 4, imfId: 'imf-20260526kd', branchId: 2, name: 'Fátima Nhavene', bi: '140112233N', phone: '+258 84 112 2334', business: 'Estética / Cabeleireiro', income: '10.001 - 25.000 MZN', maritalStatus: 'Divorciada', province: 'Maputo Cidade', district: 'KaMaxakeni', neighborhood: 'Alto Maé', address: 'Av. Eduardo Mondlane, 400', status: 'Avaliação', loanCycle: 3 }
 ];
 
 export const MOCK_LOANS = [
   { 
     id: 'L-10023', 
     imfId: 'imf-20260526kd',
+    branchId: 1,
     clientName: 'João Chissano', 
     amount: 10000, 
     interestRate: 5, 
@@ -26,6 +27,7 @@ export const MOCK_LOANS = [
   { 
     id: 'L-10024', 
     imfId: 'imf-20260526sc',
+    branchId: 3,
     clientName: 'Anabela Mutemba', 
     amount: 25000, 
     interestRate: 5, 
@@ -43,6 +45,7 @@ export const MOCK_LOANS = [
   { 
     id: 'L-10025', 
     imfId: 'imf-20260526sc',
+    branchId: 4,
     clientName: 'Carlos Sitoe', 
     amount: 45000, 
     interestRate: 10, 
@@ -59,6 +62,7 @@ export const MOCK_LOANS = [
   { 
     id: 'L-10026', 
     imfId: 'imf-20260526kd',
+    branchId: 2,
     clientName: 'Fátima Nhavene', 
     amount: 15000, 
     interestRate: 5, 

@@ -19,8 +19,21 @@ export class AdminShell {
   
   activeImf$ = this.stateService.activeImf$;
   activeImfId$ = this.stateService.activeImfId$;
+  currentUser$ = this.stateService.currentUser$;
+  
+  branches$ = this.stateService.branches$;
+  activeBranchId$ = this.stateService.activeBranchId$;
   
   showNotifications = false;
+
+  onBranchSelected(event: any) {
+    const val = event.target.value;
+    if (val === 'all') {
+      this.stateService.switchBranch('all');
+    } else {
+      this.stateService.switchBranch(Number(val));
+    }
+  }
 
   toggleNotifications() {
     this.showNotifications = !this.showNotifications;
