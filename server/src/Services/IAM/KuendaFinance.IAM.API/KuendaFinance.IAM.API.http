@@ -1,0 +1,6 @@
+@KuendaFinance.IAM.API_HostAddress = http://localhost:5011
+
+GET {{KuendaFinance.IAM.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

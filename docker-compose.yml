@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: kuendafinance-postgres
+    environment:
+      POSTGRES_USER: kuenda
+      POSTGRES_PASSWORD: kuendapassword
+      POSTGRES_DB: kuendafinancedb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: kuendafinance-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: kuenda
+      RABBITMQ_DEFAULT_PASS: kuendapassword
+    ports:
+      - "5672:5672" # AMQP port
+      - "15672:15672" # Management UI
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  rabbitmq_data:
