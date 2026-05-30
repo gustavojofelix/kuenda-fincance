@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "qsZoohDQjSY=",
+  "dgSpecHash": "gYQwk0dY1Bc=",
   "success": true,
-  "projectFilePath": "C:\\Projects\\Companies\\Alvor Software\\Source Code\\kuenda-fincance\\src\\Services\\IAM\\KuendaFinance.IAM.Domain\\KuendaFinance.IAM.Domain.csproj",
+  "projectFilePath": "C:\\Projects\\Companies\\Alvor Software\\Source Code\\kuenda-fincance\\server\\src\\Services\\IAM\\KuendaFinance.IAM.Domain\\KuendaFinance.IAM.Domain.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

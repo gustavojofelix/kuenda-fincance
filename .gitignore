@@ -1,0 +1,158 @@
+###############################################################################
+# .NET / C#
+###############################################################################
+
+# Build outputs
+[Bb]in/
+[Oo]bj/
+out/
+*.dll
+*.exe
+*.pdb
+*.lib
+*.exp
+*.mdb
+*.nupkg
+*.snupkg
+
+# .NET Core
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.userprefs
+*.pidb
+
+# Rider
+.idea/
+*.sln.iml
+
+# VS Code
+.vscode/
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/tasks.json
+!.vscode/settings.json
+
+# NuGet
+*.nupkg
+*.snupkg
+**/[Pp]ackages/
+!**/[Pp]ackages/build/
+*.nuget.props
+*.nuget.targets
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]uild/
+[Ll]og/
+[Ll]ogs/
+
+# MSBuild
+MSBuildCache/
+
+# Test results
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+*.VisualState.xml
+TestResult.xml
+nunit-*.xml
+
+# Coverage
+coverage*/
+*.coverage
+*.coveragexml
+
+# Roslyn
+*.crpsproj
+
+# Publish
+**/publish/
+**/PublishProfiles/
+
+# Entity Framework Core migrations lock
+*.Designer.cs~
+
+# dotnet tool manifests (keep this if you commit tool manifests)
+# .config/dotnet-tools.json
+
+###############################################################################
+# Node.js / Frontend (client/)
+###############################################################################
+
+node_modules/
+.npm
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.pnp.*
+
+# Build outputs
+dist/
+.next/
+.nuxt/
+.cache/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+###############################################################################
+# OS
+###############################################################################
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# Linux
+*~
+
+###############################################################################
+# Docker
+###############################################################################
+
+.dockerignore~
+
+###############################################################################
+# Secrets / Config overrides (NEVER commit these)
+###############################################################################
+
+appsettings.Development.json
+appsettings.Local.json
+*.pfx
+*.p12
+*.key
+secrets.json

@@ -15,11 +15,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Projects\\Companies\\Alvor Software\\Source Code\\kuenda-fincance\\src\\Services\\IAM\\KuendaFinance.IAM.Domain\\KuendaFinance.IAM.Domain.csproj",
+      "projectUniqueName": "C:\\Projects\\Companies\\Alvor Software\\Source Code\\kuenda-fincance\\server\\src\\Services\\IAM\\KuendaFinance.IAM.Domain\\KuendaFinance.IAM.Domain.csproj",
       "projectName": "KuendaFinance.IAM.Domain",
-      "projectPath": "C:\\Projects\\Companies\\Alvor Software\\Source Code\\kuenda-fincance\\src\\Services\\IAM\\KuendaFinance.IAM.Domain\\KuendaFinance.IAM.Domain.csproj",
+      "projectPath": "C:\\Projects\\Companies\\Alvor Software\\Source Code\\kuenda-fincance\\server\\src\\Services\\IAM\\KuendaFinance.IAM.Domain\\KuendaFinance.IAM.Domain.csproj",
       "packagesPath": "C:\\Users\\gusta\\.nuget\\packages\\",
-      "outputPath": "C:\\Projects\\Companies\\Alvor Software\\Source Code\\kuenda-fincance\\src\\Services\\IAM\\KuendaFinance.IAM.Domain\\obj\\",
+      "outputPath": "C:\\Projects\\Companies\\Alvor Software\\Source Code\\kuenda-fincance\\server\\src\\Services\\IAM\\KuendaFinance.IAM.Domain\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
