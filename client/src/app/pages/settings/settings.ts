@@ -4,6 +4,14 @@ import { FormsModule } from '@angular/forms';
 import { StateService, IMF, Branch, UserProfile } from '../../core/state.service';
 import { Observable } from 'rxjs';
 
+export interface TeamUser {
+  name: string;
+  email: string;
+  phone?: string;
+  status: 'Ativo' | 'Inativo' | 'Pendente';
+  branchRoles: { branchId: number; role: string }[];
+}
+
 @Component({
   selector: 'app-settings',
   imports: [CommonModule, FormsModule],
@@ -50,11 +58,44 @@ export class Settings implements OnInit {
   };
 
   // Mock Users
-  users = [
-    { name: 'Carlos Administrador', role: 'Administrador', email: 'carlos@kuenda.co.mz', status: 'Ativo' },
-    { name: 'Ana Agente', role: 'Agente de Crédito', email: 'ana@kuenda.co.mz', status: 'Ativo' },
-    { name: 'Pedro Gestor', role: 'Gestor de Risco', email: 'pedro@kuenda.co.mz', status: 'Pendente' }
+  users: TeamUser[] = [
+    { 
+      name: 'Carlos Administrador', 
+      email: 'carlos@kuenda.co.mz', 
+      phone: '+258 84 111 2222',
+      status: 'Ativo', 
+      branchRoles: [
+        { branchId: 1, role: 'Administrador' },
+        { branchId: 2, role: 'Administrador' }
+      ]
+    },
+    { 
+      name: 'Ana Agente', 
+      email: 'ana@kuenda.co.mz', 
+      phone: '+258 84 333 4444',
+      status: 'Ativo', 
+      branchRoles: [
+        { branchId: 1, role: 'Agente de Crédito' }
+      ]
+    },
+    { 
+      name: 'Pedro Gestor', 
+      email: 'pedro@kuenda.co.mz', 
+      phone: '+258 84 555 6666',
+      status: 'Pendente', 
+      branchRoles: [
+        { branchId: 2, role: 'Gestor de Risco' }
+      ]
+    }
   ];
+
+  // User Management Modal and Form states
+  showUserModal = false;
+  isEditingUser = false;
+  selectedUser: TeamUser = { name: '', email: '', phone: '', status: 'Pendente', branchRoles: [] };
+  userErrors: { [key: string]: string } = {};
+  allBranches: Branch[] = [];
+  standardRoles = ['Agente de Crédito', 'Gestor de Risco', 'Administrador', 'Gerente de Agência', 'Tesoureiro'];
 
   ngOnInit() {
     this.stateService.activeImf$.subscribe(i => {
@@ -67,6 +108,10 @@ export class Settings implements OnInit {
       if (u) {
         this.currentUser = { ...u };
       }
+    });
+
+    this.branches$.subscribe(b => {
+      this.allBranches = b;
     });
   }
 
@@ -217,5 +262,110 @@ export class Settings implements OnInit {
     this.currentPassword = '';
     this.newPassword = '';
     this.confirmPassword = '';
+  }
+
+  getBranchName(branchId: number): string {
+    const found = this.allBranches.find(b => b.id === branchId);
+    return found ? found.name : `Agência #${branchId}`;
+  }
+
+  openInviteUser() {
+    this.isEditingUser = false;
+    this.selectedUser = { name: '', email: '', phone: '', status: 'Pendente', branchRoles: [] };
+    this.userErrors = {};
+    this.showUserModal = true;
+  }
+
+  openEditUser(user: TeamUser) {
+    this.isEditingUser = true;
+    this.selectedUser = { 
+      ...user, 
+      branchRoles: user.branchRoles.map(br => ({ ...br })) 
+    };
+    this.userErrors = {};
+    this.showUserModal = true;
+  }
+
+  hasBranch(branchId: number): boolean {
+    return this.selectedUser.branchRoles.some(br => br.branchId === branchId);
+  }
+
+  toggleUserBranch(branchId: number) {
+    const idx = this.selectedUser.branchRoles.findIndex(br => br.branchId === branchId);
+    if (idx > -1) {
+      this.selectedUser.branchRoles.splice(idx, 1);
+    } else {
+      this.selectedUser.branchRoles.push({ branchId, role: 'Agente de Crédito' });
+    }
+  }
+
+  getBranchRole(branchId: number): string {
+    const found = this.selectedUser.branchRoles.find(br => br.branchId === branchId);
+    return found ? found.role : '';
+  }
+
+  setBranchRole(branchId: number, role: string) {
+    const found = this.selectedUser.branchRoles.find(br => br.branchId === branchId);
+    if (found) {
+      found.role = role;
+    }
+  }
+
+  validateUserForm(): boolean {
+    this.userErrors = {};
+    let isValid = true;
+
+    if (!this.selectedUser.name || this.selectedUser.name.trim().length < 3) {
+      this.userErrors['name'] = 'O nome completo deve ter pelo menos 3 caracteres.';
+      isValid = false;
+    }
+    
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!this.selectedUser.email || !emailRegex.test(this.selectedUser.email)) {
+      this.userErrors['email'] = 'Introduza um e-mail profissional válido.';
+      isValid = false;
+    }
+
+    if (this.selectedUser.phone && this.selectedUser.phone.trim().length < 9) {
+      this.userErrors['phone'] = 'O telemóvel deve ter pelo menos 9 algarismos.';
+      isValid = false;
+    }
+
+    if (this.selectedUser.branchRoles.length === 0) {
+      this.userErrors['branches'] = 'Deve associar o utilizador a pelo menos uma agência.';
+      isValid = false;
+    }
+
+    return isValid;
+  }
+
+  saveUser() {
+    if (!this.validateUserForm()) {
+      return;
+    }
+
+    if (this.isEditingUser) {
+      const idx = this.users.findIndex(u => u.email === this.selectedUser.email);
+      if (idx > -1) {
+        this.users[idx] = { ...this.selectedUser };
+      }
+    } else {
+      if (this.users.some(u => u.email.toLowerCase() === this.selectedUser.email.toLowerCase())) {
+        this.userErrors['email'] = 'Já existe um utilizador registado com este e-mail.';
+        return;
+      }
+      this.users.push({ ...this.selectedUser });
+    }
+    this.showUserModal = false;
+  }
+
+  toggleUserStatus(user: TeamUser) {
+    user.status = user.status === 'Ativo' ? 'Inativo' : 'Ativo';
+  }
+
+  deleteUser(user: TeamUser) {
+    if (confirm(`Tem a certeza que deseja remover o utilizador ${user.name}?`)) {
+      this.users = this.users.filter(u => u.email !== user.email);
+    }
   }
 }
