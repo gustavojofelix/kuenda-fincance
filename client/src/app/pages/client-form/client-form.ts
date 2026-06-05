@@ -22,6 +22,11 @@ export class ClientForm implements OnInit {
   clientId: number | null = null;
   client: Partial<Client> = this.resetForm();
 
+  // Campos para novas garantias
+  newGuaranteeName = '';
+  newGuaranteeValue: number | null = null;
+  newGuaranteePhoto = '';
+
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
@@ -31,6 +36,9 @@ export class ClientForm implements OnInit {
         this.stateService.getClientById(this.clientId).subscribe(data => {
           if (data) {
             this.client = { ...data };
+            if (!this.client.guarantees) {
+              this.client.guarantees = [];
+            }
           }
         });
       }
@@ -60,6 +68,42 @@ export class ClientForm implements OnInit {
     this.router.navigate(['/admin/clients']);
   }
 
+  onGuaranteePhotoSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.newGuaranteePhoto = reader.result as string;
+      };
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+
+  addGuarantee() {
+    if (!this.newGuaranteeName || this.newGuaranteeValue === null) {
+      alert('Por favor, preencha o nome e o valor da garantia.');
+      return;
+    }
+    if (!this.client.guarantees) {
+      this.client.guarantees = [];
+    }
+    this.client.guarantees.push({
+      name: this.newGuaranteeName,
+      value: this.newGuaranteeValue,
+      photoUrl: this.newGuaranteePhoto || ''
+    });
+    // Limpar campos
+    this.newGuaranteeName = '';
+    this.newGuaranteeValue = null;
+    this.newGuaranteePhoto = '';
+  }
+
+  removeGuarantee(index: number) {
+    if (this.client.guarantees) {
+      this.client.guarantees.splice(index, 1);
+    }
+  }
+
   private resetForm(): Partial<Client> {
     return { 
       name: '', 
@@ -75,7 +119,8 @@ export class ClientForm implements OnInit {
       businessYears: '1 a 3 anos',
       emergencyName: '', 
       emergencyRelation: 'Familiar', 
-      emergencyPhone: ''
+      emergencyPhone: '',
+      guarantees: []
     };
   }
 }

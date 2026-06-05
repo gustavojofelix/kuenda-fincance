@@ -35,6 +35,12 @@ export interface Branch {
   status: 'Ativa' | 'Inativa';
 }
 
+export interface GuaranteeItem {
+  name: string;
+  photoUrl: string;
+  value: number;
+}
+
 export interface Client {
   id: number;
   imfId: string;
@@ -57,6 +63,7 @@ export interface Client {
   maritalStatus?: string;
   status: string;
   loanCycle: number;
+  guarantees?: GuaranteeItem[];
 }
 
 export interface Loan {
