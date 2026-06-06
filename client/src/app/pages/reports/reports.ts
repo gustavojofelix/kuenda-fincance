@@ -258,7 +258,7 @@ export class Reports implements OnInit {
       ...rows.map(row => row.map(val => `"${String(val).replace(/"/g, '""')}"`).join(';'))
     ].join('\n');
     
-    const uniqueId = new Date().toISOString().replace(/[-:T]/g, '_').split('.')[0];
+    const uniqueId = new Date().toISOString().replace(/-|:|T/g, '_').split('.')[0];
     const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csvContent], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
@@ -343,7 +343,7 @@ export class Reports implements OnInit {
     });
 
     // Generate output xlsx buffer
-    const uniqueId = new Date().toISOString().replace(/[-:T]/g, '_').split('.')[0];
+    const uniqueId = new Date().toISOString().replace(/-|:|T/g, '_').split('.')[0];
     const buffer = await workbook.xlsx.writeBuffer();
     const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
     const link = document.createElement('a');
@@ -361,7 +361,7 @@ export class Reports implements OnInit {
     const imfName = this.activeImf?.name || 'Kuenda Microfinanças';
     const nuit = this.activeImf?.nuit || '400567123';
     const email = this.activeImf?.email || 'contacto@kuenda.co.mz';
-    const uniqueId = new Date().toISOString().replace(/[-:T]/g, '_').split('.')[0];
+    const uniqueId = new Date().toISOString().replace(/-|:|T/g, '_').split('.')[0];
     
     let html = `
       <html>
