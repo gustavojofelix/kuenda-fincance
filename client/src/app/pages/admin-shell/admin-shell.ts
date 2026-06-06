@@ -30,6 +30,7 @@ export class AdminShell {
   );
   
   showNotifications = false;
+  isSidebarOpen = false;
 
   onBranchSelected(event: any) {
     const val = event.target.value;

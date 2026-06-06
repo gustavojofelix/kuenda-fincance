@@ -1,18 +1,18 @@
 <div class="max-w-[1400px] mx-auto pb-20 px-6">
   
-  <div class="mb-10 flex justify-between items-center bg-white/50 backdrop-blur-md p-6 rounded-3xl border border-gray-100 shadow-sm">
-    <div>
-      <h2 class="text-3xl font-black text-gray-900 tracking-tight">Cockpit de Gestão</h2>
-      <p class="text-gray-500 mt-1 font-medium italic">Seja bem-vindo, Administrador.</p>
+  <div class="mb-10 flex flex-col lg:flex-row lg:justify-between lg:items-center gap-6 bg-white/50 backdrop-blur-md p-5 sm:p-8 rounded-3xl border border-gray-100 shadow-sm">
+    <div class="min-w-0">
+      <h2 class="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight whitespace-nowrap truncate">Cockpit de Gestão</h2>
+      <p class="text-xs sm:text-sm text-gray-500 mt-1 font-medium italic whitespace-nowrap truncate">Seja bem-vindo, Administrador.</p>
     </div>
     
-    <div class="flex items-center gap-4">
+    <div class="grid grid-cols-3 gap-2 w-full lg:flex lg:flex-row lg:w-auto lg:gap-3 items-center">
         <!-- Privacy Toggle -->
         <button (click)="togglePrivacy()" 
             [class.bg-emerald-50]="privacyMode" [class.text-emerald-600]="privacyMode"
             [class.bg-gray-100]="!privacyMode" [class.text-gray-500]="!privacyMode"
-            class="flex items-center px-4 py-2.5 rounded-xl font-bold text-xs uppercase tracking-widest transition-all cursor-pointer">
-            <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            class="flex items-center justify-center w-full whitespace-nowrap px-2 sm:px-4 py-2 sm:py-2.5 rounded-xl font-bold text-[9px] sm:text-xs uppercase tracking-widest transition-all cursor-pointer">
+            <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-1 sm:mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 @if (privacyMode) {
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path>
                 } @else {
@@ -20,21 +20,21 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
                 }
             </svg>
-            {{ privacyMode ? 'Modo Privado ON' : 'Ocultar Valores' }}
+            {{ privacyMode ? 'Privado ON' : 'Ocultar' }}
         </button>
 
         <!-- Simulator Toggle -->
         <button (click)="simulate30Days()" 
-            class="flex items-center bg-red-50 hover:bg-red-100 text-red-600 font-bold px-4 py-2.5 rounded-xl text-xs uppercase tracking-widest transition-all cursor-pointer border border-red-100">
-            <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            class="flex items-center justify-center w-full whitespace-nowrap bg-red-50 hover:bg-red-100 text-red-600 font-bold px-2 sm:px-4 py-2 sm:py-2.5 rounded-xl text-[9px] sm:text-xs uppercase tracking-widest transition-all cursor-pointer border border-red-100">
+            <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-1 sm:mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
             </svg>
-            Simular +30 Dias (Risco)
+            Simular
         </button>
 
-        <a routerLink="/admin/reports" class="bg-gray-900 text-white font-bold py-2.5 px-6 rounded-xl hover:bg-black transition-all flex items-center shadow-lg shadow-gray-200 cursor-pointer">
-          <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-          MAPs BdM
+        <a routerLink="/admin/reports" class="bg-gray-900 text-white font-bold py-2 sm:py-2.5 px-2 sm:px-6 rounded-xl hover:bg-black transition-all flex items-center justify-center shadow-lg shadow-gray-200 cursor-pointer whitespace-nowrap text-[9px] sm:text-xs uppercase tracking-widest w-full">
+          <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1 sm:mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+          MAPs
         </a>
     </div>
   </div>
@@ -104,82 +104,84 @@
     <div class="lg:col-span-2 space-y-10">
         
         <!-- Cash Flow Bar Chart (Pure SVG) -->
-        <div class="bg-white rounded-3xl border border-gray-100 p-10 shadow-sm">
-            <div class="flex justify-between items-center mb-10">
-                <div>
-                    <h3 class="text-lg font-bold text-gray-900">Histórico de Fluxo de Caixa</h3>
-                    <p class="text-xs text-gray-400 font-medium">Entradas vs Saídas (Últimos 6 Meses)</p>
+        <div class="bg-white rounded-3xl border border-gray-100 p-5 sm:p-10 shadow-sm overflow-hidden">
+            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 sm:gap-0 mb-6 sm:mb-10">
+                <div class="min-w-0">
+                    <h3 class="text-base sm:text-lg font-bold text-gray-900 whitespace-nowrap truncate">Histórico de Fluxo de Caixa</h3>
+                    <p class="text-[10px] sm:text-xs text-gray-400 font-medium whitespace-nowrap truncate">Entradas vs Saídas (Últimos 6 Meses)</p>
                 </div>
-                <div class="flex gap-4">
-                    <span class="flex items-center text-[10px] font-black text-gray-400 uppercase tracking-widest">
-                        <span class="w-3 h-3 bg-primary rounded-sm mr-2"></span> Entradas
+                <div class="flex gap-2 sm:gap-4 flex-wrap whitespace-nowrap text-[9px] sm:text-[10px]">
+                    <span class="flex items-center font-black text-gray-400 uppercase tracking-widest">
+                        <span class="w-2.5 h-2.5 bg-primary rounded-sm mr-1.5"></span> Entradas
                     </span>
-                    <span class="flex items-center text-[10px] font-black text-gray-400 uppercase tracking-widest">
-                        <span class="w-3 h-3 bg-gray-200 rounded-sm mr-2"></span> Saídas
+                    <span class="flex items-center font-black text-gray-400 uppercase tracking-widest">
+                        <span class="w-2.5 h-2.5 bg-gray-200 rounded-sm mr-1.5"></span> Saídas
                     </span>
                 </div>
             </div>
 
-            <div class="relative h-64 flex items-end justify-between gap-4 px-2">
-                <!-- Grid Lines -->
-                <div class="absolute inset-0 flex flex-col justify-between pointer-events-none">
-                    <div class="w-full border-t border-gray-50"></div>
-                    <div class="w-full border-t border-gray-50"></div>
-                    <div class="w-full border-t border-gray-50"></div>
-                </div>
-
-                @for (entry of cashFlowData; track entry.month) {
-                    <div class="flex-1 flex flex-col items-center group relative cursor-help">
-                        <!-- Bar Tooltip -->
-                        <div class="absolute -top-12 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-900 text-white text-[10px] px-3 py-1.5 rounded-lg z-10 pointer-events-none font-bold">
-                            +{{ entry.inflow | number }} MZN
-                        </div>
-                        
-                        <div class="w-full flex justify-center gap-1 items-end relative z-0">
-                            <!-- Inflow Bar -->
-                            <div class="bg-primary hover:bg-primary-dark transition-all duration-700 rounded-t-lg w-4 md:w-8" [style.height.px]="entry.inflow / 250"></div>
-                            <!-- Outflow Bar -->
-                            <div class="bg-gray-100 hover:bg-gray-200 transition-all duration-700 rounded-t-lg w-4 md:w-8" [style.height.px]="entry.outflow / 250"></div>
-                        </div>
-                        <span class="mt-4 text-[10px] font-black text-gray-400 uppercase tracking-widest">{{ entry.month }}</span>
+            <div class="overflow-x-auto overflow-y-hidden scrollbar-none">
+                <div class="relative h-64 flex items-end justify-between gap-2 sm:gap-4 px-2 min-w-[320px] sm:min-w-0">
+                    <!-- Grid Lines -->
+                    <div class="absolute inset-0 flex flex-col justify-between pointer-events-none">
+                        <div class="w-full border-t border-gray-50"></div>
+                        <div class="w-full border-t border-gray-50"></div>
+                        <div class="w-full border-t border-gray-50"></div>
                     </div>
-                }
+
+                    @for (entry of cashFlowData; track entry.month) {
+                        <div class="flex-1 flex flex-col items-center group relative cursor-help">
+                            <!-- Bar Tooltip -->
+                            <div class="absolute -top-12 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-900 text-white text-[10px] px-3 py-1.5 rounded-lg z-10 pointer-events-none font-bold">
+                                +{{ entry.inflow | number }} MZN
+                            </div>
+                            
+                            <div class="w-full flex justify-center gap-1 items-end relative z-0">
+                                <!-- Inflow Bar -->
+                                <div class="bg-primary hover:bg-primary-dark transition-all duration-700 rounded-t-lg w-4 md:w-8" [style.height.px]="entry.inflow / 250"></div>
+                                <!-- Outflow Bar -->
+                                <div class="bg-gray-100 hover:bg-gray-200 transition-all duration-700 rounded-t-lg w-4 md:w-8" [style.height.px]="entry.outflow / 250"></div>
+                            </div>
+                            <span class="mt-4 text-[9px] sm:text-[10px] font-black text-gray-400 uppercase tracking-widest whitespace-nowrap">{{ entry.month }}</span>
+                        </div>
+                    }
+                </div>
             </div>
         </div>
 
         <!-- Recent Activity Feed -->
         <div class="bg-white rounded-3xl border border-gray-100 overflow-hidden shadow-sm">
-            <div class="p-8 border-b border-gray-50 flex justify-between items-center">
-                <h3 class="text-lg font-bold text-gray-900">Últimos Contratos</h3>
-                <a routerLink="/admin/loans" class="text-xs font-black text-primary uppercase tracking-widest hover:underline">Ver Gestão de Crédito</a>
+            <div class="p-5 sm:p-8 border-b border-gray-50 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
+                <h3 class="text-base sm:text-lg font-bold text-gray-900 whitespace-nowrap truncate">Últimos Contratos</h3>
+                <a routerLink="/admin/loans" class="text-[10px] sm:text-xs font-black text-center text-primary bg-primary/10 hover:bg-primary/20 px-4 py-2.5 rounded-xl transition-all uppercase tracking-widest whitespace-nowrap border border-primary/20 shadow-sm w-full sm:w-auto">Ver Gestão de Crédito</a>
             </div>
             <div class="overflow-x-auto">
-                <table class="w-full text-left">
+                <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr class="text-[10px] font-black text-gray-400 uppercase tracking-widest bg-gray-50 border-b border-gray-100">
-                            <th class="py-4 px-8">Contrato / Cliente</th>
-                            <th class="py-4 px-8">Principal</th>
-                            <th class="py-4 px-8">Próximo Venc.</th>
-                            <th class="py-4 px-8 text-right">Estado</th>
+                        <tr class="text-[9px] sm:text-[10px] font-black text-gray-400 uppercase tracking-widest bg-gray-50 border-b border-gray-100">
+                            <th class="py-4 px-4 sm:px-8 whitespace-nowrap">Contrato / Cliente</th>
+                            <th class="py-4 px-4 sm:px-8 whitespace-nowrap">Principal</th>
+                            <th class="py-4 px-4 sm:px-8 whitespace-nowrap">Próximo Venc.</th>
+                            <th class="py-4 px-4 sm:px-8 text-right whitespace-nowrap">Estado</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-gray-50">
+                    <tbody class="divide-y divide-gray-50 text-xs sm:text-sm">
                         @for (loan of recentLoans$ | async; track loan.id) {
                             <tr class="hover:bg-gray-50/50 transition-colors">
-                                <td class="py-5 px-8">
-                                    <div class="text-sm font-bold text-gray-900">{{ loan.clientName }}</div>
-                                    <div class="text-[10px] text-gray-400 font-mono tracking-tighter">{{ loan.id }}</div>
+                                <td class="py-4 px-4 sm:px-8 whitespace-nowrap">
+                                    <div class="font-bold text-gray-900">{{ loan.clientName }}</div>
+                                    <div class="text-[9px] sm:text-[10px] text-gray-400 font-mono tracking-tighter">{{ loan.id }}</div>
                                 </td>
-                                <td class="py-5 px-8 text-sm font-black text-gray-700">
+                                <td class="py-4 px-4 sm:px-8 font-black text-gray-700 whitespace-nowrap">
                                     {{ getMaskedValue(loan.amount) }}
                                 </td>
-                                <td class="py-5 px-8">
-                                    <div class="flex items-center text-xs font-bold text-gray-500">
-                                        <svg class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                <td class="py-4 px-4 sm:px-8 whitespace-nowrap">
+                                    <div class="flex items-center font-bold text-gray-500">
+                                        <svg class="h-3.5 w-3.5 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                                         {{ loan.nextPayment }}
                                     </div>
                                 </td>
-                                <td class="py-5 px-8 text-right">
+                                <td class="py-4 px-4 sm:px-8 text-right whitespace-nowrap">
                                     <span 
                                         [class.bg-emerald-50]="loan.status === 'Ativo' || loan.status === 'Aprovado'" 
                                         [class.text-emerald-600]="loan.status === 'Ativo' || loan.status === 'Aprovado'"
@@ -196,7 +198,7 @@
                                         [class.bg-slate-50]="loan.status === 'Liquidado'" 
                                         [class.text-slate-600]="loan.status === 'Liquidado'"
                                         [class.border-slate-100]="loan.status === 'Liquidado'"
-                                        class="px-3 py-1 text-[10px] font-bold uppercase rounded-full border">
+                                        class="px-2.5 py-0.5 text-[9px] sm:text-[10px] font-bold uppercase rounded-full border">
                                         {{ loan.status }}
                                     </span>
                                 </td>
