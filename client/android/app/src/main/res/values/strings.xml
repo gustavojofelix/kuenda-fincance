@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Kuenda Finanças</string>
+    <string name="title_activity_main">Kuenda Finanças</string>
+    <string name="package_name">com.alvorsoftware.kuendafinance</string>
+    <string name="custom_url_scheme">com.alvorsoftware.kuendafinance</string>
+</resources>
