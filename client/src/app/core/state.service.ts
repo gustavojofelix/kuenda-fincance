@@ -64,6 +64,9 @@ export interface Client {
   status: string;
   loanCycle: number;
   guarantees?: GuaranteeItem[];
+  requestedTerm?: number;
+  estimatedMonthlyRevenue?: number;
+  scoreSimulado?: number;
 }
 
 export interface Loan {
