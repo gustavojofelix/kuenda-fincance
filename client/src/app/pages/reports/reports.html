@@ -1,8 +1,8 @@
 <div class="max-w-[1400px] mx-auto pb-20 px-6">
   
-    <div class="mb-10">
-      <h2 class="text-3xl font-extrabold text-gray-900 tracking-tight">Central de Relatórios</h2>
-      <p class="text-gray-500 mt-2 text-lg">Exportação estruturada de dados regulatórios e indicadores de performance.</p>
+    <div class="mb-10 min-w-0">
+      <h2 class="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight whitespace-nowrap truncate">Central de Relatórios</h2>
+      <p class="text-sm sm:text-lg text-gray-500 mt-2 whitespace-nowrap truncate">Exportação estruturada de dados regulatórios e indicadores de performance.</p>
     </div>
   
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
@@ -68,17 +68,17 @@
               @if (getReportData(); as repData) {
                 <table class="w-full text-left border-collapse">
                   <thead>
-                    <tr class="text-[10px] uppercase font-black text-gray-400 bg-gray-50/50 border-b border-gray-100">
+                    <tr class="text-[9px] sm:text-[10px] uppercase font-black text-gray-400 bg-gray-50/50 border-b border-gray-100">
                       @for (header of repData.headers; track header) {
-                        <th class="py-3 px-6">{{ header }}</th>
+                        <th class="py-3 px-6 whitespace-nowrap">{{ header }}</th>
                       }
                     </tr>
                   </thead>
-                  <tbody class="divide-y divide-gray-50 text-xs">
+                  <tbody class="divide-y divide-gray-50 text-[11px] sm:text-xs">
                     @for (row of repData.rows; track $index) {
                       <tr class="hover:bg-gray-50/50 transition-colors">
                         @for (cell of row; track $index) {
-                          <td class="py-3.5 px-6 font-semibold text-gray-700">{{ cell }}</td>
+                          <td class="py-3.5 px-6 font-semibold text-gray-700 whitespace-nowrap">{{ cell }}</td>
                         }
                       </tr>
                     }
@@ -103,25 +103,25 @@
                 <div class="overflow-x-auto">
                     <table class="w-full text-left">
                     <thead>
-                        <tr class="text-[10px] uppercase font-black text-gray-400 bg-gray-50/50 border-b border-gray-100">
-                            <th class="py-4 px-8">Relatório</th>
-                            <th class="py-4 px-8">Data de Geração</th>
-                            <th class="py-4 px-8">Formato</th>
-                            <th class="py-4 px-8 text-right">Acção</th>
+                        <tr class="text-[9px] sm:text-[10px] uppercase font-black text-gray-400 bg-gray-50/50 border-b border-gray-100">
+                            <th class="py-4 px-8 whitespace-nowrap">Relatório</th>
+                            <th class="py-4 px-8 whitespace-nowrap">Data de Geração</th>
+                            <th class="py-4 px-8 whitespace-nowrap">Formato</th>
+                            <th class="py-4 px-8 text-right whitespace-nowrap">Acção</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-gray-50">
+                    <tbody class="divide-y divide-gray-50 text-xs sm:text-sm">
                         @for (h of exportHistory; track h.name + h.date) {
                             <tr class="hover:bg-gray-50/50 transition-colors">
-                                <td class="py-4 px-8">
-                                    <div class="text-sm font-bold text-gray-900">{{ h.name }}</div>
-                                    <div class="text-[10px] text-gray-400">Gerado por {{ h.user }}</div>
+                                <td class="py-4 px-8 whitespace-nowrap">
+                                    <div class="font-bold text-gray-900">{{ h.name }}</div>
+                                    <div class="text-[9px] sm:text-[10px] text-gray-400">Gerado por {{ h.user }}</div>
                                 </td>
-                                <td class="py-4 px-8 text-sm text-gray-500 font-medium">{{ h.date }}</td>
-                                <td class="py-4 px-8">
+                                <td class="py-4 px-8 text-gray-500 font-medium whitespace-nowrap">{{ h.date }}</td>
+                                <td class="py-4 px-8 whitespace-nowrap">
                                     <span class="px-2.5 py-1 bg-gray-100 text-[10px] font-black text-gray-500 rounded-md">{{ h.format }}</span>
                                 </td>
-                                <td class="py-4 px-8 text-right">
+                                <td class="py-4 px-8 text-right whitespace-nowrap">
                                     <button class="text-primary hover:text-primary-dark font-black text-xs uppercase tracking-widest cursor-pointer">Download</button>
                                 </td>
                             </tr>
