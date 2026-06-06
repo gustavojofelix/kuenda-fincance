@@ -2,7 +2,12 @@ export const MOCK_CLIENTS = [
   { id: 1, imfId: 'imf-20260526kd', branchId: 1, name: 'João Chissano', bi: '100456123B', phone: '+258 84 123 4567', business: 'Mercearia', income: '10.001 - 25.000 MZN', maritalStatus: 'Casado', province: 'Maputo Cidade', district: 'KaMpfumo', neighborhood: 'Polana', address: 'Av. Julius Nyerere, 123', status: 'Em Dia', loanCycle: 2 },
   { id: 2, imfId: 'imf-20260526sc', branchId: 3, name: 'Anabela Mutemba', bi: '120987654M', phone: '+258 82 987 6543', business: 'Vestuário / Calçado', income: '25.001 - 50.000 MZN', maritalStatus: 'Solteira', province: 'Maputo Província', district: 'Matola', neighborhood: 'Fomento', address: 'Rua das Flores, 45', status: 'Atrasado', loanCycle: 1 },
   { id: 3, imfId: 'imf-20260526sc', branchId: 4, name: 'Carlos Sitoe', bi: '130345678C', phone: '+258 85 345 6789', business: 'Serviços / Manutenção', income: '25.001 - 50.000 MZN', maritalStatus: 'Casado', province: 'Maputo Província', district: 'Matola', neighborhood: 'Tchumene', address: 'Rua Principal, 89', status: 'Avaliação', loanCycle: 1 },
-  { id: 4, imfId: 'imf-20260526kd', branchId: 2, name: 'Fátima Nhavene', bi: '140112233N', phone: '+258 84 112 2334', business: 'Estética / Cabeleireiro', income: '10.001 - 25.000 MZN', maritalStatus: 'Divorciada', province: 'Maputo Cidade', district: 'KaMaxakeni', neighborhood: 'Alto Maé', address: 'Av. Eduardo Mondlane, 400', status: 'Avaliação', loanCycle: 3 }
+  { id: 4, imfId: 'imf-20260526kd', branchId: 2, name: 'Fátima Nhavene', bi: '140112233N', phone: '+258 84 112 2334', business: 'Estética / Cabeleireiro', income: '10.001 - 25.000 MZN', maritalStatus: 'Divorciada', province: 'Maputo Cidade', district: 'KaMaxakeni', neighborhood: 'Alto Maé', address: 'Av. Eduardo Mondlane, 400', status: 'Avaliação', loanCycle: 3 },
+  { id: 5, imfId: 'imf-20260526kd', branchId: 1, name: 'Mateus Tembe', bi: '150456789T', phone: '+258 84 999 1111', business: 'Carpintaria', income: '25.001 - 50.000 MZN', maritalStatus: 'Casado', province: 'Maputo Cidade', district: 'KaMpfumo', neighborhood: 'Malhangalene', address: 'Av. Vladimir Lenine, 888', status: 'Atrasado', loanCycle: 2 },
+  { id: 6, imfId: 'imf-20260526kd', branchId: 1, name: 'Sofia Matusse', bi: '160789123S', phone: '+258 83 222 3333', business: 'Pastelaria', income: '10.001 - 25.000 MZN', maritalStatus: 'Solteira', province: 'Maputo Cidade', district: 'KaMpfumo', neighborhood: 'Coop', address: 'Av. da OUA, 12', status: 'Liquidado', loanCycle: 1 },
+  { id: 7, imfId: 'imf-20260526kd', branchId: 2, name: 'Bernardo Cossa', bi: '170123456C', phone: '+258 85 444 5555', business: 'Transporte / Chapa', income: '50.000+ MZN', maritalStatus: 'Divorciado', province: 'Maputo Província', district: 'Matola', neighborhood: 'T3', address: 'Av. das Indústrias, 44', status: 'Aprovado', loanCycle: 4 },
+  { id: 8, imfId: 'imf-20260526sc', branchId: 3, name: 'Lucas Mondlane', bi: '180999888M', phone: '+258 82 777 6666', business: 'Agricultura', income: '25.001 - 50.000 MZN', maritalStatus: 'Casado', province: 'Gaza', district: 'Chókwè', neighborhood: 'Sede', address: 'Zona Verde, 5', status: 'Liquidado', loanCycle: 2 },
+  { id: 9, imfId: 'imf-20260526sc', branchId: 3, name: 'Helena Matsinhe', bi: '190777666H', phone: '+258 87 888 9999', business: 'Artesanato', income: '0 - 10.000 MZN', maritalStatus: 'Solteira', province: 'Inhambane', district: 'Maxixe', neighborhood: 'Chambone', address: 'Av. da Independência, 101', status: 'Aprovado', loanCycle: 1 }
 ];
 
 export const MOCK_LOANS = [
@@ -19,9 +24,9 @@ export const MOCK_LOANS = [
     monthlyPayment: 875, 
     installmentsCount: 12, 
     paidInstallments: 10,
-    date: '12 Fev 2024', 
+    date: '12 Mar 2024', 
     status: 'Ativo', 
-    nextPayment: '12 Mar 2024',
+    nextPayment: '12 Abr 2024',
     disbursementMethod: 'M-Pesa'
   },
   { 
@@ -37,9 +42,9 @@ export const MOCK_LOANS = [
     monthlyPayment: 4375, 
     installmentsCount: 6, 
     paidInstallments: 3,
-    date: '05 Jan 2024', 
+    date: '05 Mar 2024', 
     status: 'Atrasado', 
-    nextPayment: '05 Fev 2024',
+    nextPayment: '05 Abr 2024',
     disbursementMethod: 'E-mola'
   },
   { 
@@ -75,6 +80,92 @@ export const MOCK_LOANS = [
     date: '-', 
     status: 'Em Análise', 
     nextPayment: '-'
+  },
+  { 
+    id: 'L-10027', 
+    imfId: 'imf-20260526kd',
+    branchId: 1,
+    clientName: 'Mateus Tembe', 
+    amount: 55000, 
+    interestRate: 8, 
+    term: 18, 
+    totalToPay: 62920, 
+    paidAmount: 3495, 
+    monthlyPayment: 3495, 
+    installmentsCount: 18, 
+    paidInstallments: 1,
+    date: '10 Mar 2024', 
+    status: 'Atrasado', 
+    nextPayment: '10 Abr 2024',
+    disbursementMethod: 'Banco'
+  },
+  { 
+    id: 'L-10028', 
+    imfId: 'imf-20260526kd',
+    branchId: 1,
+    clientName: 'Sofia Matusse', 
+    amount: 8000, 
+    interestRate: 5, 
+    term: 6, 
+    totalToPay: 8400, 
+    paidAmount: 8400, 
+    monthlyPayment: 1400, 
+    installmentsCount: 6, 
+    paidInstallments: 6,
+    date: '01 Mar 2024', 
+    status: 'Liquidado', 
+    nextPayment: '-'
+  },
+  { 
+    id: 'L-10029', 
+    imfId: 'imf-20260526kd',
+    branchId: 2,
+    clientName: 'Bernardo Cossa', 
+    amount: 60000, 
+    interestRate: 7, 
+    term: 12, 
+    totalToPay: 64200, 
+    paidAmount: 0, 
+    monthlyPayment: 5350, 
+    installmentsCount: 12, 
+    paidInstallments: 0,
+    date: '-', 
+    status: 'Aprovado', 
+    nextPayment: '-'
+  },
+  { 
+    id: 'L-10030', 
+    imfId: 'imf-20260526sc',
+    branchId: 3,
+    clientName: 'Lucas Mondlane', 
+    amount: 30000, 
+    interestRate: 6, 
+    term: 12, 
+    totalToPay: 31800, 
+    paidAmount: 31800, 
+    monthlyPayment: 2650, 
+    installmentsCount: 12, 
+    paidInstallments: 12,
+    date: '02 Mar 2024', 
+    status: 'Liquidado', 
+    nextPayment: '-'
+  },
+  { 
+    id: 'L-10031', 
+    imfId: 'imf-20260526sc',
+    branchId: 3,
+    clientName: 'Helena Matsinhe', 
+    amount: 12000, 
+    interestRate: 5, 
+    term: 6, 
+    totalToPay: 12600, 
+    paidAmount: 0, 
+    monthlyPayment: 2100, 
+    installmentsCount: 6, 
+    paidInstallments: 0,
+    date: '-', 
+    status: 'Aprovado', 
+    nextPayment: '-'
   }
 ];
 
@@ -84,3 +175,4 @@ export const MOCK_METRICS = {
   newLeads: 8,
   upcomingDue: 14
 };
+
