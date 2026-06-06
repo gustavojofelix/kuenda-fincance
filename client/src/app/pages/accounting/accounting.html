@@ -124,17 +124,17 @@
                 <input type="text" [(ngModel)]="newTx.description" placeholder="Ex: Pagamento Internet Abril" class="w-full px-5 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all font-bold">
             </div>
 
-            <div class="grid grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
-                    <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Tipo</label>
-                    <div class="flex bg-gray-100 p-1 rounded-xl">
-                        <button (click)="changeType('Entrada')" [class.bg-white]="newTx.type === 'Entrada'" [class.shadow-sm]="newTx.type === 'Entrada'" [class.text-emerald-600]="newTx.type === 'Entrada'" class="flex-1 py-2 text-xs font-bold rounded-lg transition-all">Entrada</button>
-                        <button (click)="changeType('Saída')" [class.bg-white]="newTx.type === 'Saída'" [class.shadow-sm]="newTx.type === 'Saída'" [class.text-red-600]="newTx.type === 'Saída'" class="flex-1 py-2 text-xs font-bold rounded-lg transition-all">Saída</button>
+                    <label class="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2 whitespace-nowrap">Tipo</label>
+                    <div class="flex bg-gray-150 p-1 rounded-xl">
+                        <button (click)="changeType('Entrada')" [class.bg-white]="newTx.type === 'Entrada'" [class.shadow-sm]="newTx.type === 'Entrada'" [class.text-emerald-600]="newTx.type === 'Entrada'" class="flex-1 py-2.5 text-xs font-black rounded-lg transition-all">Entrada</button>
+                        <button (click)="changeType('Saída')" [class.bg-white]="newTx.type === 'Saída'" [class.shadow-sm]="newTx.type === 'Saída'" [class.text-red-600]="newTx.type === 'Saída'" class="flex-1 py-2.5 text-xs font-black rounded-lg transition-all">Saída</button>
                     </div>
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Categoria</label>
-                    <select [(ngModel)]="newTx.category" class="w-full px-5 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white outline-none font-bold text-sm">
+                    <label class="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2 whitespace-nowrap">Categoria</label>
+                    <select [(ngModel)]="newTx.category" class="w-full px-5 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white outline-none font-bold text-sm">
                         @if (newTx.type === 'Entrada') {
                             @for (cat of inflowCategories; track cat) {
                                 <option [value]="cat">{{ cat }}</option>
@@ -148,20 +148,25 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
-                    <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Montante (MZN)</label>
-                    <input type="number" [(ngModel)]="newTx.amount" class="w-full px-5 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all font-black text-lg">
+                    <label class="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2 whitespace-nowrap">Montante (MZN)</label>
+                    <input type="number" [(ngModel)]="newTx.amount" class="w-full px-5 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all font-black text-lg">
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Data do Movimento</label>
+                    <label class="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2 whitespace-nowrap">Data do Movimento</label>
                     <input type="date" [(ngModel)]="newTx.date" class="w-full px-5 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white outline-none font-bold text-sm">
                 </div>
             </div>
 
-            <button (click)="saveTransaction()" class="w-full bg-gray-900 hover:bg-black text-white font-bold py-4 rounded-2xl shadow-xl shadow-gray-200 transition-all flex justify-center items-center cursor-pointer">
-                Efectuar Lançamento
-            </button>
+            <div class="flex flex-col gap-3">
+                <button (click)="saveTransaction()" class="w-full bg-gray-900 hover:bg-black text-white font-black py-4 rounded-2xl shadow-xl shadow-gray-250/50 transition-all flex justify-center items-center cursor-pointer whitespace-nowrap text-sm">
+                    Efectuar Lançamento
+                </button>
+                <button (click)="showModal = false" class="w-full border border-gray-200 text-gray-500 hover:bg-gray-50 hover:text-gray-700 font-bold py-4 rounded-2xl transition-all cursor-pointer whitespace-nowrap text-sm">
+                    Cancelar
+                </button>
+            </div>
         </div>
     </div>
 </div>

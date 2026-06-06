@@ -7,25 +7,25 @@
     <span class="text-gray-900">Nova Simulação Price</span>
   </div>
 
-  <div class="mb-10">
-    <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">Registar Pedido de Crédito</h1>
-    <p class="text-gray-500 mt-2 text-lg">Configure os termos financeiros e visualize o plano de amortização.</p>
+  <div class="mb-10 min-w-0">
+    <h1 class="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight whitespace-nowrap truncate">Registar Pedido de Crédito</h1>
+    <p class="text-sm sm:text-lg text-gray-500 mt-2 whitespace-nowrap truncate">Configure os termos financeiros e visualize o plano de amortização.</p>
   </div>
 
   <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
     
     <!-- Coluna de Configuração -->
     <div class="lg:col-span-2 space-y-8">
-      <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 md:p-10">
-        <h3 class="text-lg font-bold text-gray-900 mb-8 flex items-center">
-            <span class="w-8 h-8 bg-primary/10 text-primary rounded-lg flex items-center justify-center mr-3">1</span>
+      <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-6 sm:p-10">
+        <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-8 flex items-center">
+            <span class="w-8 h-8 bg-primary/10 text-primary rounded-lg flex items-center justify-center mr-3 shrink-0">1</span>
             Configuração do Empréstimo
         </h3>
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div class="md:col-span-2">
-                <label class="block text-sm font-bold text-gray-700 mb-3 tracking-wide uppercase text-[11px]">Seleccionar Mutuário (Cliente)</label>
-                <select [(ngModel)]="loanData.clientName" class="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:bg-white focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all font-bold text-gray-900">
+                <label class="block text-sm font-bold text-gray-700 mb-3 tracking-wide uppercase text-[10px] sm:text-[11px]">Seleccionar Mutuário (Cliente)</label>
+                <select [(ngModel)]="loanData.clientName" class="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:bg-white focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all font-bold text-gray-900 text-sm">
                     <option value="" disabled selected>Escolha um cliente da lista...</option>
                     @for (client of clients$ | async; track client.id) {
                         <option [value]="client.name">{{ client.name }} (BI: {{ client.bi }})</option>
@@ -34,8 +34,8 @@
             </div>
 
             <div>
-                <label class="block text-sm font-bold text-gray-700 mb-3 tracking-wide uppercase text-[11px]">Finalidade do Crédito</label>
-                <select [(ngModel)]="loanData.purpose" class="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:bg-white focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all">
+                <label class="block text-sm font-bold text-gray-700 mb-3 tracking-wide uppercase text-[10px] sm:text-[11px]">Finalidade do Crédito</label>
+                <select [(ngModel)]="loanData.purpose" class="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:bg-white focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all text-sm">
                     <option value="Capital de Giro">Capital de Giro</option>
                     <option value="Compra de Equipamento">Compra de Equipamento</option>
                     <option value="Expansão de Negócio">Expansão de Negócio</option>
@@ -44,33 +44,33 @@
             </div>
 
             <div>
-                <label class="block text-sm font-bold text-gray-700 mb-3 tracking-wide uppercase text-[11px]">Cálculo (Método)</label>
-                <div class="px-6 py-4 bg-gray-100 border border-gray-200 rounded-2xl text-gray-500 font-bold opacity-70">
+                <label class="block text-sm font-bold text-gray-700 mb-3 tracking-wide uppercase text-[10px] sm:text-[11px]">Cálculo (Método)</label>
+                <div class="px-6 py-4 bg-gray-100 border border-gray-200 rounded-2xl text-gray-500 font-bold opacity-70 text-sm">
                     Tabela Price (Fixas)
                 </div>
             </div>
 
             <div>
-                <label class="block text-sm font-bold text-gray-700 mb-3 tracking-wide uppercase text-[11px]">Montante Principal (MZN)</label>
+                <label class="block text-sm font-bold text-gray-700 mb-3 tracking-wide uppercase text-[10px] sm:text-[11px]">Montante Principal (MZN)</label>
                 <div class="relative">
-                    <input type="number" [(ngModel)]="loanData.amount" (input)="calculatePrice()" class="w-full pl-6 pr-16 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:bg-white focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all text-xl font-black text-gray-900">
+                    <input type="number" [(ngModel)]="loanData.amount" (input)="calculatePrice()" class="w-full pl-6 pr-16 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:bg-white focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all text-lg sm:text-xl font-black text-gray-900">
                     <span class="absolute right-6 top-1/2 -translate-y-1/2 font-black text-gray-300">MZN</span>
                 </div>
             </div>
 
             <div>
-                <label class="block text-sm font-bold text-gray-700 mb-3 tracking-wide uppercase text-[11px]">Taxa de Juro Mensal (%)</label>
+                <label class="block text-sm font-bold text-gray-700 mb-3 tracking-wide uppercase text-[10px] sm:text-[11px]">Taxa de Juro Mensal (%)</label>
                 <div class="relative border-2 border-primary/20 rounded-2xl overflow-hidden">
-                    <input type="number" [(ngModel)]="loanData.interestRate" (input)="calculatePrice()" class="w-full pl-6 pr-16 py-4 bg-primary/5 text-primary outline-none transition-all text-xl font-black">
+                    <input type="number" [(ngModel)]="loanData.interestRate" (input)="calculatePrice()" class="w-full pl-6 pr-16 py-4 bg-primary/5 text-primary outline-none transition-all text-lg sm:text-xl font-black">
                     <span class="absolute right-6 top-1/2 -translate-y-1/2 font-black text-primary">%</span>
                 </div>
             </div>
 
             <div class="md:col-span-2">
-                <label class="block text-sm font-bold text-gray-700 mb-3 tracking-wide uppercase text-[11px]">Prazo de Amortização (Meses)</label>
+                <label class="block text-sm font-bold text-gray-700 mb-3 tracking-wide uppercase text-[10px] sm:text-[11px]">Prazo de Amortização (Meses)</label>
                 <div class="flex items-center gap-4">
                     <input type="range" [(ngModel)]="loanData.term" (input)="calculatePrice()" min="1" max="24" class="flex-1 accent-primary h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
-                    <span class="w-20 text-center font-black text-2xl text-primary">{{ loanData.term }} <small class="text-xs uppercase">Mês</small></span>
+                    <span class="w-20 text-center font-black text-xl sm:text-2xl text-primary">{{ loanData.term }} <small class="text-xs uppercase">Mês</small></span>
                 </div>
             </div>
         </div>
@@ -79,40 +79,45 @@
 
     <!-- Coluna de Resumo da Simulação -->
     <div class="space-y-6">
-        <div class="bg-gray-900 rounded-3xl shadow-2xl p-8 text-white relative overflow-hidden">
+        <div class="bg-gray-900 rounded-3xl shadow-2xl p-6 sm:p-8 text-white relative overflow-hidden">
             <!-- Decorative circle -->
             <div class="absolute -top-10 -right-10 w-40 h-40 bg-primary opacity-20 rounded-full blur-3xl"></div>
             
-            <h3 class="text-lg font-bold mb-8 flex items-center relative z-10">
+            <h3 class="text-base sm:text-lg font-bold mb-8 flex items-center relative z-10 whitespace-nowrap truncate">
                 <svg class="h-5 w-5 mr-3 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2-2v14a2 2 0 002 2z"></path></svg>
                 Resumo do Crédito
             </h3>
             
             <div class="space-y-6 relative z-10">
                 <div>
-                    <p class="text-[10px] uppercase font-black text-gray-400 tracking-widest mb-1">Pagamento Mensal</p>
-                    <p class="text-4xl font-black text-primary">{{ simulation.monthlyPayment | number:'1.2-2' }} MZN</p>
+                    <p class="text-[9px] sm:text-[10px] uppercase font-black text-gray-400 tracking-widest mb-1 whitespace-nowrap">Pagamento Mensal</p>
+                    <p class="text-3xl sm:text-4xl font-black text-primary whitespace-nowrap">{{ simulation.monthlyPayment | number:'1.2-2' }} MZN</p>
                 </div>
 
                 <div class="pt-6 border-t border-white/10 space-y-4">
-                    <div class="flex justify-between items-center text-sm">
+                    <div class="flex justify-between items-center text-xs sm:text-sm whitespace-nowrap">
                         <span class="text-gray-400">Total a Pagar</span>
                         <span class="font-bold">{{ simulation.totalToPay | number:'1.2-2' }} MZN</span>
                     </div>
-                    <div class="flex justify-between items-center text-sm">
+                    <div class="flex justify-between items-center text-xs sm:text-sm whitespace-nowrap">
                         <span class="text-gray-400">Custo do Juro ({{ loanData.interestRate }}%)</span>
                         <span class="font-bold text-primary">{{ (simulation.totalToPay - loanData.amount) | number:'1.2-2' }} MZN</span>
                     </div>
-                    <div class="flex justify-between items-center text-sm">
+                    <div class="flex justify-between items-center text-xs sm:text-sm whitespace-nowrap">
                         <span class="text-gray-400">Duração</span>
                         <span class="font-bold">{{ loanData.term }} Meses</span>
                     </div>
                 </div>
             </div>
 
-            <button (click)="submitLoan()" class="w-full mt-10 bg-primary hover:bg-primary-dark text-white font-black py-4 rounded-2xl shadow-lg shadow-emerald-950 transition-all cursor-pointer relative z-10">
-                Submeter para Análise
-            </button>
+            <div class="flex flex-col gap-3 mt-8 sm:mt-10 relative z-10">
+                <button (click)="submitLoan()" class="w-full bg-primary hover:bg-primary-dark text-white font-black py-4 rounded-2xl shadow-lg shadow-emerald-950 transition-all cursor-pointer whitespace-nowrap text-sm">
+                    Submeter para Análise
+                </button>
+                <a routerLink="/admin/loans" class="w-full border border-white/25 hover:border-white/50 text-gray-300 hover:text-white font-black py-4 rounded-2xl transition-all text-center cursor-pointer whitespace-nowrap text-sm">
+                    Cancelar
+                </a>
+            </div>
         </div>
 
         <div class="bg-blue-50 border border-blue-100 rounded-3xl p-6 text-blue-900">

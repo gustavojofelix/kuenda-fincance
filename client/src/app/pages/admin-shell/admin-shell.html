@@ -140,7 +140,7 @@
 
           <!-- Notifications Dropdown -->
           @if (showNotifications) {
-            <div class="absolute right-0 mt-2 w-80 bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden z-50 animate-in fade-in zoom-in-95 duration-200">
+            <div class="absolute -right-16 sm:right-0 mt-2 w-80 max-w-[calc(100vw-2rem)] bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden z-50 animate-in fade-in zoom-in-95 duration-200">
                 <div class="p-5 border-b border-gray-50 flex justify-between items-center bg-gray-50/50">
                     <h4 class="text-sm font-black text-gray-900 uppercase tracking-widest">Notificações</h4>
                     <span class="px-2 py-0.5 bg-primary text-white text-[10px] font-bold rounded-full">{{ unreadCount$ | async }} Novas</span>
