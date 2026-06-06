@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { BehaviorSubject, map, combineLatest } from 'rxjs';
+import { BehaviorSubject, map, combineLatest, shareReplay } from 'rxjs';
 import { MOCK_CLIENTS, MOCK_LOANS, MOCK_METRICS } from './mock-data';
 import { NotificationService } from './notification.service';
 
@@ -185,28 +185,32 @@ export class StateService {
 
   // Reactive Filters based on active IMF ID and active Branch ID
   branches$ = combineLatest([this.branchesSubj, this.activeImfId$]).pipe(
-    map(([branches, imfId]) => branches.filter(b => b.imfId === imfId))
+    map(([branches, imfId]) => branches.filter(b => b.imfId === imfId)),
+    shareReplay(1)
   );
 
   clients$ = combineLatest([this.clientsSubj, this.activeImfId$, this.activeBranchId$]).pipe(
     map(([clients, imfId, branchId]) => {
       const imfClients = clients.filter(c => c.imfId === imfId);
       return branchId === 'all' ? imfClients : imfClients.filter(c => c.branchId === branchId);
-    })
+    }),
+    shareReplay(1)
   );
 
   loans$ = combineLatest([this.loansSubj, this.activeImfId$, this.activeBranchId$]).pipe(
     map(([loans, imfId, branchId]) => {
       const imfLoans = loans.filter(l => l.imfId === imfId);
       return branchId === 'all' ? imfLoans : imfLoans.filter(l => l.branchId === branchId);
-    })
+    }),
+    shareReplay(1)
   );
 
   transactions$ = combineLatest([this.transactionsSubj, this.activeImfId$, this.activeBranchId$]).pipe(
     map(([transactions, imfId, branchId]) => {
       const imfTransactions = transactions.filter(t => t.imfId === imfId);
       return branchId === 'all' ? imfTransactions : imfTransactions.filter(t => t.branchId === branchId);
-    })
+    }),
+    shareReplay(1)
   );
 
   constructor() {
