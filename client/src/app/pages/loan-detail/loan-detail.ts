@@ -20,6 +20,7 @@ export class LoanDetail implements OnInit {
   showPaymentModal = false;
   paymentAmount: number = 0;
   selectedLoanId: string = '';
+  selectedChannel: 'M-Pesa' | 'E-Mola' | 'Banco' = 'M-Pesa';
 
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
@@ -42,6 +43,7 @@ export class LoanDetail implements OnInit {
 
   openPayment(loan: Loan) {
     this.paymentAmount = loan.monthlyPayment;
+    this.selectedChannel = 'M-Pesa';
     this.showPaymentModal = true;
   }
 
@@ -105,7 +107,19 @@ export class LoanDetail implements OnInit {
 
   confirmPayment() {
     if (this.selectedLoanId && this.paymentAmount > 0) {
-      this.stateService.registerPayment(this.selectedLoanId, this.paymentAmount);
+      this.stateService.registerPayment(this.selectedLoanId, this.paymentAmount, this.selectedChannel);
+      
+      const date = new Date();
+      const monthsPt = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+      const dateStr = `${date.getDate()} ${monthsPt[date.getMonth()]} ${date.getFullYear()}`;
+      
+      this.history.unshift({
+        date: dateStr,
+        amount: this.paymentAmount,
+        method: this.selectedChannel,
+        status: 'Confirmado'
+      });
+
       this.showPaymentModal = false;
       alert('Amortização registada com sucesso!');
     }

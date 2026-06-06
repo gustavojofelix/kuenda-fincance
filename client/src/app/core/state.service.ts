@@ -480,7 +480,7 @@ export class StateService {
     }
   }
 
-  registerPayment(loanId: number | string, amount: number) {
+  registerPayment(loanId: number | string, amount: number, channel: 'M-Pesa' | 'E-Mola' | 'Banco' | string = 'M-Pesa') {
       const currentLoans = this.loansSubj.value;
       const index = currentLoans.findIndex(l => l.id === loanId);
       if (index > -1) {
@@ -493,7 +493,7 @@ export class StateService {
           this.loansSubj.next(updated);
           
           this.addInternalTransaction({ 
-            description: `Amortização: ${updated[index].clientName}`, 
+            description: `Amortização (${channel}): ${updated[index].clientName}`, 
             amount: amount, 
             category: 'Amortização', 
             type: 'Entrada', 

@@ -37,6 +37,7 @@ export class Loans {
   showPaymentModal = false;
   selectedLoan: Loan | null = null;
   paymentAmount: number = 0;
+  selectedChannel: 'M-Pesa' | 'E-Mola' | 'Banco' = 'M-Pesa';
 
   openDisburse(loan: Loan) {
     this.selectedLoan = loan;
@@ -54,12 +55,13 @@ export class Loans {
   openPayment(loan: Loan) {
     this.selectedLoan = loan;
     this.paymentAmount = loan.monthlyPayment;
+    this.selectedChannel = 'M-Pesa';
     this.showPaymentModal = true;
   }
 
   confirmPayment() {
     if (this.selectedLoan && this.paymentAmount > 0) {
-      this.stateService.registerPayment(this.selectedLoan.id, this.paymentAmount);
+      this.stateService.registerPayment(this.selectedLoan.id, this.paymentAmount, this.selectedChannel);
       this.showPaymentModal = false;
       this.selectedLoan = null;
     }

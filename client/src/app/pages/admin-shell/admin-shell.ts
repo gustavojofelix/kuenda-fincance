@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { NotificationService } from '../../core/notification.service';
 import { StateService } from '../../core/state.service';
 import { FormsModule } from '@angular/forms';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-admin-shell',
@@ -23,6 +24,10 @@ export class AdminShell {
   
   branches$ = this.stateService.branches$;
   activeBranchId$ = this.stateService.activeBranchId$;
+  
+  newLeadsCount$ = this.stateService.clients$.pipe(
+    map(clients => clients.filter(c => c.status === 'Avaliação').length)
+  );
   
   showNotifications = false;
 
