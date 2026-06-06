@@ -31,6 +31,24 @@ export class ClientProfile {
     })
   );
 
+  loans$ = this.client$.pipe(
+    switchMap(client => {
+      if (!client) return of([]);
+      return this.stateService.getLoansByClientName(client.name);
+    })
+  );
+
+  history$ = this.client$.pipe(
+    switchMap(client => {
+      if (!client) return of([]);
+      return this.stateService.transactions$.pipe(
+        map(transactions => 
+          transactions.filter(t => t.description.toLowerCase().includes(client.name.toLowerCase()))
+        )
+      );
+    })
+  );
+
   activeTab = 'Informação';
 
   // Payment Modal State
