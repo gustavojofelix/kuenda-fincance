@@ -74,7 +74,6 @@
         }
 
         @if (currentTab === 'register') {
-          @if (!registeredCode) {
           <!-- Register Form -->
           <form (submit)="$event.preventDefault(); onSubmitRegister()">
             <div class="space-y-4">
@@ -87,48 +86,41 @@
                 <input type="text" [(ngModel)]="regNuit" name="regNuit" placeholder="Ex: 400123456" class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" required>
               </div>
               <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Nome Completo do Administrador</label>
+                <input type="text" [(ngModel)]="regAdminName" name="regAdminName" placeholder="Carlos Felix" class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" required>
+              </div>
+              <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Email do Administrador</label>
                 <input type="email" [(ngModel)]="regEmail" name="regEmail" placeholder="admin@imf.co.mz" class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" required>
               </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Telefone do Administrador</label>
+                <input type="text" [(ngModel)]="regAdminPhone" name="regAdminPhone" placeholder="+258 84 999 8888" class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" required>
+              </div>
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Província</label>
+                  <input type="text" [(ngModel)]="regProvince" name="regProvince" placeholder="Maputo" class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" required>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Cidade</label>
+                  <input type="text" [(ngModel)]="regCity" name="regCity" placeholder="Maputo" class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" required>
+                </div>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Endereço Completo</label>
+                <input type="text" [(ngModel)]="regAddress" name="regAddress" placeholder="Av. Eduardo Mondlane, 1234" class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" required>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Palavra-passe (Senha) de Acesso</label>
+                <input type="password" [(ngModel)]="regPassword" name="regPassword" placeholder="••••••••" class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" required>
+              </div>
               
               <button type="submit" class="w-full bg-gray-900 hover:bg-black text-white font-semibold py-3 px-4 rounded-lg shadow hover:shadow-lg transition-all duration-200 mt-4 cursor-pointer">
-                Criar Conta (8.500 MZN/mês)
+                Subscrever e Ir para Pagamento
               </button>
             </div>
           </form>
-          } @else {
-          <!-- Success State -->
-          <div class="text-center py-4 animate-in fade-in slide-in-from-bottom-4 duration-300">
-            <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 mb-4">
-              <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
-              </svg>
-            </div>
-            <h3 class="text-xl font-bold text-gray-900 mb-2">Subscrição Concluída!</h3>
-            <p class="text-sm text-gray-500 mb-6 font-medium">A sua instituição foi registada. Utilize o código gerado abaixo para aceder ao sistema:</p>
-            
-            <div class="bg-gray-50 border border-dashed border-gray-300 rounded-xl p-4 mb-6 relative group overflow-hidden">
-              <span class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1.5">Código da IMF</span>
-              <span class="block text-2xl font-mono font-bold text-slate-800 uppercase tracking-wider select-all">{{ registeredCode }}</span>
-            </div>
-
-            <div class="text-left bg-blue-50 border border-blue-100 rounded-xl p-4 mb-6 text-xs text-blue-800 leading-relaxed">
-              <p class="font-bold mb-1.5 flex items-center">
-                <svg class="h-4 w-4 mr-1 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                Instruções de Acesso:
-              </p>
-              <ul class="list-disc list-inside space-y-1 ml-1 font-semibold">
-                <li>Utilize o código acima como Código da IMF.</li>
-                <li>E-mail: <code class="font-bold text-blue-900 bg-blue-100/50 px-1.5 py-0.5 rounded">{{ regEmail }}</code></li>
-                <li>Palavra-passe padrão: <code class="font-bold text-blue-900 bg-blue-100/50 px-1.5 py-0.5 rounded">123456</code></li>
-              </ul>
-            </div>
-
-            <button (click)="proceedToLogin()" class="w-full bg-primary hover:bg-primary-dark text-white font-semibold py-3 px-4 rounded-lg shadow hover:shadow-lg transition-all duration-200 cursor-pointer">
-              Avançar para o Login
-            </button>
-          </div>
-          }
         }
 
       </div>
@@ -174,3 +166,122 @@
     </div>
   </div>
 </div>
+
+<!-- Checkout / Payment Simulation Modal -->
+@if (showPaymentModal) {
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+  <div class="bg-white rounded-2xl shadow-2xl border border-gray-200 max-w-md w-full overflow-hidden animate-in zoom-in-95 duration-200">
+    <!-- Header -->
+    <div class="bg-slate-900 text-white p-6 relative">
+      <button (click)="closePaymentModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors cursor-pointer bg-transparent border-0">
+        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+      </button>
+      <span class="text-[10px] font-black uppercase tracking-widest text-emerald-400 mb-1 block">Checkout Kuenda</span>
+      <h3 class="text-xl font-bold">Subscrição do Plano Standard</h3>
+      <p class="text-xs text-gray-400 mt-1">Valor recorrente: <span class="font-bold text-white">8.500 MZN/mês</span></p>
+    </div>
+
+    <!-- Body -->
+    <div class="p-6 space-y-6">
+      <!-- Payment Methods Tabs -->
+      <div class="grid grid-cols-3 gap-2">
+        <button 
+          type="button"
+          (click)="paymentMethod = 'mpesa'"
+          [class.bg-emerald-50]="paymentMethod === 'mpesa'"
+          [class.border-emerald-500]="paymentMethod === 'mpesa'"
+          [class.text-emerald-700]="paymentMethod === 'mpesa'"
+          class="flex flex-col items-center justify-center p-3 border rounded-xl font-semibold text-xs cursor-pointer transition-all hover:bg-gray-50">
+          <span class="text-lg mb-1">🇲🇿</span>
+          M-Pesa
+        </button>
+        <button 
+          type="button"
+          (click)="paymentMethod = 'card'"
+          [class.bg-blue-50]="paymentMethod === 'card'"
+          [class.border-blue-500]="paymentMethod === 'card'"
+          [class.text-blue-700]="paymentMethod === 'card'"
+          class="flex flex-col items-center justify-center p-3 border rounded-xl font-semibold text-xs cursor-pointer transition-all hover:bg-gray-50">
+          <span class="text-lg mb-1">💳</span>
+          Cartão
+        </button>
+        <button 
+          type="button"
+          (click)="paymentMethod = 'bank'"
+          [class.bg-amber-50]="paymentMethod === 'bank'"
+          [class.border-amber-500]="paymentMethod === 'bank'"
+          [class.text-amber-700]="paymentMethod === 'bank'"
+          class="flex flex-col items-center justify-center p-3 border rounded-xl font-semibold text-xs cursor-pointer transition-all hover:bg-gray-50">
+          <span class="text-lg mb-1">🏦</span>
+          Transf.
+        </button>
+      </div>
+
+      <!-- Form Inputs depending on Method -->
+      @if (paymentMethod === 'mpesa') {
+        <div class="space-y-3 text-left">
+          <label class="block text-[10px] font-bold text-gray-700 uppercase tracking-wider">Número de Celular M-Pesa</label>
+          <input type="text" [(ngModel)]="paymentPhone" placeholder="+258 84 999 8888" class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all">
+          <div class="p-3 bg-emerald-50 text-emerald-800 rounded-xl text-xs leading-relaxed border border-emerald-100 flex items-start">
+            <svg class="h-5 w-5 mr-1.5 text-emerald-600 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <span>Um pedido de pagamento USSD será enviado para o celular acima. Confirme no seu telemóvel para simular a transação.</span>
+          </div>
+        </div>
+      }
+
+      @if (paymentMethod === 'card') {
+        <div class="space-y-4 text-left">
+          <div>
+            <label class="block text-[10px] font-bold text-gray-700 uppercase tracking-wider mb-1">Número do Cartão</label>
+            <input type="text" [(ngModel)]="paymentCardNumber" placeholder="4000 1234 5678 9010" class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all">
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-[10px] font-bold text-gray-700 uppercase tracking-wider mb-1">Expiração</label>
+              <input type="text" [(ngModel)]="paymentCardExpiry" placeholder="12/29" class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all">
+            </div>
+            <div>
+              <label class="block text-[10px] font-bold text-gray-700 uppercase tracking-wider mb-1">CVV</label>
+              <input type="text" [(ngModel)]="paymentCardCvv" placeholder="123" class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all">
+            </div>
+          </div>
+        </div>
+      }
+
+      @if (paymentMethod === 'bank') {
+        <div class="p-4 bg-gray-50 border border-gray-200 rounded-xl space-y-3 text-sm text-left">
+          <div>
+            <span class="block text-xs font-bold text-gray-500 uppercase">Banco destinatário</span>
+            <span class="font-bold text-gray-800">Millennium BIM / BCI (Kuenda MFI Services)</span>
+          </div>
+          <div>
+            <span class="block text-xs font-bold text-gray-500 uppercase">NIB da Kuenda</span>
+            <span class="font-mono font-bold text-gray-800">0001 0293 8475 9201 0291 3</span>
+          </div>
+          <div>
+            <span class="block text-xs font-bold text-gray-500 uppercase">Entidade / Referência</span>
+            <span class="font-bold text-gray-800">Subscrição Standard - MFI</span>
+          </div>
+        </div>
+      }
+
+      <div class="pt-2">
+        <button 
+          type="button"
+          (click)="onConfirmPayment()" 
+          [disabled]="paymentSimulating"
+          class="w-full bg-slate-900 hover:bg-black text-white font-semibold py-3 px-4 rounded-lg shadow hover:shadow-lg transition-all duration-200 cursor-pointer flex items-center justify-center space-x-2 border-0">
+          @if (paymentSimulating) {
+            <svg class="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+            <span>A processar pagamento...</span>
+          } @else {
+            <span>Confirmar Pagamento Mock (8.500 MZN)</span>
+          }
+        </button>
+        <span class="block text-center text-[9px] text-gray-400 mt-2">Esta é uma simulação de pagamento segura no ambiente Sandbox do Kuenda.</span>
+      </div>
+    </div>
+  </div>
+</div>
+}
+

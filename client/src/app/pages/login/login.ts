@@ -23,11 +23,26 @@ export class Login {
   regName = '';
   regNuit = '';
   regEmail = '';
+  regAdminName = '';
+  regAdminPhone = '';
+  regProvince = '';
+  regCity = '';
+  regAddress = '';
+  regPassword = '';
+  
   registeredCode = '';
+
+  // Payment Modal controls
+  showPaymentModal = false;
+  paymentMethod: 'mpesa' | 'card' | 'bank' = 'mpesa';
+  paymentPhone = '';
+  paymentCardNumber = '';
+  paymentCardExpiry = '';
+  paymentCardCvv = '';
+  paymentSimulating = false;
 
   switchTab(tab: 'login' | 'register') {
     this.currentTab = tab;
-    // Clear registration success state if navigating away
     if (tab === 'login') {
       this.registeredCode = '';
     }
@@ -76,28 +91,70 @@ export class Login {
   }
 
   onSubmitRegister() {
-    if (!this.regName || !this.regNuit || !this.regEmail) {
+    if (!this.regName || !this.regNuit || !this.regEmail || !this.regAdminName || !this.regAdminPhone || !this.regProvince || !this.regCity || !this.regAddress || !this.regPassword) {
       alert('Por favor, preencha todos os campos.');
       return;
     }
-
-    try {
-      const newImf = this.stateService.registerIMF(this.regName, this.regNuit, this.regEmail);
-      this.registeredCode = newImf.id.toUpperCase();
-    } catch (error) {
-      alert('Ocorreu um erro ao registar a IMF. Por favor, tente novamente.');
-    }
+    
+    this.paymentPhone = this.regAdminPhone;
+    this.showPaymentModal = true;
   }
 
-  proceedToLogin() {
-    if (this.registeredCode) {
-      this.imfId = this.registeredCode;
-      this.onImfIdInput(); // Auto-apply brand colors for the newly created IMF!
-      this.registeredCode = '';
-      this.regName = '';
-      this.regNuit = '';
-      this.regEmail = '';
-      this.switchTab('login');
-    }
+  onConfirmPayment() {
+    this.paymentSimulating = true;
+    setTimeout(() => {
+      this.paymentSimulating = false;
+      this.showPaymentModal = false;
+      
+      try {
+        const fullAddress = `${this.regProvince}, ${this.regCity}, ${this.regAddress}`;
+        const newImf = this.stateService.registerIMF(
+          this.regName,
+          this.regNuit,
+          this.regEmail,
+          this.regAdminPhone,
+          this.regCity,
+          fullAddress,
+          this.regAdminName
+        );
+        this.registeredCode = newImf.id.toUpperCase();
+        
+        // Immediate login redirection
+        this.imfId = this.registeredCode;
+        this.email = this.regEmail;
+        this.password = this.regPassword;
+        this.onImfIdInput();
+        this.stateService.switchImf(this.registeredCode);
+        
+        this.stateService.updateCurrentUser({
+          name: this.regAdminName,
+          email: this.regEmail,
+          phone: this.regAdminPhone,
+          role: 'Admin'
+        });
+
+        alert('Subscrição e Pagamento concluídos com sucesso! Bem-vindo ao Kuenda.');
+
+        // Clear bindings
+        this.regName = '';
+        this.regNuit = '';
+        this.regEmail = '';
+        this.regAdminName = '';
+        this.regAdminPhone = '';
+        this.regProvince = '';
+        this.regCity = '';
+        this.regAddress = '';
+        this.regPassword = '';
+        this.registeredCode = '';
+
+        this.router.navigate(['/admin/dashboard']);
+      } catch (error) {
+        alert('Ocorreu um erro ao registar a IMF. Por favor, tente novamente.');
+      }
+    }, 1500);
+  }
+
+  closePaymentModal() {
+    this.showPaymentModal = false;
   }
 }

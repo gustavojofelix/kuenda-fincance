@@ -1,11 +1,11 @@
 using FastEndpoints;
-using KuendaFinance.IAM.Application.Commands.RegisterUser;
+using KuendaFinance.IAM.Application.Commands.RegisterImf;
 using KuendaFinance.IAM.Application.DTOs;
 using MediatR;
 
 namespace KuendaFinance.IAM.API.Endpoints.Auth;
 
-public class RegisterEndpoint : Endpoint<RegisterUserCommand, AuthResultDto>
+public class RegisterEndpoint : Endpoint<RegisterImfCommand, AuthResultDto>
 {
     private readonly IMediator _mediator;
 
@@ -20,7 +20,7 @@ public class RegisterEndpoint : Endpoint<RegisterUserCommand, AuthResultDto>
         AllowAnonymous();
     }
 
-    public override async Task HandleAsync(RegisterUserCommand req, CancellationToken ct)
+    public override async Task HandleAsync(RegisterImfCommand req, CancellationToken ct)
     {
         try
         {

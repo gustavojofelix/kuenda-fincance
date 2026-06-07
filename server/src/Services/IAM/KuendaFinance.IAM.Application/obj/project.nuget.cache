@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "D5ONpReSZLE=",
+  "dgSpecHash": "aNLHUNHs4dk=",
   "success": true,
   "projectFilePath": "C:\\Projects\\Companies\\Alvor Software\\Source Code\\kuenda-fincance\\server\\src\\Services\\IAM\\KuendaFinance.IAM.Application\\KuendaFinance.IAM.Application.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\gusta\\.nuget\\packages\\fluentvalidation\\12.1.1\\fluentvalidation.12.1.1.nupkg.sha512",
     "C:\\Users\\gusta\\.nuget\\packages\\mediatr\\14.1.0\\mediatr.14.1.0.nupkg.sha512",
     "C:\\Users\\gusta\\.nuget\\packages\\mediatr.contracts\\2.0.1\\mediatr.contracts.2.0.1.nupkg.sha512",
     "C:\\Users\\gusta\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\10.0.0\\microsoft.extensions.dependencyinjection.abstractions.10.0.0.nupkg.sha512",

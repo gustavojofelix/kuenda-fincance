@@ -2,6 +2,19 @@
   "version": 3,
   "targets": {
     "net10.0": {
+      "FluentValidation/12.1.1": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0/FluentValidation.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/FluentValidation.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "MediatR/14.1.0": {
         "type": "package",
         "dependencies": {
@@ -134,16 +147,48 @@
       "KuendaFinance.IAM.Domain/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v10.0",
+        "dependencies": {
+          "KuendaFinance.Shared": "1.0.0"
+        },
         "compile": {
           "bin/placeholder/KuendaFinance.IAM.Domain.dll": {}
         },
         "runtime": {
           "bin/placeholder/KuendaFinance.IAM.Domain.dll": {}
         }
+      },
+      "KuendaFinance.Shared/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v10.0",
+        "dependencies": {
+          "FluentValidation": "12.1.1",
+          "MediatR": "14.1.0"
+        },
+        "compile": {
+          "bin/placeholder/KuendaFinance.Shared.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/KuendaFinance.Shared.dll": {}
+        }
       }
     }
   },
   "libraries": {
+    "FluentValidation/12.1.1": {
+      "sha512": "EPpkIe1yh1a0OXyC100oOA8WMbZvqUu5plwhvYcb7oSELfyUZzfxV48BLhvs3kKo4NwG7MGLNgy1RJiYtT8Dpw==",
+      "type": "package",
+      "path": "fluentvalidation/12.1.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "fluent-validation-icon.png",
+        "fluentvalidation.12.1.1.nupkg.sha512",
+        "fluentvalidation.nuspec",
+        "lib/net8.0/FluentValidation.dll",
+        "lib/net8.0/FluentValidation.xml"
+      ]
+    },
     "MediatR/14.1.0": {
       "sha512": "pdxza1pLqAk+06LV3THzNJrw5K5Ah6EC17TEkoC90gsAxwtXDJAQrGuDSDinHGgxWKWEn5ebqTNN3k1bLJOb0g==",
       "type": "package",
@@ -385,6 +430,11 @@
       "type": "project",
       "path": "../KuendaFinance.IAM.Domain/KuendaFinance.IAM.Domain.csproj",
       "msbuildProject": "../KuendaFinance.IAM.Domain/KuendaFinance.IAM.Domain.csproj"
+    },
+    "KuendaFinance.Shared/1.0.0": {
+      "type": "project",
+      "path": "../../../Shared/KuendaFinance.Shared/KuendaFinance.Shared.csproj",
+      "msbuildProject": "../../../Shared/KuendaFinance.Shared/KuendaFinance.Shared.csproj"
     }
   },
   "projectFileDependencyGroups": {

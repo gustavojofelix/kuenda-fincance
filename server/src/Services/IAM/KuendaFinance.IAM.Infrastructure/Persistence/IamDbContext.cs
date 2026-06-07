@@ -1,4 +1,9 @@
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using KuendaFinance.IAM.Domain.Entities;
 using KuendaFinance.IAM.Infrastructure.Identity;
+using KuendaFinance.Shared.Domain;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,16 +15,54 @@ public class IamDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, 
     {
     }
 
+    public DbSet<Tenant> Tenants { get; set; } = null!;
+    public DbSet<Branch> Branches { get; set; } = null!;
+    public DbSet<UserBranchRole> UserBranchRoles { get; set; } = null!;
+
+    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        var entries = ChangeTracker.Entries();
+        foreach (var entry in entries)
+        {
+            if (entry.Entity is Entity entity)
+            {
+                if (entry.State == EntityState.Added)
+                {
+                    entity.CreatedAt = DateTime.UtcNow;
+                }
+                else if (entry.State == EntityState.Modified)
+                {
+                    entity.LastUpdated = DateTime.UtcNow;
+                }
+            }
+            else if (entry.Entity is ApplicationUser user)
+            {
+                if (entry.State == EntityState.Added)
+                {
+                    user.CreatedAt = DateTime.UtcNow;
+                }
+                else if (entry.State == EntityState.Modified)
+                {
+                    user.LastUpdated = DateTime.UtcNow;
+                }
+            }
+        }
+        return await base.SaveChangesAsync(cancellationToken);
+    }
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
 
         // Customize the ASP.NET Identity model and override the defaults if needed.
-        // For example, you can rename the ASP.NET Identity table names and more.
         
         builder.Entity<ApplicationUser>(b =>
         {
             b.ToTable("Users");
+            b.HasOne<Tenant>()
+             .WithMany()
+             .HasForeignKey(u => u.TenantId)
+             .OnDelete(DeleteBehavior.Restrict);
         });
 
         builder.Entity<ApplicationRole>(b =>
@@ -50,6 +93,46 @@ public class IamDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, 
         builder.Entity<Microsoft.AspNetCore.Identity.IdentityUserToken<Guid>>(b =>
         {
             b.ToTable("UserTokens");
+        });
+
+        // Multitenancy Entity Configurations
+        builder.Entity<Tenant>(b =>
+        {
+            b.ToTable("Tenants");
+            b.HasKey(t => t.Id);
+            b.HasIndex(t => t.Code).IsUnique();
+            b.Property(t => t.Code).IsRequired().HasMaxLength(50);
+            b.Property(t => t.Name).IsRequired().HasMaxLength(150);
+            b.Property(t => t.Nuit).IsRequired().HasMaxLength(50);
+        });
+
+        builder.Entity<Branch>(b =>
+        {
+            b.ToTable("Branches");
+            b.HasKey(br => br.Id);
+            b.HasOne<Tenant>()
+             .WithMany()
+             .HasForeignKey(br => br.TenantId)
+             .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        builder.Entity<UserBranchRole>(b =>
+        {
+            b.ToTable("UserBranchRoles");
+            b.HasKey(ubr => ubr.Id);
+            
+            // Composite index to enforce unique branch membership per user
+            b.HasIndex(ubr => new { ubr.UserId, ubr.BranchId }).IsUnique();
+
+            b.HasOne<ApplicationUser>()
+             .WithMany(u => u.UserBranchRoles)
+             .HasForeignKey(ubr => ubr.UserId)
+             .OnDelete(DeleteBehavior.Cascade);
+
+            b.HasOne<Branch>()
+             .WithMany()
+             .HasForeignKey(ubr => ubr.BranchId)
+             .OnDelete(DeleteBehavior.Cascade);
         });
     }
 }

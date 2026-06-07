@@ -17,7 +17,7 @@ public class JwtTokenGenerator : IJwtTokenGenerator
         _configuration = configuration;
     }
 
-    public string GenerateToken(User user, IEnumerable<string> roles)
+    public string GenerateToken(User user, string imfCode, IEnumerable<string> roles)
     {
         var claims = new List<Claim>
         {
@@ -25,7 +25,9 @@ public class JwtTokenGenerator : IJwtTokenGenerator
             new Claim(JwtRegisteredClaimNames.Email, user.Email),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             new Claim("firstName", user.FirstName),
-            new Claim("lastName", user.LastName)
+            new Claim("lastName", user.LastName),
+            new Claim("tenantId", user.TenantId.ToString()),
+            new Claim("imfCode", imfCode)
         };
 
         foreach (var role in roles)

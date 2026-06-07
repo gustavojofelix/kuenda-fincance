@@ -237,7 +237,7 @@ export class StateService {
     }
   }
 
-  registerIMF(name: string, nuit: string, email: string): IMF {
+  registerIMF(name: string, nuit: string, email: string, adminPhone: string, city: string, address: string, adminName: string): IMF {
     const today = new Date();
     const yyyy = today.getFullYear();
     const mm = String(today.getMonth() + 1).padStart(2, '0');
@@ -248,7 +248,7 @@ export class StateService {
     const r1 = chars.charAt(Math.floor(Math.random() * chars.length));
     const r2 = chars.charAt(Math.floor(Math.random() * chars.length));
     
-    const generatedId = `imf-${dateStr}${r1}${r2}`.toLowerCase();
+    const generatedId = `IMF-${dateStr}${r1}${r2}`;
 
     // Select dynamic brand primary color combinations (Hex)
     const colors = [
@@ -266,8 +266,8 @@ export class StateService {
       name,
       nuit,
       email,
-      phone: '',
-      address: '',
+      phone: adminPhone,
+      address,
       primaryColor: color.primary,
       secondaryColor: color.secondary
     };
@@ -282,9 +282,11 @@ export class StateService {
       id: nextBranchId,
       imfId: generatedId,
       name: 'Agência Sede',
-      city: 'Maputo',
-      address: 'Sede Principal',
-      manager: 'Administrador',
+      city: city,
+      address: address,
+      manager: adminName,
+      phone: adminPhone,
+      email: email,
       status: 'Ativa'
     };
     this.branchesSubj.next([...currentBranches, defaultBranch]);

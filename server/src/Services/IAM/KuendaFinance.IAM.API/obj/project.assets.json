@@ -1199,6 +1199,9 @@
       "KuendaFinance.IAM.Domain/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v10.0",
+        "dependencies": {
+          "KuendaFinance.Shared": "1.0.0"
+        },
         "compile": {
           "bin/placeholder/KuendaFinance.IAM.Domain.dll": {}
         },
@@ -1221,6 +1224,20 @@
         },
         "runtime": {
           "bin/placeholder/KuendaFinance.IAM.Infrastructure.dll": {}
+        }
+      },
+      "KuendaFinance.Shared/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v10.0",
+        "dependencies": {
+          "FluentValidation": "12.1.1",
+          "MediatR": "14.1.0"
+        },
+        "compile": {
+          "bin/placeholder/KuendaFinance.Shared.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/KuendaFinance.Shared.dll": {}
         }
       }
     }
@@ -3375,6 +3392,11 @@
       "type": "project",
       "path": "../KuendaFinance.IAM.Infrastructure/KuendaFinance.IAM.Infrastructure.csproj",
       "msbuildProject": "../KuendaFinance.IAM.Infrastructure/KuendaFinance.IAM.Infrastructure.csproj"
+    },
+    "KuendaFinance.Shared/1.0.0": {
+      "type": "project",
+      "path": "../../../Shared/KuendaFinance.Shared/KuendaFinance.Shared.csproj",
+      "msbuildProject": "../../../Shared/KuendaFinance.Shared/KuendaFinance.Shared.csproj"
     }
   },
   "projectFileDependencyGroups": {

@@ -13,6 +13,11 @@ public abstract class Entity : IEquatable<Entity>
 
     public Guid Id { get; init; }
 
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public string? CreatedBy { get; set; }
+    public DateTime? LastUpdated { get; set; }
+    public string? UpdatedBy { get; set; }
+
     public override bool Equals(object? obj)
     {
         if (obj is null) return false;

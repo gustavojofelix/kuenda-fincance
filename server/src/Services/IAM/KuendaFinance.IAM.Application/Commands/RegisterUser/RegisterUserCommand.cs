@@ -29,16 +29,18 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, A
         }
 
         // 2. Create User Entity
-        var user = new User(Guid.NewGuid(), request.Email, request.FirstName, request.LastName);
+        var user = new User(Guid.NewGuid(), Guid.Empty, request.Email, request.FirstName, request.LastName);
 
         // 3. Persist User
         await _userRepository.AddAsync(user, request.Password, cancellationToken);
 
         // 4. Generate Token (default role 'User' for now)
-        var token = _jwtTokenGenerator.GenerateToken(user, new[] { "User" });
+        var token = _jwtTokenGenerator.GenerateToken(user, "system", new[] { "User" });
 
         // 5. Return result
-        var userDto = new UserDto(user.Id, user.Email, user.FirstName, user.LastName, user.IsActive);
-        return new AuthResultDto(token, userDto);
+        var branchRoles = new List<UserBranchRoleDto>();
+        var userDto = new UserDto(user.Id, user.TenantId, user.Email, user.FirstName, user.LastName, user.IsActive, branchRoles);
+        var tenantDto = new TenantDto(user.TenantId, "system", "System Tenant", "#6366f1", "#4f46e5");
+        return new AuthResultDto(token, userDto, tenantDto);
     }
 }

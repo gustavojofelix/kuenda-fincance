@@ -24,6 +24,7 @@ public class UserRepository : IUserRepository
             FirstName = user.FirstName,
             LastName = user.LastName,
             IsActive = user.IsActive,
+            TenantId = user.TenantId,
             CreatedAt = user.CreatedAt
         };
 
@@ -78,7 +79,7 @@ public class UserRepository : IUserRepository
     {
         // Using reflection or a mapping method to reconstruct domain entity
         // Since constructor requires fields, we'll use it
-        var user = new User(appUser.Id, appUser.Email!, appUser.FirstName, appUser.LastName);
+        var user = new User(appUser.Id, appUser.TenantId, appUser.Email!, appUser.FirstName, appUser.LastName);
         if (!appUser.IsActive) user.Deactivate();
         return user;
     }
