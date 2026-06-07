@@ -1,6 +1,4 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
+using KuendaFinance.IAM.Application.Common.Interfaces;
 using KuendaFinance.IAM.Domain.Entities;
 using KuendaFinance.IAM.Infrastructure.Identity;
 using KuendaFinance.Shared.Domain;
@@ -11,8 +9,13 @@ namespace KuendaFinance.IAM.Infrastructure.Persistence;
 
 public class IamDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>
 {
-    public IamDbContext(DbContextOptions<IamDbContext> options) : base(options)
+    private readonly ICurrentUserService _currentUserService;
+
+    public IamDbContext(
+        DbContextOptions<IamDbContext> options,
+        ICurrentUserService currentUserService) : base(options)
     {
+        _currentUserService = currentUserService;
     }
 
     public DbSet<Tenant> Tenants { get; set; } = null!;
@@ -22,6 +25,8 @@ public class IamDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         var entries = ChangeTracker.Entries();
+        var userId = _currentUserService.UserId ?? "system";
+        
         foreach (var entry in entries)
         {
             if (entry.Entity is Entity entity)
@@ -29,10 +34,12 @@ public class IamDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, 
                 if (entry.State == EntityState.Added)
                 {
                     entity.CreatedAt = DateTime.UtcNow;
+                    entity.CreatedBy = userId;
                 }
                 else if (entry.State == EntityState.Modified)
                 {
                     entity.LastUpdated = DateTime.UtcNow;
+                    entity.UpdatedBy = userId;
                 }
             }
             else if (entry.Entity is ApplicationUser user)
@@ -40,10 +47,12 @@ public class IamDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, 
                 if (entry.State == EntityState.Added)
                 {
                     user.CreatedAt = DateTime.UtcNow;
+                    user.CreatedBy = userId;
                 }
                 else if (entry.State == EntityState.Modified)
                 {
                     user.LastUpdated = DateTime.UtcNow;
+                    user.UpdatedBy = userId;
                 }
             }
         }
@@ -101,7 +110,9 @@ public class IamDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, 
             b.ToTable("Tenants");
             b.HasKey(t => t.Id);
             b.HasIndex(t => t.Code).IsUnique();
+            b.HasIndex(t => t.Subdomain).IsUnique();
             b.Property(t => t.Code).IsRequired().HasMaxLength(50);
+            b.Property(t => t.Subdomain).IsRequired().HasMaxLength(100);
             b.Property(t => t.Name).IsRequired().HasMaxLength(150);
             b.Property(t => t.Nuit).IsRequired().HasMaxLength(50);
         });

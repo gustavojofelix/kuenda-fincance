@@ -63,10 +63,13 @@ builder.Services.AddAuthorization();
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<RegisterUserCommand>());
 
 // 5. Dependency Injection (Application/Infrastructure)
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<KuendaFinance.IAM.Application.Common.Interfaces.ICurrentUserService, KuendaFinance.IAM.Infrastructure.Services.CurrentUserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ITenantRepository, TenantRepository>();
 builder.Services.AddScoped<IBranchRepository, BranchRepository>();
 builder.Services.AddScoped<IUserBranchRoleRepository, UserBranchRoleRepository>();
+builder.Services.AddScoped<ITransactionManager, TransactionManager>();
 builder.Services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
 
 // 6. FastEndpoints & Swagger
@@ -93,6 +96,7 @@ if (app.Environment.IsDevelopment())
 // Configure the HTTP request pipeline.
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseMiddleware<KuendaFinance.IAM.API.Middleware.SubscriptionMiddleware>();
 app.UseFastEndpoints();
 
 if (app.Environment.IsDevelopment())

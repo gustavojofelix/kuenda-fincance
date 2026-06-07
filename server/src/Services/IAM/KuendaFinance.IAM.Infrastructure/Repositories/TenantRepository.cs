@@ -29,10 +29,22 @@ public class TenantRepository : ITenantRepository
         return await _context.Tenants.AnyAsync(t => t.Code == normalizedCode, cancellationToken);
     }
 
+    public async Task<bool> SubdomainExistsAsync(string subdomain, CancellationToken cancellationToken = default)
+    {
+        var normalizedSubdomain = subdomain.ToLowerInvariant().Trim();
+        return await _context.Tenants.AnyAsync(t => t.Subdomain == normalizedSubdomain, cancellationToken);
+    }
+
     public async Task<Tenant?> GetByCodeAsync(string code, CancellationToken cancellationToken = default)
     {
         var normalizedCode = code.ToLowerInvariant().Trim();
         return await _context.Tenants.FirstOrDefaultAsync(t => t.Code == normalizedCode, cancellationToken);
+    }
+
+    public async Task<Tenant?> GetBySubdomainAsync(string subdomain, CancellationToken cancellationToken = default)
+    {
+        var normalizedSubdomain = subdomain.ToLowerInvariant().Trim();
+        return await _context.Tenants.FirstOrDefaultAsync(t => t.Subdomain == normalizedSubdomain, cancellationToken);
     }
 
     public async Task<Tenant?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)

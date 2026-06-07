@@ -36,8 +36,9 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, AuthResultDto>
 
     public async Task<AuthResultDto> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
-        // 1. Get Tenant by IMF Code
-        var tenant = await _tenantRepository.GetByCodeAsync(request.ImfCode, cancellationToken);
+        // 1. Get Tenant by IMF Code or Subdomain
+        var tenant = await _tenantRepository.GetByCodeAsync(request.ImfCode, cancellationToken)
+                     ?? await _tenantRepository.GetBySubdomainAsync(request.ImfCode, cancellationToken);
         if (tenant is null || !tenant.IsActive)
         {
             throw new Exception("Invalid IMF code, email or password.");

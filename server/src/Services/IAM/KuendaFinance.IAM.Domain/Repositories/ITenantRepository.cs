@@ -9,7 +9,9 @@ public interface ITenantRepository
 {
     Task<Tenant?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
     Task<Tenant?> GetByCodeAsync(string code, CancellationToken cancellationToken = default);
+    Task<Tenant?> GetBySubdomainAsync(string subdomain, CancellationToken cancellationToken = default);
     Task AddAsync(Tenant tenant, CancellationToken cancellationToken = default);
     Task UpdateAsync(Tenant tenant, CancellationToken cancellationToken = default);
     Task<bool> CodeExistsAsync(string code, CancellationToken cancellationToken = default);
+    Task<bool> SubdomainExistsAsync(string subdomain, CancellationToken cancellationToken = default);
 }

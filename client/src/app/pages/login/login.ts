@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -9,7 +9,7 @@ import { StateService } from '../../core/state.service';
   imports: [RouterLink, FormsModule, CommonModule],
   templateUrl: './login.html'
 })
-export class Login {
+export class Login implements OnInit {
   private router = inject(Router);
   private stateService = inject(StateService);
 
@@ -18,6 +18,34 @@ export class Login {
   imfId = '';
   email = '';
   password = '';
+  isSubdomainLocked = false;
+
+  ngOnInit() {
+    if (typeof window !== 'undefined' && window.location) {
+      const hostname = window.location.hostname;
+      const parts = hostname.split('.');
+      
+      // Check if we are on a subdomain (e.g. tenant.kuenda.co.mz or tenant.localhost)
+      if (parts.length > 2 || (parts.length === 2 && parts[1] === 'localhost')) {
+        const potentialSubdomain = parts[0].trim().toLowerCase();
+        
+        if (potentialSubdomain !== 'www' && potentialSubdomain !== 'app' && potentialSubdomain !== 'admin') {
+          this.stateService.imfs$.subscribe(imfs => {
+            const foundImf = imfs.find(i => {
+              const cleanedId = i.id.toLowerCase();
+              return cleanedId === potentialSubdomain || cleanedId === `imf-${potentialSubdomain}`;
+            });
+
+            if (foundImf) {
+              this.imfId = foundImf.id.toUpperCase();
+              this.isSubdomainLocked = true;
+              this.stateService.applyImfTheme(foundImf);
+            }
+          }).unsubscribe();
+        }
+      }
+    }
+  }
 
   // Registration bindings
   regName = '';
@@ -29,6 +57,7 @@ export class Login {
   regCity = '';
   regAddress = '';
   regPassword = '';
+  showRegPassword = false;
   
   registeredCode = '';
 

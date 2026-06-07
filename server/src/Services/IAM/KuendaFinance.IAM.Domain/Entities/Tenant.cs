@@ -12,6 +12,7 @@ public class Tenant : Entity
     public string Code { get; private set; }
     
     public string Name { get; private set; }
+    public string Subdomain { get; private set; }
     public string Nuit { get; private set; }
     public string Email { get; private set; }
     public string Phone { get; private set; }
@@ -23,10 +24,11 @@ public class Tenant : Entity
 
     private Tenant() { } // EF Core
 
-    public Tenant(Guid id, string code, string name, string nuit, string email, string phone, string address, string primaryColor = "#6366f1", string secondaryColor = "#4f46e5", string subscriptionPackage = "Standard") : base(id)
+    public Tenant(Guid id, string code, string name, string subdomain, string nuit, string email, string phone, string address, string primaryColor = "#6366f1", string secondaryColor = "#4f46e5", string subscriptionPackage = "Standard") : base(id)
     {
         Code = code.ToLowerInvariant().Trim();
         Name = name;
+        Subdomain = subdomain.ToLowerInvariant().Trim();
         Nuit = nuit;
         Email = email;
         Phone = phone;
