@@ -43,8 +43,15 @@ public class CreateClientCommandValidator : AbstractValidator<CreateClientComman
     public CreateClientCommandValidator()
     {
         RuleFor(x => x.Name).NotEmpty().WithMessage("Name is required.");
-        RuleFor(x => x.BI).NotEmpty().WithMessage("Identity card (BI) is required.");
-        RuleFor(x => x.Phone).NotEmpty().WithMessage("Phone number is required.");
+        
+        RuleFor(x => x.BI)
+            .NotEmpty().WithMessage("Identity card (BI) is required.")
+            .Matches(@"^\d{12}[A-Za-z]$").WithMessage("Invalid Mozambique BI format. Should be 12 digits followed by a letter (e.g. 123456789012A).");
+            
+        RuleFor(x => x.Phone)
+            .NotEmpty().WithMessage("Phone number is required.")
+            .Matches(@"^(\+258)?(8[234567]\d{7})$").WithMessage("Invalid Mozambique phone number format. Must start with +258 or directly with 82/83/84/85/86/87 followed by 7 digits.");
+            
         RuleFor(x => x.TenantId).NotEmpty().WithMessage("TenantId is required.");
         RuleFor(x => x.BranchId).NotEmpty().WithMessage("BranchId is required.");
     }
@@ -105,6 +112,18 @@ public class CreateClientCommandHandler : ICommandHandler<CreateClientCommand, C
         }
 
         await _clientRepository.AddAsync(client, cancellationToken);
+
+        // Add client status log entry
+        var statusLog = new ClientStatusHistory(Guid.NewGuid())
+        {
+            ClientId = client.Id,
+            PreviousStatus = "None",
+            NewStatus = client.Status,
+            ChangedAt = DateTime.UtcNow,
+            ChangedBy = client.CreatedBy ?? "system",
+            Notes = "Client registered in system (Evaluation mode)."
+        };
+        await _clientRepository.AddStatusHistoryAsync(statusLog, cancellationToken);
 
         var dto = new ClientDto
         {

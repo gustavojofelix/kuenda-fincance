@@ -56,6 +56,7 @@ builder.Services.AddValidatorsFromAssemblyContaining<CreateClientCommand>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
+builder.Services.AddScoped<IStorageService, MinioStorageService>();
 
 // 5. FastEndpoints & Swagger
 builder.Services.AddFastEndpoints();

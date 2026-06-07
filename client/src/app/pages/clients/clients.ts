@@ -23,15 +23,52 @@ export class Clients {
   selectedProvince = 'Todas';
   selectedStatus = 'Todos';
 
+  // Pagination
+  currentPage = 1;
+  pageSize = 5;
+  totalPages = 1;
+  totalCount = 0;
+  Math = Math;
+
   getFiltered(clients: Client[] | null): Client[] {
-    if (!clients) return [];
-    return clients.filter(c => {
+    if (!clients) {
+      this.totalCount = 0;
+      this.totalPages = 1;
+      return [];
+    }
+    const filtered = clients.filter(c => {
       const matchSearch = !this.searchTerm || c.name.toLowerCase().includes(this.searchTerm.toLowerCase()) || c.bi.toLowerCase().includes(this.searchTerm.toLowerCase());
       const matchProvince = this.selectedProvince === 'Todas' || c.province === this.selectedProvince;
       const matchStatus = this.selectedStatus === 'Todos' || c.status === this.selectedStatus;
       
       return matchSearch && matchProvince && matchStatus;
     });
+
+    this.totalCount = filtered.length;
+    this.totalPages = Math.ceil(this.totalCount / this.pageSize) || 1;
+
+    if (this.currentPage > this.totalPages) {
+      this.currentPage = this.totalPages;
+    }
+
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    return filtered.slice(startIndex, startIndex + this.pageSize);
+  }
+
+  previousPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+    }
+  }
+
+  nextPage() {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+    }
+  }
+
+  goToPage(page: number) {
+    this.currentPage = page;
   }
 
   deactivateClient(id: number) {

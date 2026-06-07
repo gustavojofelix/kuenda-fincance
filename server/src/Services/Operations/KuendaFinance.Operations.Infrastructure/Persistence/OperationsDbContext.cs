@@ -21,6 +21,7 @@ public class OperationsDbContext : DbContext
 
     public DbSet<Client> Clients { get; set; } = null!;
     public DbSet<Guarantee> Guarantees { get; set; } = null!;
+    public DbSet<ClientStatusHistory> ClientStatusHistories { get; set; } = null!;
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
@@ -56,6 +57,9 @@ public class OperationsDbContext : DbContext
             b.ToTable("Clients");
             b.HasKey(c => c.Id);
 
+            // Global query filter for Multi-Tenancy
+            b.HasQueryFilter(c => c.TenantId == _currentUserService.TenantId);
+
             // Composite unique index for TenantId + BI to enforce uniqueness within a tenant
             b.HasIndex(c => new { c.TenantId, c.BI }).IsUnique();
 
@@ -69,6 +73,12 @@ public class OperationsDbContext : DbContext
         {
             b.ToTable("Guarantees");
             b.HasKey(g => g.Id);
+        });
+
+        modelBuilder.Entity<ClientStatusHistory>(b =>
+        {
+            b.ToTable("ClientStatusHistories");
+            b.HasKey(h => h.Id);
         });
     }
 }

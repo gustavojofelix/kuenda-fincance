@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using KuendaFinance.Operations.Domain.Entities;
@@ -11,4 +12,13 @@ public interface IClientRepository
     Task<Client?> GetByBiAsync(string bi, Guid tenantId, CancellationToken cancellationToken = default);
     Task AddAsync(Client client, CancellationToken cancellationToken = default);
     Task UpdateAsync(Client client, CancellationToken cancellationToken = default);
+    Task<(List<Client> Items, int TotalCount)> GetClientsPagedAsync(
+        int pageNumber,
+        int pageSize,
+        string searchTerm,
+        string province,
+        string status,
+        Guid? branchId,
+        CancellationToken cancellationToken = default);
+    Task AddStatusHistoryAsync(ClientStatusHistory history, CancellationToken cancellationToken = default);
 }

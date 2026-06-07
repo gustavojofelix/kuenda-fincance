@@ -14,4 +14,8 @@ public class CurrentUserService : ICurrentUserService
     }
 
     public string? UserId => _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+
+    public Guid TenantId => Guid.TryParse(_httpContextAccessor.HttpContext?.User?.FindFirstValue("tenantId"), out var tenantId) 
+        ? tenantId 
+        : Guid.Empty;
 }
