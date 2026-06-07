@@ -25,6 +25,7 @@ public class OperationsDbContext : DbContext
     public DbSet<Loan> Loans { get; set; } = null!;
     public DbSet<Installment> Installments { get; set; } = null!;
     public DbSet<Payment> Payments { get; set; } = null!;
+    public DbSet<Transaction> Transactions { get; set; } = null!;
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
@@ -113,6 +114,15 @@ public class OperationsDbContext : DbContext
         {
             b.ToTable("Payments");
             b.HasKey(p => p.Id);
+        });
+
+        modelBuilder.Entity<Transaction>(b =>
+        {
+            b.ToTable("Transactions");
+            b.HasKey(t => t.Id);
+            b.HasQueryFilter(t => t.TenantId == _currentUserService.TenantId);
+            b.HasIndex(t => t.TransactionDate);
+            b.HasIndex(t => t.Category);
         });
     }
 }

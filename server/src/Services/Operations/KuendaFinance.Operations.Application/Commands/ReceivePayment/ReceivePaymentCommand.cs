@@ -34,10 +34,12 @@ public class ReceivePaymentCommandValidator : AbstractValidator<ReceivePaymentCo
 public class ReceivePaymentCommandHandler : ICommandHandler<ReceivePaymentCommand, LoanDto>
 {
     private readonly ILoanRepository _loanRepository;
+    private readonly ITransactionRepository _transactionRepository;
 
-    public ReceivePaymentCommandHandler(ILoanRepository loanRepository)
+    public ReceivePaymentCommandHandler(ILoanRepository loanRepository, ITransactionRepository transactionRepository)
     {
         _loanRepository = loanRepository;
+        _transactionRepository = transactionRepository;
     }
 
     public async Task<Result<LoanDto>> Handle(ReceivePaymentCommand request, CancellationToken cancellationToken)
@@ -117,6 +119,20 @@ public class ReceivePaymentCommandHandler : ICommandHandler<ReceivePaymentComman
         }
 
         await _loanRepository.UpdateAsync(loan, cancellationToken);
+
+        // Auto-record payment received transaction
+        var tx = new Transaction(Guid.NewGuid())
+        {
+            TenantId = loan.TenantId,
+            BranchId = loan.BranchId,
+            Description = $"Amortização ({request.Channel}): Contrato {loan.Id}",
+            Amount = request.Amount,
+            TransactionDate = DateTime.UtcNow,
+            Category = "Amortização",
+            Type = "Entrada",
+            IsAuto = true
+        };
+        await _transactionRepository.AddAsync(tx, cancellationToken);
 
         var dto = loan.ToDto();
         return Result.Success(dto);

@@ -58,6 +58,7 @@ builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<IStorageService, MinioStorageService>();
 builder.Services.AddScoped<ILoanRepository, LoanRepository>();
+builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 builder.Services.AddHostedService<KuendaFinance.Operations.Infrastructure.Services.DailyOverdueBackgroundService>();
 
 // 5. FastEndpoints & Swagger

@@ -32,10 +32,12 @@ public class DisburseLoanCommandValidator : AbstractValidator<DisburseLoanComman
 public class DisburseLoanCommandHandler : ICommandHandler<DisburseLoanCommand, LoanDto>
 {
     private readonly ILoanRepository _loanRepository;
+    private readonly ITransactionRepository _transactionRepository;
 
-    public DisburseLoanCommandHandler(ILoanRepository loanRepository)
+    public DisburseLoanCommandHandler(ILoanRepository loanRepository, ITransactionRepository transactionRepository)
     {
         _loanRepository = loanRepository;
+        _transactionRepository = transactionRepository;
     }
 
     public async Task<Result<LoanDto>> Handle(DisburseLoanCommand request, CancellationToken cancellationToken)
@@ -80,6 +82,20 @@ public class DisburseLoanCommandHandler : ICommandHandler<DisburseLoanCommand, L
         }
 
         await _loanRepository.UpdateAsync(loan, cancellationToken);
+
+        // Auto-record disbursement transaction
+        var tx = new Transaction(Guid.NewGuid())
+        {
+            TenantId = loan.TenantId,
+            BranchId = loan.BranchId,
+            Description = $"Desembolso ({request.DisbursementMethod}): Contrato {loan.Id}",
+            Amount = loan.Amount,
+            TransactionDate = DateTime.UtcNow,
+            Category = "Empréstimo",
+            Type = "Saída",
+            IsAuto = true
+        };
+        await _transactionRepository.AddAsync(tx, cancellationToken);
 
         var dto = loan.ToDto();
         return Result.Success(dto);
