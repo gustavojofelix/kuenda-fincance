@@ -3,6 +3,7 @@ using System;
 using KuendaFinance.Operations.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace KuendaFinance.Operations.Infrastructure.Migrations
 {
     [DbContext(typeof(OperationsDbContext))]
-    partial class OperationsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260607153036_AddLatePenalties")]
+    partial class AddLatePenalties
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -277,9 +280,6 @@ namespace KuendaFinance.Operations.Infrastructure.Migrations
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("text");
-
-                    b.Property<decimal>("DailyPenaltyRate")
-                        .HasColumnType("numeric");
 
                     b.Property<DateTime?>("DisbursedAt")
                         .HasColumnType("timestamp with time zone");

@@ -28,6 +28,7 @@ public class Loan : Entity
     public DateTime? DisbursedAt { get; set; }
     public string? DisbursementMethod { get; set; }
     public string? DisbursementReference { get; set; }
+    public decimal DailyPenaltyRate { get; set; } = 0.01m;
     public decimal TotalToPay { get; set; }
     public decimal PaidAmount { get; set; }
     public DateTime? NextPaymentDate { get; set; }

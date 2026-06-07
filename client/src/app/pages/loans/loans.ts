@@ -23,13 +23,50 @@ export class Loans {
   searchTerm = '';
   selectedStatus = 'Todos';
 
+  // Pagination
+  currentPage = 1;
+  pageSize = 5;
+  totalPages = 1;
+  totalCount = 0;
+  Math = Math;
+
   getFiltered(loans: Loan[] | null): Loan[] {
-    if (!loans) return [];
-    return loans.filter(l => {
+    if (!loans) {
+      this.totalCount = 0;
+      this.totalPages = 1;
+      return [];
+    }
+    const filtered = loans.filter(l => {
       const matchSearch = !this.searchTerm || l.clientName.toLowerCase().includes(this.searchTerm.toLowerCase()) || l.id.toLowerCase().includes(this.searchTerm.toLowerCase());
       const matchStatus = this.selectedStatus === 'Todos' || l.status === this.selectedStatus;
       return matchSearch && matchStatus;
     });
+
+    this.totalCount = filtered.length;
+    this.totalPages = Math.ceil(this.totalCount / this.pageSize) || 1;
+
+    if (this.currentPage > this.totalPages) {
+      this.currentPage = this.totalPages;
+    }
+
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    return filtered.slice(startIndex, startIndex + this.pageSize);
+  }
+
+  previousPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+    }
+  }
+
+  nextPage() {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+    }
+  }
+
+  goToPage(page: number) {
+    this.currentPage = page;
   }
 
   // Modals state

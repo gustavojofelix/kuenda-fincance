@@ -22,6 +22,9 @@ public class OperationsDbContext : DbContext
     public DbSet<Client> Clients { get; set; } = null!;
     public DbSet<Guarantee> Guarantees { get; set; } = null!;
     public DbSet<ClientStatusHistory> ClientStatusHistories { get; set; } = null!;
+    public DbSet<Loan> Loans { get; set; } = null!;
+    public DbSet<Installment> Installments { get; set; } = null!;
+    public DbSet<Payment> Payments { get; set; } = null!;
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
@@ -79,6 +82,37 @@ public class OperationsDbContext : DbContext
         {
             b.ToTable("ClientStatusHistories");
             b.HasKey(h => h.Id);
+        });
+
+        modelBuilder.Entity<Loan>(b =>
+        {
+            b.ToTable("Loans");
+            b.HasKey(l => l.Id);
+            
+            // Multi-Tenancy Filter
+            b.HasQueryFilter(l => l.TenantId == _currentUserService.TenantId);
+
+            b.HasMany(l => l.Installments)
+             .WithOne()
+             .HasForeignKey(i => i.LoanId)
+             .OnDelete(DeleteBehavior.Cascade);
+
+            b.HasMany(l => l.Payments)
+             .WithOne()
+             .HasForeignKey(p => p.LoanId)
+             .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<Installment>(b =>
+        {
+            b.ToTable("Installments");
+            b.HasKey(i => i.Id);
+        });
+
+        modelBuilder.Entity<Payment>(b =>
+        {
+            b.ToTable("Payments");
+            b.HasKey(p => p.Id);
         });
     }
 }
