@@ -19,6 +19,13 @@ export class Accounting {
   
   transactions$ = this.stateService.transactions$;
 
+  // Pagination
+  currentPage = 1;
+  pageSize = 10;
+  totalCount = 0;
+  totalPages = 1;
+  Math = Math;
+
   // Filters
   searchTerm = '';
   selectedCategory = 'Todas';
@@ -26,6 +33,37 @@ export class Accounting {
   // Modal State
   showModal = false;
   newTx: Partial<Transaction> = this.resetForm();
+
+  goToPage(page: number) {
+    this.currentPage = page;
+  }
+
+  nextPage() {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+    }
+  }
+
+  previousPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+    }
+  }
+
+  getPagedTransactions(transactions: Transaction[] | null): Transaction[] {
+    if (!transactions) return [];
+    const filtered = this.getFiltered(transactions);
+    this.totalCount = filtered.length;
+    this.totalPages = Math.ceil(this.totalCount / this.pageSize) || 1;
+    
+    // Reset page index if filters reduce count below current page limit
+    if (this.currentPage > this.totalPages) {
+      this.currentPage = 1;
+    }
+    
+    const start = (this.currentPage - 1) * this.pageSize;
+    return filtered.slice(start, start + this.pageSize);
+  }
 
   // Dynamic Categories
   inflowCategories = ['Amortização', 'Receita Juros', 'Injeção de Capital', 'Outros'];
