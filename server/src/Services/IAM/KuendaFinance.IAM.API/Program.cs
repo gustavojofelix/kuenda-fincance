@@ -64,7 +64,7 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<Re
 
 // 5. Dependency Injection (Application/Infrastructure)
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddScoped<KuendaFinance.IAM.Application.Common.Interfaces.ICurrentUserService, KuendaFinance.IAM.Infrastructure.Services.CurrentUserService>();
+builder.Services.AddScoped<KuendaFinance.IAM.Domain.Common.ICurrentUserService, KuendaFinance.IAM.Infrastructure.Services.CurrentUserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ITenantRepository, TenantRepository>();
 builder.Services.AddScoped<IBranchRepository, BranchRepository>();

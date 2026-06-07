@@ -1,4 +1,4 @@
-using KuendaFinance.IAM.Application.Common.Interfaces;
+using KuendaFinance.IAM.Domain.Common;
 using KuendaFinance.IAM.Domain.Entities;
 using KuendaFinance.IAM.Infrastructure.Identity;
 using KuendaFinance.Shared.Domain;

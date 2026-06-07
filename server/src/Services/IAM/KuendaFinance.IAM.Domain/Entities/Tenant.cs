@@ -20,11 +20,12 @@ public class Tenant : Entity
     public string PrimaryColor { get; private set; }
     public string SecondaryColor { get; private set; }
     public string SubscriptionPackage { get; private set; }
+    public string? LogoUrl { get; private set; }
     public bool IsActive { get; private set; }
 
     private Tenant() { } // EF Core
 
-    public Tenant(Guid id, string code, string name, string subdomain, string nuit, string email, string phone, string address, string primaryColor = "#6366f1", string secondaryColor = "#4f46e5", string subscriptionPackage = "Standard") : base(id)
+    public Tenant(Guid id, string code, string name, string subdomain, string nuit, string email, string phone, string address, string primaryColor = "#6366f1", string secondaryColor = "#4f46e5", string subscriptionPackage = "Standard", string? logoUrl = null) : base(id)
     {
         Code = code.ToLowerInvariant().Trim();
         Name = name;
@@ -36,7 +37,19 @@ public class Tenant : Entity
         PrimaryColor = primaryColor;
         SecondaryColor = secondaryColor;
         SubscriptionPackage = subscriptionPackage;
+        LogoUrl = logoUrl;
         IsActive = true;
+    }
+
+    public void UpdateBranding(string name, string email, string phone, string address, string primaryColor, string secondaryColor, string? logoUrl)
+    {
+        Name = name;
+        Email = email;
+        Phone = phone;
+        Address = address;
+        PrimaryColor = primaryColor;
+        SecondaryColor = secondaryColor;
+        LogoUrl = logoUrl;
     }
 
     public void Deactivate() => IsActive = false;

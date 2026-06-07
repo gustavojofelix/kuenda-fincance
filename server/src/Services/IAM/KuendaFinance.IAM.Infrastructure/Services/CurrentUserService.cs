@@ -1,5 +1,5 @@
 using System.Security.Claims;
-using KuendaFinance.IAM.Application.Common.Interfaces;
+using KuendaFinance.IAM.Domain.Common;
 using Microsoft.AspNetCore.Http;
 
 namespace KuendaFinance.IAM.Infrastructure.Services;

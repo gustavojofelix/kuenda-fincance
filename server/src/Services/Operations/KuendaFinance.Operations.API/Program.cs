@@ -59,6 +59,7 @@ builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<IStorageService, MinioStorageService>();
 builder.Services.AddScoped<ILoanRepository, LoanRepository>();
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
+builder.Services.AddScoped<ICreditSettingsRepository, CreditSettingsRepository>();
 builder.Services.AddScoped<KuendaFinance.Operations.Application.Interfaces.IReportingService, KuendaFinance.Operations.Infrastructure.Services.ReportingService>();
 builder.Services.AddHostedService<KuendaFinance.Operations.Infrastructure.Services.DailyOverdueBackgroundService>();
 

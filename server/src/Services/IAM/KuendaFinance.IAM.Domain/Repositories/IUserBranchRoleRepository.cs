@@ -10,4 +10,5 @@ public interface IUserBranchRoleRepository
 {
     Task AddAsync(UserBranchRole userBranchRole, CancellationToken cancellationToken = default);
     Task<List<UserBranchRole>> GetByUserIdAsync(Guid userId, CancellationToken cancellationToken = default);
+    Task RemoveRangeAsync(IEnumerable<UserBranchRole> userBranchRoles, CancellationToken cancellationToken = default);
 }

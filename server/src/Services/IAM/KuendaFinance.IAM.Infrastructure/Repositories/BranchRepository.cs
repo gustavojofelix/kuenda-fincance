@@ -27,4 +27,23 @@ public class BranchRepository : IBranchRepository
     {
         return await _context.Branches.FindAsync(new object[] { id }, cancellationToken);
     }
+
+    public async Task UpdateAsync(Branch branch, CancellationToken cancellationToken = default)
+    {
+        _context.Branches.Update(branch);
+        await _context.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task DeleteAsync(Branch branch, CancellationToken cancellationToken = default)
+    {
+        _context.Branches.Remove(branch);
+        await _context.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task<List<Branch>> GetBranchesByTenantIdAsync(Guid tenantId, CancellationToken cancellationToken = default)
+    {
+        return await _context.Branches
+            .Where(b => b.TenantId == tenantId)
+            .ToListAsync(cancellationToken);
+    }
 }

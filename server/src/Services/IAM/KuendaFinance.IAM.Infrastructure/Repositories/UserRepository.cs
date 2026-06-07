@@ -71,15 +71,42 @@ public class UserRepository : IUserRepository
         appUser.FirstName = user.FirstName;
         appUser.LastName = user.LastName;
         appUser.IsActive = user.IsActive;
+        appUser.PhoneNumber = user.Phone;
+        appUser.PhotoUrl = user.PhotoUrl;
 
         await _userManager.UpdateAsync(appUser);
     }
 
+    public async Task DeleteAsync(User user, CancellationToken cancellationToken = default)
+    {
+        var appUser = await _userManager.FindByIdAsync(user.Id.ToString());
+        if (appUser != null)
+        {
+            await _userManager.DeleteAsync(appUser);
+        }
+    }
+
+    public async Task<List<User>> GetTeamMembersAsync(Guid tenantId, CancellationToken cancellationToken = default)
+    {
+        // Microsoft.EntityFrameworkCore needed for ToListAsync
+        var users = await Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync(
+            _userManager.Users.Where(u => u.TenantId == tenantId),
+            cancellationToken);
+
+        return users.Select(MapToDomain).ToList();
+    }
+
     private User MapToDomain(ApplicationUser appUser)
     {
-        // Using reflection or a mapping method to reconstruct domain entity
-        // Since constructor requires fields, we'll use it
-        var user = new User(appUser.Id, appUser.TenantId, appUser.Email!, appUser.FirstName, appUser.LastName);
+        var user = new User(
+            appUser.Id, 
+            appUser.TenantId, 
+            appUser.Email!, 
+            appUser.FirstName, 
+            appUser.LastName, 
+            appUser.PhoneNumber, 
+            appUser.PhotoUrl);
+
         if (!appUser.IsActive) user.Deactivate();
         return user;
     }

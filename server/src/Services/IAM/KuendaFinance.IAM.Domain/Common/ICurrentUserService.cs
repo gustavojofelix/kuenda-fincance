@@ -1,6 +1,6 @@
 using System;
 
-namespace KuendaFinance.IAM.Application.Common.Interfaces;
+namespace KuendaFinance.IAM.Domain.Common;
 
 public interface ICurrentUserService
 {

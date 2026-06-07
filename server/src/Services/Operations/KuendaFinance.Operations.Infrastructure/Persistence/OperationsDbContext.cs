@@ -26,6 +26,7 @@ public class OperationsDbContext : DbContext
     public DbSet<Installment> Installments { get; set; } = null!;
     public DbSet<Payment> Payments { get; set; } = null!;
     public DbSet<Transaction> Transactions { get; set; } = null!;
+    public DbSet<CreditSettings> CreditSettings { get; set; } = null!;
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
@@ -123,6 +124,14 @@ public class OperationsDbContext : DbContext
             b.HasQueryFilter(t => t.TenantId == _currentUserService.TenantId);
             b.HasIndex(t => t.TransactionDate);
             b.HasIndex(t => t.Category);
+        });
+
+        modelBuilder.Entity<CreditSettings>(b =>
+        {
+            b.ToTable("CreditSettings");
+            b.HasKey(s => s.Id);
+            b.HasQueryFilter(s => s.TenantId == _currentUserService.TenantId);
+            b.HasIndex(s => s.TenantId).IsUnique();
         });
     }
 }

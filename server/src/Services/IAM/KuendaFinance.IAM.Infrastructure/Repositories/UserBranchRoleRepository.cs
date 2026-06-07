@@ -31,4 +31,10 @@ public class UserBranchRoleRepository : IUserBranchRoleRepository
             .Where(ubr => ubr.UserId == userId)
             .ToListAsync(cancellationToken);
     }
+
+    public async Task RemoveRangeAsync(IEnumerable<UserBranchRole> userBranchRoles, CancellationToken cancellationToken = default)
+    {
+        _context.UserBranchRoles.RemoveRange(userBranchRoles);
+        await _context.SaveChangesAsync(cancellationToken);
+    }
 }
