@@ -11,6 +11,13 @@ export interface KuendaNotification {
   link?: string;
 }
 
+export interface Toast {
+  id: string;
+  title: string;
+  message: string;
+  type: 'info' | 'warning' | 'success' | 'danger';
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -39,15 +46,37 @@ export class NotificationService {
   notifications$ = this.notificationsSubj.asObservable();
   unreadCount$ = this.notifications$.pipe(map(ns => ns.filter(n => !n.read).length));
 
+  // Global Toast System
+  private toastsSubj = new BehaviorSubject<Toast[]>([]);
+  toasts$ = this.toastsSubj.asObservable();
+
+  showToast(title: string, message: string, type: 'info' | 'warning' | 'success' | 'danger' = 'info') {
+    const id = Math.random().toString(36).substring(2, 11);
+    const newToast: Toast = { id, title, message, type };
+    this.toastsSubj.next([...this.toastsSubj.value, newToast]);
+    
+    // Auto-remove after 4 seconds
+    setTimeout(() => {
+      this.removeToast(id);
+    }, 4000);
+  }
+
+  removeToast(id: string) {
+    this.toastsSubj.next(this.toastsSubj.value.filter(t => t.id !== id));
+  }
+
   addNotification(n: Omit<KuendaNotification, 'id' | 'date' | 'read'>) {
     const current = this.notificationsSubj.value;
     const newNote: KuendaNotification = {
         ...n,
-        id: Math.random().toString(36).substr(2, 9),
+        id: Math.random().toString(36).substring(2, 11),
         date: new Date(),
         read: false
     };
     this.notificationsSubj.next([newNote, ...current]);
+    
+    // Proactively show a toast for every new notification too
+    this.showToast(n.title, n.message, n.type);
   }
 
   markAllAsRead() {

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { StateService, Client } from '../../core/state.service';
+import { NotificationService } from '../../core/notification.service';
 import { of } from 'rxjs';
 
 @Component({
@@ -14,6 +15,7 @@ export class ClientForm implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private stateService = inject(StateService);
+  private notificationService = inject(NotificationService);
 
   isEditMode = false;
   currentStep = 1;
@@ -81,7 +83,7 @@ export class ClientForm implements OnInit {
 
   addGuarantee() {
     if (!this.newGuaranteeName || this.newGuaranteeValue === null) {
-      alert('Por favor, preencha o nome e o valor da garantia.');
+      this.notificationService.showToast('Garantia Incompleta', 'Por favor, preencha o nome e o valor da garantia.', 'warning');
       return;
     }
     if (!this.client.guarantees) {

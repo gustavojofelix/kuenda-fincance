@@ -3,6 +3,7 @@ import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { StateService } from '../../core/state.service';
+import { NotificationService } from '../../core/notification.service';
 
 @Component({
   selector: 'app-login',
@@ -12,6 +13,7 @@ import { StateService } from '../../core/state.service';
 export class Login implements OnInit {
   private router = inject(Router);
   private stateService = inject(StateService);
+  private notificationService = inject(NotificationService);
 
   currentTab: 'login' | 'register' = 'login';
   
@@ -19,6 +21,33 @@ export class Login implements OnInit {
   email = '';
   password = '';
   isSubdomainLocked = false;
+
+  // Registration bindings
+  regName = '';
+  regNuit = '';
+  regEmail = '';
+  regAdminName = '';
+  regAdminPhone = '';
+  regProvince = '';
+  regCity = '';
+  regAddress = '';
+  regPassword = '';
+  showRegPassword = false;
+  
+  registeredCode = '';
+
+  // Payment Modal controls
+  showPaymentModal = false;
+  paymentMethod: 'mpesa' | 'card' | 'bank' = 'mpesa';
+  paymentPhone = '';
+  paymentCardNumber = '';
+  paymentCardExpiry = '';
+  paymentCardCvv = '';
+  paymentSimulating = false;
+
+  // Validation helpers (RegEx)
+  emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+  nuitPattern = /^\d{9}$/;
 
   ngOnInit() {
     if (typeof window !== 'undefined' && window.location) {
@@ -47,28 +76,36 @@ export class Login implements OnInit {
     }
   }
 
-  // Registration bindings
-  regName = '';
-  regNuit = '';
-  regEmail = '';
-  regAdminName = '';
-  regAdminPhone = '';
-  regProvince = '';
-  regCity = '';
-  regAddress = '';
-  regPassword = '';
-  showRegPassword = false;
-  
-  registeredCode = '';
+  // Inline validators
+  isEmailValid(val: string): boolean {
+    return this.emailPattern.test(val);
+  }
 
-  // Payment Modal controls
-  showPaymentModal = false;
-  paymentMethod: 'mpesa' | 'card' | 'bank' = 'mpesa';
-  paymentPhone = '';
-  paymentCardNumber = '';
-  paymentCardExpiry = '';
-  paymentCardCvv = '';
-  paymentSimulating = false;
+  isNuitValid(val: string): boolean {
+    return this.nuitPattern.test(val);
+  }
+
+  isPasswordValid(val: string): boolean {
+    if (!val || val.length < 8) return false;
+    const hasDigit = /\d/.test(val);
+    const hasUpper = /[A-Z]/.test(val);
+    const hasLower = /[a-z]/.test(val);
+    return hasDigit && hasUpper && hasLower;
+  }
+
+  isRegisterFormValid(): boolean {
+    return !!(
+      this.regName.trim() &&
+      this.isNuitValid(this.regNuit) &&
+      this.regAdminName.trim() &&
+      this.isEmailValid(this.regEmail) &&
+      this.regAdminPhone.trim() &&
+      this.regProvince.trim() &&
+      this.regCity.trim() &&
+      this.regAddress.trim() &&
+      this.isPasswordValid(this.regPassword)
+    );
+  }
 
   switchTab(tab: 'login' | 'register') {
     this.currentTab = tab;
@@ -99,29 +136,42 @@ export class Login implements OnInit {
 
   onSubmitLogin() {
     const id = this.imfId.trim().toLowerCase();
-    let imfExists = false;
-    
-    this.stateService.imfs$.subscribe(imfs => {
-      imfExists = imfs.some(i => i.id.toLowerCase() === id);
-    }).unsubscribe();
 
-    if (!imfExists) {
-      alert('Código da IMF inválido! Por favor, insira um código válido (ex: IMF-20260526KD, IMF-20260526SC ou o código gerado na sua subscrição).');
+    if (!id || !this.email || !this.password) {
+      this.notificationService.showToast('Campos em falta', 'Por favor, preencha todos os campos.', 'warning');
       return;
     }
 
-    if (!this.email || !this.password) {
-      alert('Por favor, preencha todos os campos.');
+    if (!this.isEmailValid(this.email)) {
+      this.notificationService.showToast('E-mail Inválido', 'Por favor, insira um endereço de e-mail válido.', 'warning');
       return;
     }
 
-    this.stateService.switchImf(id);
-    this.router.navigate(['/admin/dashboard']);
+    this.stateService.login(id, this.email, this.password).subscribe({
+      next: () => {
+        this.router.navigate(['/admin/dashboard']);
+      },
+      error: (err) => {
+        let errMsg = 'Código da IMF, email ou palavra-passe incorretos.';
+        if (err.error?.errors) {
+          const messages: string[] = [];
+          for (const key in err.error.errors) {
+            if (Array.isArray(err.error.errors[key])) {
+              messages.push(...err.error.errors[key]);
+            }
+          }
+          if (messages.length > 0) errMsg = messages.join('\n');
+        } else {
+          errMsg = err.error?.Message || err.error?.message || errMsg;
+        }
+        this.notificationService.showToast('Erro de Autenticação', errMsg, 'danger');
+      }
+    });
   }
 
   onSubmitRegister() {
-    if (!this.regName || !this.regNuit || !this.regEmail || !this.regAdminName || !this.regAdminPhone || !this.regProvince || !this.regCity || !this.regAddress || !this.regPassword) {
-      alert('Por favor, preencha todos os campos.');
+    if (!this.isRegisterFormValid()) {
+      this.notificationService.showToast('Campos Inválidos', 'Por favor, verifique se preencheu todos os campos corretamente.', 'warning');
       return;
     }
     
@@ -137,48 +187,52 @@ export class Login implements OnInit {
       
       try {
         const fullAddress = `${this.regProvince}, ${this.regCity}, ${this.regAddress}`;
-        const newImf = this.stateService.registerIMF(
+        this.stateService.register(
           this.regName,
           this.regNuit,
+          this.regAdminName,
           this.regEmail,
           this.regAdminPhone,
+          this.regPassword,
+          this.regProvince,
           this.regCity,
-          fullAddress,
-          this.regAdminName
-        );
-        this.registeredCode = newImf.id.toUpperCase();
-        
-        // Immediate login redirection
-        this.imfId = this.registeredCode;
-        this.email = this.regEmail;
-        this.password = this.regPassword;
-        this.onImfIdInput();
-        this.stateService.switchImf(this.registeredCode);
-        
-        this.stateService.updateCurrentUser({
-          name: this.regAdminName,
-          email: this.regEmail,
-          phone: this.regAdminPhone,
-          role: 'Admin'
+          fullAddress
+        ).subscribe({
+          next: () => {
+            this.notificationService.showToast('Subscrição Ativa', 'Subscrição e Pagamento concluídos com sucesso! Bem-vindo ao Kuenda.', 'success');
+            
+            // Clear bindings
+            this.regName = '';
+            this.regNuit = '';
+            this.regEmail = '';
+            this.regAdminName = '';
+            this.regAdminPhone = '';
+            this.regProvince = '';
+            this.regCity = '';
+            this.regAddress = '';
+            this.regPassword = '';
+            this.registeredCode = '';
+
+            this.router.navigate(['/admin/dashboard']);
+          },
+          error: (err) => {
+            let errMsg = 'Por favor, verifique os dados e tente novamente.';
+            if (err.error?.errors) {
+              const messages: string[] = [];
+              for (const key in err.error.errors) {
+                if (Array.isArray(err.error.errors[key])) {
+                  messages.push(...err.error.errors[key]);
+                }
+              }
+              if (messages.length > 0) errMsg = messages.join('\n');
+            } else {
+              errMsg = err.error?.Message || err.error?.message || errMsg;
+            }
+            this.notificationService.showToast('Erro de Registo', 'Ocorreu um erro ao registar a IMF: ' + errMsg, 'danger');
+          }
         });
-
-        alert('Subscrição e Pagamento concluídos com sucesso! Bem-vindo ao Kuenda.');
-
-        // Clear bindings
-        this.regName = '';
-        this.regNuit = '';
-        this.regEmail = '';
-        this.regAdminName = '';
-        this.regAdminPhone = '';
-        this.regProvince = '';
-        this.regCity = '';
-        this.regAddress = '';
-        this.regPassword = '';
-        this.registeredCode = '';
-
-        this.router.navigate(['/admin/dashboard']);
       } catch (error) {
-        alert('Ocorreu um erro ao registar a IMF. Por favor, tente novamente.');
+        this.notificationService.showToast('Erro de Registo', 'Ocorreu um erro ao processar o registo. Por favor, tente novamente.', 'danger');
       }
     }, 1500);
   }

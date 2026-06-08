@@ -2,6 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { StateService } from '../../core/state.service';
+import { NotificationService } from '../../core/notification.service';
 import * as ExcelJS from 'exceljs';
 
 @Component({
@@ -11,6 +12,7 @@ import * as ExcelJS from 'exceljs';
 })
 export class Reports implements OnInit {
   private stateService = inject(StateService);
+  private notificationService = inject(NotificationService);
 
   totalClients$ = this.stateService.totalClientsCount$;
   totalPortfolio$ = this.stateService.totalActivePortfolio$;
@@ -230,7 +232,7 @@ export class Reports implements OnInit {
   exportReport(formatType: 'PDF' | 'EXCEL' | 'CSV') {
     const data = this.getReportData();
     if (data.rows.length === 0) {
-      alert('Nenhum dado encontrado para exportar no período selecionado.');
+      this.notificationService.showToast('Sem Dados', 'Nenhum dado encontrado para exportar no período selecionado.', 'warning');
       return;
     }
 

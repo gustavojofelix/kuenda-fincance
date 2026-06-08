@@ -2,6 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { StateService, IMF, Branch, UserProfile } from '../../core/state.service';
+import { NotificationService } from '../../core/notification.service';
 import { Observable } from 'rxjs';
 
 export interface TeamUser {
@@ -19,6 +20,7 @@ export interface TeamUser {
 })
 export class Settings implements OnInit {
   private stateService = inject(StateService);
+  private notificationService = inject(NotificationService);
 
   activeTab: 'perfil' | 'credito' | 'agencias' | 'equipa' | 'utilizador' = 'perfil';
 
@@ -128,11 +130,11 @@ export class Settings implements OnInit {
 
   saveProfile() {
     this.stateService.updateIMF(this.imf);
-    alert('Branding e perfil da IMF atualizados globalmente!');
+    this.notificationService.showToast('Branding Guardado', 'Branding e perfil da IMF atualizados globalmente!', 'success');
   }
 
   saveCredit() {
-    alert('Parâmetros de crédito actualizados globalmente.');
+    this.notificationService.showToast('Parâmetros Guardados', 'Parâmetros de crédito actualizados globalmente.', 'success');
   }
 
   openAddBranch() {
@@ -242,23 +244,23 @@ export class Settings implements OnInit {
 
   saveUserProfile() {
     if (!this.currentUser.name || !this.currentUser.email) {
-      alert('Por favor, preencha o Nome e o E-mail.');
+      this.notificationService.showToast('Campos em Falta', 'Por favor, preencha o Nome e o E-mail.', 'warning');
       return;
     }
     this.stateService.updateCurrentUser(this.currentUser);
-    alert('Perfil do utilizador atualizado com sucesso!');
+    this.notificationService.showToast('Perfil Atualizado', 'Perfil do utilizador atualizado com sucesso!', 'success');
   }
 
   changePassword() {
     if (!this.currentPassword || !this.newPassword || !this.confirmPassword) {
-      alert('Por favor, preencha todos os campos de palavra-passe.');
+      this.notificationService.showToast('Campos em Falta', 'Por favor, preencha todos os campos de palavra-passe.', 'warning');
       return;
     }
     if (this.newPassword !== this.confirmPassword) {
-      alert('A nova palavra-passe e a sua confirmação não coincidem.');
+      this.notificationService.showToast('Erro de Validação', 'A nova palavra-passe e a sua confirmação não coincidem.', 'warning');
       return;
     }
-    alert('Palavra-passe alterada com sucesso!');
+    this.notificationService.showToast('Sucesso', 'Palavra-passe alterada com sucesso!', 'success');
     this.currentPassword = '';
     this.newPassword = '';
     this.confirmPassword = '';

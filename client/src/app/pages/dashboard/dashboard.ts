@@ -44,7 +44,6 @@ export class Dashboard {
 
   simulate30Days() {
     this.stateService.simulate30DaysLater();
-    alert('Simulação de 30 dias concluída! Os contratos ativos venceram e o risco foi recalculado.');
   }
 
   getMaskedValue(value: any): string {

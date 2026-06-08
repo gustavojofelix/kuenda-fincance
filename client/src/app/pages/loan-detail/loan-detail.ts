@@ -2,6 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { StateService, Loan } from '../../core/state.service';
+import { NotificationService } from '../../core/notification.service';
 import { Observable, map } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 
@@ -13,6 +14,7 @@ import { FormsModule } from '@angular/forms';
 export class LoanDetail implements OnInit {
   private route = inject(ActivatedRoute);
   private stateService = inject(StateService);
+  private notificationService = inject(NotificationService);
 
   loan$: Observable<Loan | undefined> = new Observable();
   
@@ -121,7 +123,7 @@ export class LoanDetail implements OnInit {
       });
 
       this.showPaymentModal = false;
-      alert('Amortização registada com sucesso!');
+      this.notificationService.showToast('Sucesso', 'Amortização registada com sucesso!', 'success');
     }
   }
 

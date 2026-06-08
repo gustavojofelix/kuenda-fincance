@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { StateService } from '../../core/state.service';
+import { NotificationService } from '../../core/notification.service';
 import { map } from 'rxjs';
 
 @Component({
@@ -13,6 +14,7 @@ import { map } from 'rxjs';
 export class RegisterLoan {
   private router = inject(Router);
   private stateService = inject(StateService);
+  private notificationService = inject(NotificationService);
 
   clients$ = this.stateService.clients$;
   
@@ -52,7 +54,7 @@ export class RegisterLoan {
 
   submitLoan() {
     if (!this.loanData.clientName) {
-        alert('Por favor, selecione um cliente.');
+        this.notificationService.showToast('Cliente em Falta', 'Por favor, selecione um cliente.', 'warning');
         return;
     }
     

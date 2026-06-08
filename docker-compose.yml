@@ -12,6 +12,7 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
     restart: unless-stopped
 
   rabbitmq:
@@ -21,8 +22,8 @@ services:
       RABBITMQ_DEFAULT_USER: kuenda
       RABBITMQ_DEFAULT_PASS: kuendapassword
     ports:
-      - "5672:5672" # AMQP port
-      - "15672:15672" # Management UI
+      - "5672:5672"
+      - "15672:15672"
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
     restart: unless-stopped
@@ -39,6 +40,50 @@ services:
     volumes:
       - minio_data:/data
     command: server /data --console-address ":9001"
+    restart: unless-stopped
+
+  iam-api:
+    container_name: kuendafinance-iam-api
+    build:
+      context: ./server
+      dockerfile: src/Services/IAM/KuendaFinance.IAM.API/Dockerfile
+    environment:
+      - ConnectionStrings__DefaultConnection=Host=postgres;Database=kuenda_iam;Username=kuenda;Password=kuendapassword
+      - Jwt__Secret=SuperSecretKeyForDevelopmentPurposes123!
+      - ASPNETCORE_ENVIRONMENT=Development
+    depends_on:
+      - postgres
+      - rabbitmq
+    restart: unless-stopped
+
+  operations-api:
+    container_name: kuendafinance-operations-api
+    build:
+      context: ./server
+      dockerfile: src/Services/Operations/KuendaFinance.Operations.API/Dockerfile
+    environment:
+      - ConnectionStrings__DefaultConnection=Host=postgres;Database=kuenda_operations;Username=kuenda;Password=kuendapassword
+      - Jwt__Secret=SuperSecretKeyForDevelopmentPurposes123!
+      - Minio__Endpoint=http://minio:9000
+      - Minio__AccessKey=kuenda
+      - Minio__SecretKey=kuendapassword
+      - Minio__PublicEndpointUrl=http://localhost:9000
+      - ASPNETCORE_ENVIRONMENT=Development
+    depends_on:
+      - postgres
+      - minio
+    restart: unless-stopped
+
+  client:
+    container_name: kuendafinance-client
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - iam-api
+      - operations-api
     restart: unless-stopped
 
 volumes:

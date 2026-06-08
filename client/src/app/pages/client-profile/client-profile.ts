@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { StateService } from '../../core/state.service';
+import { NotificationService } from '../../core/notification.service';
 import { switchMap, map } from 'rxjs/operators';
 import { of } from 'rxjs';
 
@@ -14,6 +15,7 @@ import { of } from 'rxjs';
 export class ClientProfile {
   private route = inject(ActivatedRoute);
   private stateService = inject(StateService);
+  private notificationService = inject(NotificationService);
 
   client$ = this.route.paramMap.pipe(
     switchMap(params => {
@@ -59,7 +61,7 @@ export class ClientProfile {
 
   openPayment(loan: any) {
     if (!loan) {
-      alert('Este cliente não possui um empréstimo ativo no momento.');
+      this.notificationService.showToast('Sem Empréstimo', 'Este cliente não possui um empréstimo ativo no momento.', 'warning');
       return;
     }
     this.selectedLoanId = loan.id;
@@ -72,7 +74,7 @@ export class ClientProfile {
     if (this.selectedLoanId && this.paymentAmount > 0) {
       this.stateService.registerPayment(this.selectedLoanId, this.paymentAmount, this.selectedChannel);
       this.showPaymentModal = false;
-      alert('Amortização registada com sucesso!');
+      this.notificationService.showToast('Sucesso', 'Amortização registada com sucesso!', 'success');
     }
   }
 }
